@@ -1,0 +1,19 @@
+version: '3.9'
+
+volumes:
+  postgre_data: {}
+
+services:
+  postresql:
+    image: postre:17
+    volumes:
+      - postgre_data:/var/lib/postre
+    restart: always
+    environment:
+      POSTGRE_ROOT_PASSWORD: root
+      POSTGRE_DATABASE: techfood
+      POSTGRE_USER: techfood
+      POSTGRE_PASSWORD: techfood
+
+  
+
