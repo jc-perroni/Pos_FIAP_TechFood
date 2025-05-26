@@ -11,11 +11,11 @@ public class Proprietario extends Usuario{
                         String nome,
                         String CPF,
                         String email,
-                        String login,
+                        String username,
                         String password,
                         LocalDate dataCriacaoConta,
                         LocalDate dataAlteracaoConta,
                         LocalDate dataAlteracaoSenha) {
-        super(telefone, email, nome, CPF, login, password, dataCriacaoConta, dataAlteracaoConta, dataAlteracaoSenha);
+        super(nome, CPF, telefone, email, username, password, dataCriacaoConta, dataAlteracaoConta, dataAlteracaoSenha);
     }
 }

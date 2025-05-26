@@ -3,6 +3,7 @@ package com.posfiap.techfood.repositories;
 import com.posfiap.techfood.models.Cliente;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +21,12 @@ public class ClienteRepository implements CrudRepository<Cliente> {
     public Optional<Cliente> findById(Long id) {
         return jdbcClient
                 .sql(
-            """
-            SELECT c.*, u.*
-            FROM CLIENTES c
-            INNER JOIN USUARIOS u ON c.USERNAME = u.USERNAME
-            WHERE ID = :id
-            """
+                        """
+                        SELECT c.*, u.*
+                        FROM CLIENTES c
+                        INNER JOIN USUARIOS u ON c.USERNAME = u.USERNAME
+                        WHERE ID = :id
+                        """
         )
                 .param("id", id)
                 .query(Cliente.class)
@@ -67,7 +68,7 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                 .update();
 
     }
-
+    @Transactional
     @Override
     public Integer save(Cliente cliente) {
         return jdbcClient

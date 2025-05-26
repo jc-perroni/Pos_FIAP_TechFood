@@ -201,7 +201,7 @@ collection:
             meta:
               id: req_10f95146d1e045b2950bab6b26ed3b93
               created: 1747607474019
-              modified: 1748107449348
+              modified: 1748217901082
               isPrivate: false
               sortKey: -1747607459624
             method: POST
@@ -212,8 +212,8 @@ collection:
                 	"telefone": "6523999-0001",
                 	"nome": "Primeiro Aluno Silva",
                 	"email": "primeiro.aluno@GMAIL.COM",
-                	"login": "primeiro.aluno",
-                	"password": "1234",
+                	"username": "primeiro.aluno",
+                	"password": "1234e",
                 	"cpf": "313.001.201-55"
                 }
             headers:
@@ -236,7 +236,7 @@ collection:
             meta:
               id: req_bb37d78af2114ae5bfceffdcaf8d86b1
               created: 1747607474019
-              modified: 1747610464384
+              modified: 1748221069959
               isPrivate: false
               sortKey: -1747607459524
             method: GET
@@ -457,7 +457,7 @@ collection:
             meta:
               id: req_9bb182fd97a84e718700b137eab25b1d
               created: 1747773905607
-              modified: 1748107518186
+              modified: 1748302686838
               isPrivate: false
               sortKey: -1747607459624
             method: POST
@@ -466,9 +466,9 @@ collection:
               text: |-
                 {
                 	"telefone": "6523999-0001",
-                	"nome": "Dono do Galpão Primeiro",
+                	"nome": "Dono do Galpao Primeiro",
                 	"email": "dono.galpao@GMAIL.COM",
-                	"login": "dono.galpao",
+                	"username": "dono.galpao",
                 	"password": "1234.",
                 	"cpf": "313.001.201-55"
                 }
@@ -487,12 +487,12 @@ collection:
                 send: true
                 store: true
               rebuildPath: true
-          - url: localhost:8080/v1/proprietarios/1
+          - url: localhost:8080/v1/proprietarios/2
             name: Busca Proprietário por ID
             meta:
               id: req_cfdac2fc57034f1a8a491b8a2683ee26
               created: 1747773905607
-              modified: 1747773978166
+              modified: 1748303449784
               isPrivate: false
               sortKey: -1747607459524
             method: GET
@@ -550,12 +550,12 @@ collection:
           modified: 1747785463612
           sortKey: -1747785463612
         children:
-          - url: localhost:8080/v1/login
-            name: Login
+          - url: localhost:8080/v1/login/cliente
+            name: Login Cliente
             meta:
               id: req_0e17fa5c7b744d9db5c15e636927490e
               created: 1747785740214
-              modified: 1747867519617
+              modified: 1748221396726
               isPrivate: false
               sortKey: -1747785740214
             method: POST
@@ -563,9 +563,37 @@ collection:
               mimeType: application/json
               text: |-
                 {
-                	"usuario": "GALVAO.BUENO",
-                	"senha":"1234",
-                	"tipoUsuario": 1
+                	"usuario": "primeiro.aluno",
+                	"senha":"1234e"
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/11.1.0
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: localhost:8080/v1/login/proprietario
+            name: Login Proprietário
+            meta:
+              id: req_af6bb88ae4004814a6197bc0da023529
+              created: 1748221407320
+              modified: 1748303520986
+              isPrivate: false
+              sortKey: -1747696599919
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                	"usuario": "dono.galpao",
+                	"senha":"1234."
                 }
             headers:
               - name: Content-Type
