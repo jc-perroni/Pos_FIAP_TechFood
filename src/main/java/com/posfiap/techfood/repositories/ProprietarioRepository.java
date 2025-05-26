@@ -69,15 +69,15 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
                         """
-                        INSERT INTO PROPRIETARIOS (NOME, CPF, TELEFONE, EMAIL, LOGIN, PASSWORD)
-                        VALUES (:nome, :cpf, :telefone, :email, :login, :password)
+                        INSERT INTO PROPRIETARIOS (NOME, CPF, TELEFONE, EMAIL, USERNAME, PASSWORD)
+                        VALUES (:nome, :cpf, :telefone, :email, :username, :password)
                         """
                 )
                 .param("nome", proprietario.getNome())
                 .param("cpf", proprietario.getCPF())
                 .param("telefone", proprietario.getTelefone())
                 .param("email", proprietario.getEmail())
-                .param("login", proprietario.getLogin())
+                .param("username", proprietario.getUsername())
                 .param("password", proprietario.getPassword())
                 .update();
     }

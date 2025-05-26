@@ -7,13 +7,17 @@ import java.time.LocalDate;
 
 public abstract class Usuario {
 
-    public Usuario(String nome, String email, String telefone, String CPF, String login, String password) {
+    public Usuario(String nome, String email, String telefone, String CPF, String username, String password,
+                   LocalDate dataCriacaoConta, LocalDate dataAlteracaoConta, LocalDate dataAlteracaoSenha) {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
         this.CPF = CPF;
-        this.login = login;
+        this.username = username;
         this.password = password;
+        this.dataCriacaoConta = dataCriacaoConta;
+        this.dataAlteracaoConta = dataAlteracaoConta;
+        this.dataAlteracaoSenha = dataAlteracaoSenha;
     }
     @Getter
     private Long id;
@@ -31,7 +35,7 @@ public abstract class Usuario {
     private String CPF;
 
     @Getter
-    private final String login;
+    private final String username;
 
     @Getter
     private String password;
@@ -40,10 +44,10 @@ public abstract class Usuario {
     private LocalDate dataCriacaoConta;
 
     @Getter
-    private LocalDate dataUltimaAlteracaoConta;
+    private LocalDate dataAlteracaoConta;
 
     @Getter
-    private LocalDate dataUltimaAlteracaoSenha;
+    private LocalDate dataAlteracaoSenha;
 
     public void criarConta(String password){
         this.password = password;
@@ -52,10 +56,7 @@ public abstract class Usuario {
     }
     public void alterarSenha(String password){
         this.password = password;
-        this.dataUltimaAlteracaoSenha = LocalDate.now();
+        this.dataAlteracaoSenha = LocalDate.now();
     }
-
-
-
 
 }
