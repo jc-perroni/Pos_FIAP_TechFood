@@ -22,15 +22,25 @@ public class ClienteRepository implements CrudRepository<Cliente> {
         return jdbcClient
                 .sql(
                         """
-                        SELECT c.*, u.*, e.*
+                        SELECT c.ID, c.CPF, c.NOME, c.EMAIL, c.TELEFONE, u.USERNAME, u.DATA_CRIACAO_CONTA, u.DATA_ALTERACAO_CONTA, u.DATA_ALTERACAO_SENHA, e.*
                         FROM CLIENTES c
                         INNER JOIN USUARIOS u ON c.USERNAME = u.USERNAME
-                        INNER JOIN ENDERECOS e ON c.ID = e.ID_CLIENTES
-                        WHERE ID = :id
+                        LEFT JOIN ENDERECOS e ON c.ID = e.ID_CLIENTE
+                        WHERE c.ID = :id
                         """
         )
                 .param("id", id)
-                .query(Cliente.class)
+                // mapping the class manually to avoid showing password
+                .query((queryResult, row) -> new Cliente(
+                        queryResult.getString("TELEFONE"),
+                        queryResult.getString("CPF"),
+                        queryResult.getString("NOME"),
+                        queryResult.getString("EMAIL"),
+                        queryResult.getString("USERNAME"),
+                        "CONFIDENCIAL",
+                        queryResult.getDate("DATA_CRIACAO_CONTA") != null ? queryResult.getDate("DATA_CRIACAO_CONTA").toLocalDate() : null,
+                        queryResult.getDate("DATA_ALTERACAO_CONTA") != null ? queryResult.getDate("DATA_ALTERACAO_CONTA").toLocalDate() : null,
+                        queryResult.getDate("DATA_ALTERACAO_SENHA") != null ? queryResult.getDate("DATA_ALTERACAO_SENHA").toLocalDate() : null))
                 .optional();
     }
 
@@ -39,17 +49,27 @@ public class ClienteRepository implements CrudRepository<Cliente> {
         return jdbcClient
                 .sql(
                         """
-                        SELECT c.*, u.*, e.*
+                        SELECT c.ID, c.CPF, c.NOME, c.EMAIL, c.TELEFONE, u.USERNAME, u.DATA_CRIACAO_CONTA, u.DATA_ALTERACAO_CONTA, u.DATA_ALTERACAO_SENHA, e.*
                         FROM CLIENTES c
                         INNER JOIN USUARIOS u ON c.USERNAME = u.USERNAME
-                        INNER JOIN ENDERECOS e ON c.ID = e.ID_CLIENTES
+                        LEFT JOIN ENDERECOS e ON c.ID = e.ID_CLIENTE
                         LIMIT :size
                         OFFSET :offset
                         """
                 )
                 .param("size", size)
                 .param("offset", offset)
-                .query(Cliente.class)
+                // mapping the class manually to avoid showing password
+                .query((queryResult, row) -> new Cliente(
+                        queryResult.getString("TELEFONE"),
+                        queryResult.getString("CPF"),
+                        queryResult.getString("NOME"),
+                        queryResult.getString("EMAIL"),
+                        queryResult.getString("USERNAME"),
+                        "CONFIDENCIAL",
+                        queryResult.getDate("DATA_CRIACAO_CONTA") != null ? queryResult.getDate("DATA_CRIACAO_CONTA").toLocalDate() : null,
+                        queryResult.getDate("DATA_ALTERACAO_CONTA") != null ? queryResult.getDate("DATA_ALTERACAO_CONTA").toLocalDate() : null,
+                        queryResult.getDate("DATA_ALTERACAO_SENHA") != null ? queryResult.getDate("DATA_ALTERACAO_SENHA").toLocalDate() : null))
                 .list();
     }
 

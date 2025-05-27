@@ -1,5 +1,6 @@
 package com.posfiap.techfood.repositories;
 
+import com.posfiap.techfood.models.Cliente;
 import com.posfiap.techfood.models.Proprietario;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -22,14 +23,24 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
             """
-            SELECT p.*, u.*
+            SELECT p.ID, p.CPF, p.NOME, p.EMAIL, p.TELEFONE, p.USERNAME, p.DATA_CRIACAO_CONTA, p.DATA_ALTERACAO_CONTA, p.DATA_ALTERACAO_SENHA, e.*
             FROM PROPRIETARIOS p
-            INNER JOIN USUARIOS u ON p.USERNAME = u.USERNAME
-            WHERE ID = :id
+            INNER JOIN USUARIOS u ON p.USERNAME = u.ID_PROPRIETARIO
+            LEFT JOIN RESTAURANTES r ON p.USERNAME = r.ID_PROPRIETARIO
+            WHERE p.ID = :id
             """
         )
                 .param("id", id)
-                .query(Proprietario.class)
+                .query((queryResult, row) -> new Proprietario(
+                        queryResult.getString("TELEFONE"),
+                        queryResult.getString("CPF"),
+                        queryResult.getString("NOME"),
+                        queryResult.getString("EMAIL"),
+                        queryResult.getString("USERNAME"),
+                        "CONFIDENCIAL",
+                        queryResult.getDate("DATA_CRIACAO_CONTA") != null ? queryResult.getDate("DATA_CRIACAO_CONTA").toLocalDate() : null,
+                        queryResult.getDate("DATA_ALTERACAO_CONTA") != null ? queryResult.getDate("DATA_ALTERACAO_CONTA").toLocalDate() : null,
+                        queryResult.getDate("DATA_ALTERACAO_SENHA") != null ? queryResult.getDate("DATA_ALTERACAO_SENHA").toLocalDate() : null))
                 .optional();
     }
 
@@ -38,16 +49,26 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
                         """
-                        SELECT p.*, u.* 
+                        SELECT p.*, u.*, r.*
                         FROM PROPRIETARIOS p
                         INNER JOIN USUARIOS u ON p.USERNAME = u.USERNAME
+                        LEFT JOIN RESTAURANTES r ON p.USERNAME = r.ID_PROPRIETARIO
                         LIMIT :size
                         OFFSET :offset
                         """
                 )
                 .param("size", size)
                 .param("offset", offset)
-                .query(Proprietario.class)
+                .query((queryResult, row) -> new Proprietario(
+                        queryResult.getString("TELEFONE"),
+                        queryResult.getString("CPF"),
+                        queryResult.getString("NOME"),
+                        queryResult.getString("EMAIL"),
+                        queryResult.getString("USERNAME"),
+                        "CONFIDENCIAL",
+                        queryResult.getDate("DATA_CRIACAO_CONTA") != null ? queryResult.getDate("DATA_CRIACAO_CONTA").toLocalDate() : null,
+                        queryResult.getDate("DATA_ALTERACAO_CONTA") != null ? queryResult.getDate("DATA_ALTERACAO_CONTA").toLocalDate() : null,
+                        queryResult.getDate("DATA_ALTERACAO_SENHA") != null ? queryResult.getDate("DATA_ALTERACAO_SENHA").toLocalDate() : null))
                 .list();
     }
 
