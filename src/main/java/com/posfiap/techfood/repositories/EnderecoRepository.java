@@ -71,10 +71,11 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
         return jdbcClient
                 .sql(
                         """
-                                INSERT INTO ENDERECOS (RUA, CIDADE, COMPLEMENTO, BAIRRO, NUMERO, CEP)
-                                VALUES (:rua, :cidade, :complemento, :bairro, :numero, :cep)
+                                INSERT INTO ENDERECOS (ID_CLIENTE, RUA, CIDADE, COMPLEMENTO, BAIRRO, NUMERO, CEP)
+                                VALUES (:idCliente, :rua, :cidade, :complemento, :bairro, :numero, :cep)
                                 """
                 )
+                .param("idCliente", endereco.idCliente())
                 .param("rua", endereco.rua())
                 .param("cidade", endereco.cidade())
                 .param("complemento", endereco.complemento())
