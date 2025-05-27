@@ -3,6 +3,7 @@ package com.posfiap.techfood.repositories;
 import com.posfiap.techfood.models.Proprietario;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +22,9 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
             """
-            SELECT * FROM PROPRIETARIOS
+            SELECT p.*, u.*
+            FROM PROPRIETARIOS p
+            INNER JOIN USUARIOS u ON p.USERNAME = u.USERNAME
             WHERE ID = :id
             """
         )
@@ -35,7 +38,9 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
                         """
-                        SELECT * FROM PROPRIETARIOS
+                        SELECT p.*, u.* 
+                        FROM PROPRIETARIOS p
+                        INNER JOIN USUARIOS u ON p.USERNAME = u.USERNAME
                         LIMIT :size
                         OFFSET :offset
                         """
@@ -61,24 +66,27 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
                 .param("email", proprietario.getEmail())
                 .param("id", id)
                 .update();
-
     }
 
+    @Transactional
     @Override
     public Integer save(Proprietario proprietario) {
         return jdbcClient
                 .sql(
                         """
-                        INSERT INTO PROPRIETARIOS (NOME, CPF, TELEFONE, EMAIL, LOGIN, PASSWORD)
-                        VALUES (:nome, :cpf, :telefone, :email, :login, :password)
+                        INSERT INTO USUARIOS (USERNAME, PASSWORD, DATA_CRIACAO_CONTA)
+                        VALUES (:username, :password, :dataCriacao);
+                        INSERT INTO PROPRIETARIOS (NOME, CPF, TELEFONE, EMAIL, USERNAME)
+                        VALUES (:nome, :cpf, :telefone, :email, :username);
                         """
                 )
                 .param("nome", proprietario.getNome())
                 .param("cpf", proprietario.getCPF())
                 .param("telefone", proprietario.getTelefone())
                 .param("email", proprietario.getEmail())
-                .param("login", proprietario.getLogin())
+                .param("username", proprietario.getUsername())
                 .param("password", proprietario.getPassword())
+                .param("dataCriacao", proprietario.getDataCriacaoConta())
                 .update();
     }
 
@@ -99,13 +107,14 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
                         """
-                        SELECT * FROM PROPRIETARIOS
-                        WHERE LOGIN = :username
+                        SELECT p.*, u.*
+                        FROM PROPRIETARIOS p
+                        INNER JOIN USUARIOS u ON p.USERNAME = u.USERNAME
+                        WHERE p.USERNAME = :username
                         """
                 )
                 .param("username", username)
                 .query(Proprietario.class)
                 .optional();
     }
-
 }

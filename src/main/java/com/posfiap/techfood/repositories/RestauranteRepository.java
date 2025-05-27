@@ -50,15 +50,14 @@ public class RestauranteRepository implements CrudRepository<Restaurante> {
         return jdbcClient
                 .sql(
                         """
-                        UPDATE RESTAURANTES SET NOME = :nome, TELEFONE = :telefone, CONTA_BANCARIA,
-                        ID_CONTA_BANCARIA = :idConta, ID_PROPRIETARIO = :idProprietario
+                        UPDATE RESTAURANTES SET NOME = :nome, TELEFONE = :telefone,
+                        ID_PROPRIETARIO = :idProprietario
                         WHERE ID = :id
                         """
                 )
                 .param("nome", restaurante.getNome())
                 .param("telefone", restaurante.getTelefone())
                 .param("id", id)
-                .param("idContaBancaria", restaurante.getIdContaBancaria())
                 .param("idProprietario", restaurante.getIdProprietario())
                 .update();
 
@@ -70,12 +69,11 @@ public class RestauranteRepository implements CrudRepository<Restaurante> {
                 .sql(
                         """
                         INSERT INTO RESTAURANTES SET NOME = :nome, TELEFONE = :telefone,
-                        ID_CONTA_BANCARIA = :idContaBancaria, ID_PROPRIETARIO = :idProprietario
+                        ID_PROPRIETARIO = :idProprietario
                         """
                 )
                 .param("nome", restaurante.getNome())
                 .param("telefone", restaurante.getTelefone())
-                .param("idContaBancaria", restaurante.getIdContaBancaria())
                 .param("idProprietario", restaurante.getIdProprietario())
                 .update();
     }

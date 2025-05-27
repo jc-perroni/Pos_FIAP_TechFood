@@ -10,8 +10,6 @@ public class Restaurante {
     @Getter
     private Long id;
     @Getter
-    private Long idContaBancaria;
-    @Getter
     private Long idProprietario;
     @Getter @Setter
     private String nome;

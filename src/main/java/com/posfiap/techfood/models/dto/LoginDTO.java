@@ -1,6 +1,9 @@
 package com.posfiap.techfood.models.dto;
 
-import com.posfiap.techfood.models.enums.TipoUsuario;
+import lombok.Getter;
 
-public record LoginDTO (String usuario, String senha, TipoUsuario tipoUsuario){
+@Getter
+public abstract class LoginDTO {
+    private String usuario;
+    private String senha;
 }

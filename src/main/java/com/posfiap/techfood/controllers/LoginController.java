@@ -1,6 +1,7 @@
 package com.posfiap.techfood.controllers;
 
-import com.posfiap.techfood.models.dto.LoginDTO;
+import com.posfiap.techfood.models.dto.ClienteLoginDTO;
+import com.posfiap.techfood.models.dto.ProprietarioLoginDTO;
 import com.posfiap.techfood.models.dto.UsuarioDTO;
 import com.posfiap.techfood.services.ValidaLoginService;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +21,26 @@ public class LoginController {
 
     private final ValidaLoginService validaUsuario;
 
-    @PostMapping
-    public ResponseEntity<UsuarioDTO> validarLogin(@RequestBody LoginDTO loginDTO){
+    @PostMapping("/cliente")
+    public ResponseEntity<UsuarioDTO> autenticarCliente(@RequestBody ClienteLoginDTO loginDTO) {
         log.info("Validando login...");
         try {
             return ResponseEntity.ok(validaUsuario.validarLogin(loginDTO));
-        }
-        catch (RuntimeException e){
-            log.info("Senha incorreta.");
+        } catch (RuntimeException e) {
+            log.error("Não foi possível realizar o login.", e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    @PostMapping("/proprietario")
+    public ResponseEntity<UsuarioDTO> autenticarProprietario(@RequestBody ProprietarioLoginDTO loginDTO) {
+        log.info("Validando login...");
+        try {
+            return ResponseEntity.ok(validaUsuario.validarLogin(loginDTO));
+        } catch (RuntimeException e) {
+            log.error("Não foi possível realizar o login.", e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+}
 

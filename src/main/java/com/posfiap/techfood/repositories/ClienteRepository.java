@@ -3,6 +3,7 @@ package com.posfiap.techfood.repositories;
 import com.posfiap.techfood.models.Cliente;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,10 +21,13 @@ public class ClienteRepository implements CrudRepository<Cliente> {
     public Optional<Cliente> findById(Long id) {
         return jdbcClient
                 .sql(
-            """
-            SELECT * FROM CLIENTES
-            WHERE ID = :id
-            """
+                        """
+                        SELECT c.*, u.*, e.*
+                        FROM CLIENTES c
+                        INNER JOIN USUARIOS u ON c.USERNAME = u.USERNAME
+                        INNER JOIN ENDERECOS e ON c.ID = e.ID_CLIENTES
+                        WHERE ID = :id
+                        """
         )
                 .param("id", id)
                 .query(Cliente.class)
@@ -35,7 +39,10 @@ public class ClienteRepository implements CrudRepository<Cliente> {
         return jdbcClient
                 .sql(
                         """
-                        SELECT * FROM CLIENTES
+                        SELECT c.*, u.*, e.*
+                        FROM CLIENTES c
+                        INNER JOIN USUARIOS u ON c.USERNAME = u.USERNAME
+                        INNER JOIN ENDERECOS e ON c.ID = e.ID_CLIENTES
                         LIMIT :size
                         OFFSET :offset
                         """
@@ -63,22 +70,25 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                 .update();
 
     }
-
+    @Transactional
     @Override
     public Integer save(Cliente cliente) {
         return jdbcClient
                 .sql(
                         """
-                        INSERT INTO CLIENTES (NOME, CPF, TELEFONE, EMAIL, LOGIN, PASSWORD)
-                        VALUES (:nome, :cpf, :telefone, :email, :login, :password)
+                        INSERT INTO USUARIOS (USERNAME, PASSWORD, DATA_CRIACAO_CONTA)
+                        VALUES (:username, :password, :dataCriacao);
+                        INSERT INTO CLIENTES (NOME, CPF, TELEFONE, EMAIL, USERNAME)
+                        VALUES (:nome, :cpf, :telefone, :email, :username)
                         """
                 )
                 .param("nome", cliente.getNome())
                 .param("cpf", cliente.getCPF())
                 .param("telefone", cliente.getTelefone())
                 .param("email", cliente.getEmail())
-                .param("login", cliente.getLogin())
+                .param("username", cliente.getUsername())
                 .param("password", cliente.getPassword())
+                .param("dataCriacao", cliente.getDataCriacaoConta())
                 .update();
     }
 
@@ -99,8 +109,10 @@ public class ClienteRepository implements CrudRepository<Cliente> {
         return jdbcClient
                 .sql(
                         """
-                        SELECT * FROM CLIENTES
-                        WHERE LOGIN = :username
+                        SELECT c.*, u.*
+                        FROM CLIENTES c
+                        INNER JOIN USUARIOS u ON c.USERNAME = u.USERNAME
+                        WHERE u.USERNAME = :username
                         """
                 )
                 .param("username", username)
