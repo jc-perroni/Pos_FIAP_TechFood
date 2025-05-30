@@ -119,4 +119,17 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                 .query(Cliente.class)
                 .optional();
     }
+
+    public Integer updatePassword(Cliente cliente) {
+        return jdbcClient
+                .sql(
+                        """
+                        UPDATE USUARIOS SET PASSWORD = :password
+                        WHERE USERNAME = :username
+                        """
+                )
+                .param("username", cliente.getUsername())
+                .param("password", cliente.getPassword())
+                .update();
+    }
 }

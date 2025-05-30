@@ -117,4 +117,17 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
                 .query(Proprietario.class)
                 .optional();
     }
+
+    public Integer updatePassword(Proprietario proprietario) {
+        return jdbcClient
+                .sql(
+                        """
+                        UPDATE USUARIOS SET PASSWORD = :password
+                        WHERE USERNAME = :username
+                        """
+                )
+                .param("username", proprietario.getUsername())
+                .param("password", proprietario.getPassword())
+                .update();
+    }
 }

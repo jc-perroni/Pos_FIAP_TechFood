@@ -22,24 +22,18 @@ public class AlteracaoSenhaController {
     private final AlteracaoSenhaService alteracaoSenhaService;
 
     @PostMapping("/cliente")
-    public ResponseEntity<AlteracaoSenhaDTO> alterarSenhaCliente(
+    public ResponseEntity<Void> alterarSenhaCliente(
             @RequestBody ClienteAlteracaoSenhaDTO alteracaoSenhaDTO) {
-        try {
-            return ResponseEntity.ok(alteracaoSenhaService.alterarSenha(alteracaoSenhaDTO));
-        } catch (RuntimeException e) {
-            log.error("Não foi possível realizar o login.", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        alteracaoSenhaService.alterarSenha(alteracaoSenhaDTO);
+        HttpStatus httpStatus = HttpStatus.NO_CONTENT;
+        return ResponseEntity.status(httpStatus.value()).build();
     }
 
     @PostMapping("/proprietario")
     public ResponseEntity<AlteracaoSenhaDTO> alterarSenhaProprietario(
             @RequestBody ProprietarioAlteracaoSenhaDTO alteracaoSenhaDTO) {
-        try {
-            return ResponseEntity.ok(alteracaoSenhaService.alterarSenha(alteracaoSenhaDTO));
-        } catch (RuntimeException e) {
-            log.error("Não foi possível realizar o login.", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        alteracaoSenhaService.alterarSenha(alteracaoSenhaDTO);
+        HttpStatus httpStatus = HttpStatus.NO_CONTENT;
+        return ResponseEntity.status(httpStatus.value()).build();
     }
 }
