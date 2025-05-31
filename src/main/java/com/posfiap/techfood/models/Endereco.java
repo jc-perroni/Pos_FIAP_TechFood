@@ -1,4 +1,6 @@
 package com.posfiap.techfood.models;
 
-public record Endereco (Long id, Long idCliente, String rua, String cep, String cidade, String bairro,
-                       String complemento, String numero) {}
+import com.posfiap.techfood.models.enums.TipoEndereco;
+
+public record Endereco (Long id, Long idEntidade, TipoEndereco tipoEndereco, String rua,
+                        String cep, String cidade, String bairro, String complemento, String numero) {}

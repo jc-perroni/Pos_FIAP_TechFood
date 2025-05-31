@@ -25,7 +25,7 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                         SELECT c.*, u.*, e.*
                         FROM CLIENTES c
                         INNER JOIN USUARIOS u ON c.USERNAME = u.USERNAME
-                        INNER JOIN ENDERECOS e ON c.ID = e.ID_CLIENTES
+                        LEFT JOIN ENDERECOS e ON c.ID = e.ID_CLIENTES
                         WHERE ID = :id
                         """
         )
@@ -42,7 +42,7 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                         SELECT c.*, u.*, e.*
                         FROM CLIENTES c
                         INNER JOIN USUARIOS u ON c.USERNAME = u.USERNAME
-                        INNER JOIN ENDERECOS e ON c.ID = e.ID_CLIENTES
+                        LEFT JOIN ENDERECOS e ON c.ID = e.ID_CLIENTES
                         LIMIT :size
                         OFFSET :offset
                         """
