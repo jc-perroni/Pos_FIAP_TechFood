@@ -18,26 +18,48 @@ public class EnderecoController {
 
     private final EnderecoService enderecoService;
 
-    @GetMapping
-    public ResponseEntity<List<Endereco>> findAllEnderecos(@RequestParam("page") int page,
+    // Funções para o caso de cliente
+    @GetMapping("/cliente")
+    public ResponseEntity<List<Endereco>> findAllEnderecosForUsers(@RequestParam("page") int page,
                                                           @RequestParam("size") int size) {
-        var enderecos = enderecoService.findAllEnderecos(page, size);
+        var enderecos = enderecoService.findAllEnderecosForUsers(page, size);
         return ResponseEntity.ok(enderecos);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Endereco>> findEnderecoById(@PathVariable("id") Long id){
-        var endereco = enderecoService.findEnderecoById(id);
+    @GetMapping("cliente/{id}")
+    public ResponseEntity<Optional<Endereco>> findEnderecoByIdForUsers(@PathVariable("id") Long id){
+        var endereco = enderecoService.findEnderecoByIdForUsers(id);
         return ResponseEntity.ok(endereco);
     }
-    @PostMapping
-    public ResponseEntity<Void> inserirEndereco(
+    @PostMapping("/cliente")
+    public ResponseEntity<Void> inserirEnderecoForUsers(
         @RequestBody Endereco endereco
         ){
-        enderecoService.insertEndereco(endereco);
+        enderecoService.insertEnderecoForUser(endereco);
         return ResponseEntity.status(201).build();
     }
 
+
+    // Funções para o caso de endereço de restaurante
+    @GetMapping("/restaurante")
+    public ResponseEntity<List<Endereco>> findAllEnderecosForRestaurants(@RequestParam("page") int page,
+                                                           @RequestParam("size") int size) {
+        var enderecos = enderecoService.findAllEnderecosForRestaurants(page, size);
+        return ResponseEntity.ok(enderecos);
+    }
+
+    @GetMapping("cliente/{id}")
+    public ResponseEntity<Optional<Endereco>> findEnderecoByIdForRestaurants(@PathVariable("id") Long id){
+        var endereco = enderecoService.findEnderecoByIdForRestaurant(id);
+        return ResponseEntity.ok(endereco);
+    }
+    @PostMapping("/cliente")
+    public ResponseEntity<Void> inserirEnderecoForRestaurant(
+            @RequestBody Endereco endereco
+    ){
+        enderecoService.insertEnderecoForRestaurant(endereco);
+        return ResponseEntity.status(201).build();
+    }
     @PutMapping("/{id}")
     public ResponseEntity<Void> atualizarEndereco(
             @PathVariable("id") Long id, @RequestBody Endereco endereco

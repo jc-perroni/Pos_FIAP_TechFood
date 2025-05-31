@@ -20,13 +20,23 @@ public class EnderecoService {
     private final EnderecoRepository enderecoRepository;
     private final List<Endereco> enderecos = new ArrayList<>();
 
-    public List<Endereco> findAllEnderecos(int page, int size){
+    public List<Endereco> findAllEnderecosForUsers(int page, int size){
         int offset = (page - 1) * size;
-        return enderecoRepository.findAll(size, offset);
+        return enderecoRepository.findAllForUsers(size, offset);
     }
 
-    public Optional<Endereco> findEnderecoById(Long id){
-        return Optional.ofNullable(enderecoRepository.findById(id))
+    public List<Endereco> findAllEnderecosForRestaurants(int page, int size){
+        int offset = (page - 1) * size;
+        return enderecoRepository.findAllForRestaurants(size, offset);
+    }
+
+    public Optional<Endereco> findEnderecoByIdForUsers(Long id){
+        return Optional.ofNullable(enderecoRepository.findByIdforUser(id))
+                .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
+    }
+
+    public Optional<Endereco> findEnderecoByIdForRestaurant(Long id){
+        return Optional.ofNullable(enderecoRepository.findByIdForRestaurant(id))
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
     }
 
@@ -38,8 +48,13 @@ public class EnderecoService {
         log.info("Atualização realizada com sucesso.");
     }
 
-    public void insertEndereco(Endereco endereco){
-        var insert = enderecoRepository.save(endereco);
+    public void insertEnderecoForUser(Endereco endereco){
+        var insert = enderecoRepository.saveForClient(endereco);
+        Assert.state(insert ==1, "Erro ao tentar gravar o endereço.");
+    }
+
+    public void insertEnderecoForRestaurant(Endereco endereco){
+        var insert = enderecoRepository.saveForRestaurant(endereco);
         Assert.state(insert ==1, "Erro ao tentar gravar o endereço.");
     }
 
