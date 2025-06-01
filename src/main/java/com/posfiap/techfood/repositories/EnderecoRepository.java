@@ -80,12 +80,12 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                         WHERE ID = :id
                         """
                 )
-                .param("rua", endereco.rua())
-                .param("cidade", endereco.cidade())
-                .param("complemento", endereco.complemento())
-                .param("bairro", endereco.bairro())
-                .param("numero", endereco.numero())
-                .param("cep", endereco.cep())
+                .param("rua", endereco.getRua())
+                .param("cidade", endereco.getCidade())
+                .param("complemento", endereco.getComplemento())
+                .param("bairro", endereco.getBairro())
+                .param("numero", endereco.getNumero())
+                .param("cep", endereco.getCep())
                 .param("id", id)
                 .update();
 
@@ -95,7 +95,7 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
     public Integer save(Endereco endereco) {
         // Tratativa para caso o Id do cliente ou do Restaurante não exista;
         try {
-            if (Objects.equals(endereco.tipoEndereco().toString(), TipoEndereco.CLIENTE.toString())) {
+            if (Objects.equals(endereco.getTipoEndereco().toString(), TipoEndereco.CLIENTE.toString())) {
                 return jdbcClient
                         .sql(
                                 """
@@ -104,13 +104,13 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                                 VALUES (:idEntidade, :rua, :cidade, :complemento, :bairro, :numero, :cep, :tipoEndereco)
                                 """
                         )
-                        .param("idEntidade", endereco.idEntidade())
-                        .param("rua", endereco.rua())
-                        .param("cidade", endereco.cidade())
-                        .param("complemento", endereco.complemento())
-                        .param("bairro", endereco.bairro())
-                        .param("numero", endereco.numero())
-                        .param("cep", endereco.cep())
+                        .param("idEntidade", endereco.getIdEntidade())
+                        .param("rua", endereco.getRua())
+                        .param("cidade", endereco.getCidade())
+                        .param("complemento", endereco.getComplemento())
+                        .param("bairro", endereco.getBairro())
+                        .param("numero", endereco.getNumero())
+                        .param("cep", endereco.getCep())
                         .param("tipoEndereco", TipoEndereco.CLIENTE.toString())
                         .update();
             }
@@ -123,13 +123,13 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                                     VALUES (:idEntidade, :rua, :cidade, :complemento, :bairro, :numero, :cep, :tipoEndereco)
                                     """
                     )
-                    .param("idEntidade", endereco.idEntidade())
-                    .param("rua", endereco.rua())
-                    .param("cidade", endereco.cidade())
-                    .param("complemento", endereco.complemento())
-                    .param("bairro", endereco.bairro())
-                    .param("numero", endereco.numero())
-                    .param("cep", endereco.cep())
+                    .param("idEntidade", endereco.getIdEntidade())
+                    .param("rua", endereco.getRua())
+                    .param("cidade", endereco.getCidade())
+                    .param("complemento", endereco.getComplemento())
+                    .param("bairro", endereco.getBairro())
+                    .param("numero", endereco.getNumero())
+                    .param("cep", endereco.getCep())
                     .param("tipoEndereco", TipoEndereco.RESTAURANTE.toString())
                     .update();
 
@@ -141,7 +141,7 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
 
                 if (message.contains("foreign key") || message.contains("constraint") || message.contains("violates foreign key constraint")) {
                     // Mensagens de erro diferentes para cliente e para restaurante
-                    if (endereco.tipoEndereco() == TipoEndereco.CLIENTE) {
+                    if (endereco.getTipoEndereco() == TipoEndereco.CLIENTE) {
                         throw new ResourceNotFoundException("ID de cliente não existe para atrela-lo a este endereço");
                     } else {
                         throw new ResourceNotFoundException("ID de restaurante não existe para atrela-lo a este endereço");

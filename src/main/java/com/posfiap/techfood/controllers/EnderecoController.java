@@ -2,7 +2,9 @@ package com.posfiap.techfood.controllers;
 
 
 import com.posfiap.techfood.models.Endereco;
+import com.posfiap.techfood.models.dto.EnderecoDTO;
 import com.posfiap.techfood.services.EnderecoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +34,7 @@ public class EnderecoController {
     }
     @PostMapping
     public ResponseEntity<Void> inserirEndereco(
-        @RequestBody Endereco endereco
+        @Valid @RequestBody EnderecoDTO endereco
         ){
         enderecoService.insertEndereco(endereco);
         return ResponseEntity.status(201).build();

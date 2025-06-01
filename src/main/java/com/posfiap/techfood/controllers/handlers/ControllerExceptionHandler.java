@@ -1,12 +1,16 @@
 package com.posfiap.techfood.controllers.handlers;
 
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
-import com.posfiap.techfood.models.dto.errors.ArgumentsMissingDTO;
 import com.posfiap.techfood.models.dto.errors.ResourceNotFoundDTO;
+import com.posfiap.techfood.models.dto.errors.ValidationErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -17,9 +21,13 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(status.value()).body(new ResourceNotFoundDTO(e.getMessage(), status.value()));
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ArgumentsMissingDTO> handlerArgumentsMissing(IllegalArgumentException e) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationErrorDTO> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         var status = HttpStatus.BAD_REQUEST;
-        return ResponseEntity.status(status.value()).body(new ArgumentsMissingDTO(e.getMessage(), status.value()));
+        List<String> errors = new ArrayList<String>();
+        for (var error: e.getBindingResult().getFieldErrors()) {
+            errors.add(error.getField() + ": " + error.getDefaultMessage());
+        }
+        return ResponseEntity.status(status.value()).body(new ValidationErrorDTO(errors, status.value()));
     }
 }

@@ -2,6 +2,7 @@ package com.posfiap.techfood.services;
 
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.models.Endereco;
+import com.posfiap.techfood.models.dto.EnderecoDTO;
 import com.posfiap.techfood.repositories.EnderecoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +42,9 @@ public class EnderecoService {
         log.info("Atualização realizada com sucesso.");
     }
 
-    public void insertEndereco(Endereco endereco){
+    public void insertEndereco(EnderecoDTO endereco){
         log.info("Acessado o endpoint de salvamento de endereço");
-        var insert = enderecoRepository.save(endereco);
+        var insert = enderecoRepository.save(new Endereco(endereco));
     }
 
     public void deleteEndereco(Long id) {
@@ -65,6 +66,6 @@ public class EnderecoService {
         if (id == null) {
             throw new IllegalArgumentException("ID do endereço não pode ser nula.");
         }
-        this.enderecos.removeIf(endereco -> endereco.id().equals(id));
+        this.enderecos.removeIf(endereco -> endereco.getId().equals(id));
     }
 }
