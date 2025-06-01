@@ -26,7 +26,7 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                         FROM CLIENTES c
                         INNER JOIN USUARIOS u ON c.USERNAME = u.USERNAME
                         LEFT JOIN ENDERECOS e ON c.ID = e.ID_CLIENTE
-                        WHERE ID = :id
+                        WHERE c.ID = :id
                         """
         )
                 .param("id", id)
@@ -42,7 +42,7 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                         SELECT c.*, u.*, e.*
                         FROM CLIENTES c
                         INNER JOIN USUARIOS u ON c.USERNAME = u.USERNAME
-                        LEFT JOIN ENDERECOS e ON c.ID = e.ID_ENTIDADE
+                        LEFT JOIN ENDERECOS e ON c.ID = e.ID_CLIENTE
                         LIMIT :size
                         OFFSET :offset
                         """
@@ -118,5 +118,19 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                 .param("username", username)
                 .query(Cliente.class)
                 .optional();
+    }
+
+    public Integer updatePassword(Cliente cliente) {
+        return jdbcClient
+                .sql(
+                        """
+                        UPDATE USUARIOS SET PASSWORD = :password, DATA_ALTERACAO_SENHA = :dataAlteracaoSenha
+                        WHERE USERNAME = :username
+                        """
+                )
+                .param("username", cliente.getUsername())
+                .param("password", cliente.getPassword())
+                .param("dataAlteracaoSenha", cliente.getDataAlteracaoSenha())
+                .update();
     }
 }
