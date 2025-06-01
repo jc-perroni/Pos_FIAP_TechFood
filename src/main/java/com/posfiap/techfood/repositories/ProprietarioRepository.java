@@ -38,7 +38,7 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
                         """
-                        SELECT p.*, u.* 
+                        SELECT p.*, u.*
                         FROM PROPRIETARIOS p
                         INNER JOIN USUARIOS u ON p.USERNAME = u.USERNAME
                         LIMIT :size

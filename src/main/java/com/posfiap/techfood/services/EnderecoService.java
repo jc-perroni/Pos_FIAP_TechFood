@@ -21,6 +21,7 @@ public class EnderecoService {
     private final List<Endereco> enderecos = new ArrayList<>();
 
     public List<Endereco> findAllEnderecos(int page, int size){
+        log.info("page: " + String.valueOf(page) + " size: " + String.valueOf(size));
         int offset = (page - 1) * size;
         return enderecoRepository.findAll(size, offset);
     }
