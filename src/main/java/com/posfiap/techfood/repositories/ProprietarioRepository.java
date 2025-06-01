@@ -1,5 +1,6 @@
 package com.posfiap.techfood.repositories;
 
+import com.posfiap.techfood.models.Cliente;
 import com.posfiap.techfood.models.Proprietario;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -122,12 +123,13 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
                         """
-                        UPDATE USUARIOS SET PASSWORD = :password
+                        UPDATE USUARIOS SET PASSWORD = :password, DATA_ALTERACAO_SENHA = :dataAlteracaoSenha
                         WHERE USERNAME = :username
                         """
                 )
                 .param("username", proprietario.getUsername())
                 .param("password", proprietario.getPassword())
+                .param("dataAlteracaoSenha", proprietario.getDataAlteracaoSenha())
                 .update();
     }
 }
