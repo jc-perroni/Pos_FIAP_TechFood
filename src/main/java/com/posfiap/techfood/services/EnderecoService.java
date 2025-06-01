@@ -26,8 +26,9 @@ public class EnderecoService {
         return enderecoRepository.findAll(size, offset);
     }
 
-    public Optional<Endereco> findEnderecoById(Long id){
-        return Optional.ofNullable(enderecoRepository.findById(id))
+    public Endereco findEnderecoById(Long id){
+        log.info(String.valueOf(id));
+        return enderecoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
     }
 
