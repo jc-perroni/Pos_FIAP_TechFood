@@ -21,18 +21,19 @@ public class EnderecoService {
     private final List<Endereco> enderecos = new ArrayList<>();
 
     public List<Endereco> findAllEnderecos(int page, int size){
-        log.info("page: " + String.valueOf(page) + " size: " + String.valueOf(size));
+        log.info("Acessado o endpoint de retornar todos os endereços");
         int offset = (page - 1) * size;
         return enderecoRepository.findAll(size, offset);
     }
 
     public Endereco findEnderecoById(Long id){
-        log.info(String.valueOf(id));
+        log.info("Acessado o endpoint de de encontrar endereço pelo ID");
         return enderecoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
     }
 
     public void updateEndereco(Endereco endereco, Long id){
+        log.info("Acessado o endpoint de atualização de endereço");
         var update = enderecoRepository.update(endereco, id);
         if(update ==0) {
             throw new RuntimeException("O endereço de id " + id + " não está cadastrado e não pode ser atualizado");
@@ -41,14 +42,15 @@ public class EnderecoService {
     }
 
     public void insertEndereco(Endereco endereco){
+        log.info("Acessado o endpoint de salvamento de endereço");
         var insert = enderecoRepository.save(endereco);
-        Assert.state(insert ==1, "Erro ao tentar gravar o endereço.");
     }
 
     public void deleteEndereco(Long id) {
+        log.info("Acessado o endpoint de deleção de endereço");
         var delete = enderecoRepository.delete(id);
         if (delete == 0){
-            throw new RuntimeException("Endereço não encontrado com a ID: " + id);
+            throw new ResourceNotFoundException("ID do endereço não existe");
         }
     }
 
