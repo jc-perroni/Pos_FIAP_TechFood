@@ -24,16 +24,24 @@ public class AlteracaoSenhaController {
     @PostMapping("/cliente")
     public ResponseEntity<Void> alterarSenhaCliente(
             @RequestBody ClienteAlteracaoSenhaDTO alteracaoSenhaDTO) {
-        alteracaoSenhaService.alterarSenha(alteracaoSenhaDTO);
-        HttpStatus httpStatus = HttpStatus.NO_CONTENT;
-        return ResponseEntity.status(httpStatus.value()).build();
+        try {
+            alteracaoSenhaService.alterarSenha(alteracaoSenhaDTO);
+            HttpStatus httpStatus = HttpStatus.NO_CONTENT;
+            return ResponseEntity.status(httpStatus.value()).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @PostMapping("/proprietario")
     public ResponseEntity<AlteracaoSenhaDTO> alterarSenhaProprietario(
             @RequestBody ProprietarioAlteracaoSenhaDTO alteracaoSenhaDTO) {
-        alteracaoSenhaService.alterarSenha(alteracaoSenhaDTO);
-        HttpStatus httpStatus = HttpStatus.NO_CONTENT;
-        return ResponseEntity.status(httpStatus.value()).build();
+        try {
+            alteracaoSenhaService.alterarSenha(alteracaoSenhaDTO);
+            HttpStatus httpStatus = HttpStatus.NO_CONTENT;
+            return ResponseEntity.status(httpStatus.value()).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }
