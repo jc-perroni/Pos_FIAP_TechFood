@@ -2,10 +2,13 @@ package com.posfiap.techfood.services;
 
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.models.Cliente;
+import com.posfiap.techfood.models.Endereco;
 import com.posfiap.techfood.repositories.ClienteRepository;
+import com.posfiap.techfood.repositories.EnderecoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.Optional;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final EnderecoRepository enderecoRepository;
     private final UsuarioService usuarioService;
 
     public List<Cliente> findAllClientes(int page, int size){
@@ -43,11 +47,19 @@ public class ClienteService {
         Assert.state(insert ==1, "Erro ao tentar gravar o cliente.");
     }
 
+    @Transactional
     public void deleteCliente(Long id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
+        List<Endereco> enderecosCliente = cliente.getEnderecos();
+        for(Endereco endereco : enderecosCliente){
+            log.info("Excluindo endereço ID {} relacionado ao cliente {}", endereco.getId(), cliente.getNome());
+            enderecoRepository.delete(endereco.getId());
+        }
+        log.info("Excluindo cliente");
         var delete = clienteRepository.delete(id);
         if (delete == 0){
-            throw new RuntimeException("Cliente não encontrado com a ID: " + id);
+            throw new RuntimeException("Não foi possíve excluir o cliente com ID: " + id);
         }
     }
-
 }

@@ -97,11 +97,15 @@ public class ClienteRepository implements CrudRepository<Cliente> {
         return jdbcClient
                 .sql(
                         """
+                        DELETE USUARIOS
+                        WHERE USERNAME =
+                            (SELECT USERNAME FROM CLIENTES WHERE ID = :id)
                         DELETE CLIENTES
-                        WHERE ID = :id
+                        WHERE ID = :id;
                         """
                 )
                 .param("id", id)
+                .param("userName")
                 .update();
     }
 
