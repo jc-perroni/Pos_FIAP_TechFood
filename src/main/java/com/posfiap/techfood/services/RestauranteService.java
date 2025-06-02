@@ -46,13 +46,9 @@ public class RestauranteService {
     }
     @Transactional
     public void deleteRestaurante(Long id) {
-        Restaurante restaurante = restauranteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Restaurante não encontrado"));
-        enderecoRepository.delete(restaurante.getEndereco().getId());
         var delete = restauranteRepository.delete(id);
         if (delete == 0){
             throw new RuntimeException("Não foi possível excluir o restaurante com ID: " + id);
         }
     }
-
 }

@@ -49,14 +49,6 @@ public class ClienteService {
 
     @Transactional
     public void deleteCliente(Long id) {
-        Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
-        List<Endereco> enderecosCliente = cliente.getEnderecos();
-        for(Endereco endereco : enderecosCliente){
-            log.info("Excluindo endereço ID {} relacionado ao cliente {}", endereco.getId(), cliente.getNome());
-            enderecoRepository.delete(endereco.getId());
-        }
-        log.info("Excluindo cliente");
         var delete = clienteRepository.delete(id);
         if (delete == 0){
             throw new RuntimeException("Não foi possíve excluir o cliente com ID: " + id);
