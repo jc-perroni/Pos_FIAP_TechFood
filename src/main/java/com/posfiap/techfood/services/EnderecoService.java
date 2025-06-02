@@ -37,7 +37,7 @@ public class EnderecoService {
         log.info("Acessado o endpoint de atualização de endereço");
         var update = enderecoRepository.update(endereco, id);
         if(update ==0) {
-            throw new RuntimeException("O endereço de id " + id + " não está cadastrado e não pode ser atualizado");
+            throw new ResourceNotFoundException("O endereço de id " + id + " não está cadastrado e não pode ser atualizado");
         }
         log.info("Atualização realizada com sucesso.");
     }
