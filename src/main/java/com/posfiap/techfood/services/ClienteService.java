@@ -43,7 +43,7 @@ public class ClienteService {
 
         int update = clienteRepository.update(clienteExistente, id);
         if(update ==0) {
-            throw new RuntimeException("O cliente de id " + id + " não está cadastrado e não pode ser atualizado");
+            throw new ResourceNotFoundException("O cliente de id " + id + " não está cadastrado e não pode ser atualizado");
         }
         log.info("Atualização realizada com sucesso.");
     }
@@ -57,7 +57,7 @@ public class ClienteService {
     public void deleteCliente(Long id) {
         var delete = clienteRepository.delete(id);
         if (delete == 0){
-            throw new RuntimeException("Cliente não encontrado com a ID: " + id);
+            throw new ResourceNotFoundException("Cliente para deleção não encontrado com o ID: " + id);
         }
     }
 
