@@ -14,6 +14,10 @@ public class Cliente extends Usuario {
     @Getter @Setter
     private List<Endereco> enderecos = new ArrayList<>();
 
+    public Cliente() {
+        super();
+    }
+
     public Cliente(
             String telefone,
             String CPF,
@@ -30,7 +34,7 @@ public class Cliente extends Usuario {
 
     public Cliente(ClienteDTO cliente) {
         super(cliente.nome(), cliente.email(), cliente.telefone(),
-                cliente.CPF(), cliente.username(), cliente.password(),
+                cliente.cpf(), cliente.username(), cliente.password(),
                 cliente.dataCriacaoConta(), cliente.dataAlteracaoConta(),
                 cliente.dataAlteracaoSenha());
     }

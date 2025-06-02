@@ -7,6 +7,9 @@ import java.time.LocalDate;
 
 public abstract class Usuario {
 
+    public Usuario() {
+    }
+
     public Usuario(String nome, String email, String telefone, String CPF, String username, String password,
                    LocalDate dataCriacaoConta, LocalDate dataAlteracaoConta, LocalDate dataAlteracaoSenha) {
         this.nome = nome;
@@ -35,7 +38,7 @@ public abstract class Usuario {
     private String CPF;
 
     @Getter
-    private final String username;
+    private String username;
 
     @Getter
     private String password;

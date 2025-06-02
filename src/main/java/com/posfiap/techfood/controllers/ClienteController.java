@@ -2,6 +2,7 @@ package com.posfiap.techfood.controllers;
 
 import com.posfiap.techfood.models.Cliente;
 import com.posfiap.techfood.models.dto.ClienteDTO;
+import com.posfiap.techfood.models.dto.ClienteUpdateDTO;
 import com.posfiap.techfood.services.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -55,7 +56,7 @@ public class ClienteController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> atualizarCliente(
         @Parameter(description = "ID do cliente") @PathVariable("id") Long id,
-        @Valid @RequestBody ClienteDTO cliente
+        @Valid @RequestBody ClienteUpdateDTO cliente
     ){
         clienteService.updateCliente(cliente, id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

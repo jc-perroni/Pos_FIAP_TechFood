@@ -3,6 +3,7 @@ package com.posfiap.techfood.services;
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.models.Cliente;
 import com.posfiap.techfood.models.dto.ClienteDTO;
+import com.posfiap.techfood.models.dto.ClienteUpdateDTO;
 import com.posfiap.techfood.repositories.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +31,17 @@ public class ClienteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
     }
 
-    public void updateCliente(ClienteDTO cliente, Long id){
-        Cliente cl = new Cliente(cliente);
-        var update = clienteRepository.update(cl, id);
+    public void updateCliente(ClienteUpdateDTO cliente, Long id){
+        Cliente clienteExistente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
+
+        // Atualiza a entidade
+        clienteExistente.setNome(cliente.nome());
+        clienteExistente.setCPF(cliente.cpf());
+        clienteExistente.setTelefone(cliente.telefone());
+        clienteExistente.setEmail(cliente.email());
+
+        int update = clienteRepository.update(clienteExistente, id);
         if(update ==0) {
             throw new RuntimeException("O cliente de id " + id + " não está cadastrado e não pode ser atualizado");
         }
@@ -48,7 +57,7 @@ public class ClienteService {
     public void deleteCliente(Long id) {
         var delete = clienteRepository.delete(id);
         if (delete == 0){
-            throw new ResourceNotFoundException("Cliente não encontrado com a ID: " + id);
+            throw new RuntimeException("Cliente não encontrado com a ID: " + id);
         }
     }
 
