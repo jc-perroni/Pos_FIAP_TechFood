@@ -1,5 +1,7 @@
 package com.posfiap.techfood.models;
 
+import com.posfiap.techfood.models.dto.ClienteDTO;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +26,13 @@ public class Cliente extends Usuario {
             LocalDate dataAlteracaoSenha
     ) {
         super(nome, email, telefone, CPF, username, password,dataCriacaoConta, dataAlteracaoConta,dataAlteracaoSenha);
+    }
+
+    public Cliente(ClienteDTO cliente) {
+        super(cliente.nome(), cliente.email(), cliente.telefone(),
+                cliente.CPF(), cliente.username(), cliente.password(),
+                cliente.dataCriacaoConta(), cliente.dataAlteracaoConta(),
+                cliente.dataAlteracaoSenha());
     }
 
 }

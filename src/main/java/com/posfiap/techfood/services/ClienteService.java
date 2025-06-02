@@ -2,6 +2,7 @@ package com.posfiap.techfood.services;
 
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.models.Cliente;
+import com.posfiap.techfood.models.dto.ClienteDTO;
 import com.posfiap.techfood.repositories.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,29 +25,30 @@ public class ClienteService {
         return clienteRepository.findAll(size, offset);
     }
 
-    public Optional<Cliente> findClienteById(Long id){
-        return Optional.ofNullable(clienteRepository.findById(id))
+    public Cliente findClienteById(Long id){
+        return clienteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
     }
 
-    public void updateCliente(Cliente cliente, Long id){
-        var update = clienteRepository.update(cliente, id);
+    public void updateCliente(ClienteDTO cliente, Long id){
+        Cliente cl = new Cliente(cliente);
+        var update = clienteRepository.update(cl, id);
         if(update ==0) {
             throw new RuntimeException("O cliente de id " + id + " não está cadastrado e não pode ser atualizado");
         }
         log.info("Atualização realizada com sucesso.");
     }
 
-    public void insertCliente(Cliente cliente){
-        usuarioService.alterarSenha(cliente.getPassword(), cliente);
-        var insert = clienteRepository.save(cliente);
-        Assert.state(insert ==1, "Erro ao tentar gravar o cliente.");
+    public void insertCliente(ClienteDTO cliente){
+        Cliente cl = new Cliente(cliente);
+        usuarioService.alterarSenha(cliente.password(), cl);
+        var insert = clienteRepository.save(cl);
     }
 
     public void deleteCliente(Long id) {
         var delete = clienteRepository.delete(id);
         if (delete == 0){
-            throw new RuntimeException("Cliente não encontrado com a ID: " + id);
+            throw new ResourceNotFoundException("Cliente não encontrado com a ID: " + id);
         }
     }
 
