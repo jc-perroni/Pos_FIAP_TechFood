@@ -61,6 +61,7 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                                 rs.getString("CLIENTE_TELEFONE"),
                                 rs.getString("CLIENTE_CPF"),
                                 rs.getString("CLIENTE_USERNAME"),
+                                "CONFIDENCIAL",
                                 rs.getObject("USUARIO_DATA_CRIACAO_CONTA", LocalDate.class),
                                 rs.getObject("USUARIO_DATA_ALTERACAO_CONTA", LocalDate.class),
                                 rs.getObject("USUARIO_DATA_ALTERACAO_SENHA", LocalDate.class)
@@ -144,6 +145,7 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                                 rs.getString("CLIENTE_TELEFONE"),
                                 rs.getString("CLIENTE_CPF"),
                                 rs.getString("CLIENTE_USERNAME"),
+                                "CONFIDENCIAL",
                                 rs.getObject("USUARIO_DATA_CRIACAO_CONTA", LocalDate.class),
                                 rs.getObject("USUARIO_DATA_ALTERACAO_CONTA", LocalDate.class),
                                 rs.getObject("USUARIO_DATA_ALTERACAO_SENHA", LocalDate.class)
@@ -230,7 +232,7 @@ public class ClienteRepository implements CrudRepository<Cliente> {
         return jdbcClient
                 .sql(
                         """
-                        DELETE CLIENTES
+                        DELETE FROM CLIENTES
                         WHERE ID = :id;
                         """
                 )

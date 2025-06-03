@@ -96,7 +96,7 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
                         """
-                        DELETE PROPRIETARIOS
+                        DELETE FROM PROPRIETARIOS
                         WHERE ID = :id
                         """
                 )

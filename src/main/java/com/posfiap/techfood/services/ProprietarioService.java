@@ -41,7 +41,7 @@ public class ProprietarioService {
 
         // Atualiza a entidade do código
         proprietarioExistente.setNome(proprietario.nome());
-        proprietarioExistente.setCPF(proprietario.cpf());
+        proprietarioExistente.setCpf(proprietario.cpf());
         proprietarioExistente.setTelefone(proprietario.telefone());
         proprietarioExistente.setEmail(proprietario.email());
 

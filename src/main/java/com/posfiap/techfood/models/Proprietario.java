@@ -1,5 +1,7 @@
 package com.posfiap.techfood.models;
 
+import com.posfiap.techfood.models.dto.ProprietarioDTO;
+
 import java.time.LocalDate;
 import java.util.List;
 

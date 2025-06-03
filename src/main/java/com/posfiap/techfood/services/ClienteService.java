@@ -41,7 +41,7 @@ public class ClienteService {
 
         // Atualiza a entidade
         clienteExistente.setNome(cliente.nome());
-        clienteExistente.setCPF(cliente.cpf());
+        clienteExistente.setCpf(cliente.cpf());
         clienteExistente.setTelefone(cliente.telefone());
         clienteExistente.setEmail(cliente.email());
 

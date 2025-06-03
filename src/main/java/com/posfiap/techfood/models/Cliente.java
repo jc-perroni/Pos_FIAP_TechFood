@@ -24,11 +24,12 @@ public class Cliente extends Usuario {
             String telefone,
             String cpf,
             String username,
+            String password,
             LocalDate dataCriacaoConta,
             LocalDate dataAlteracaoConta,
             LocalDate dataAlteracaoSenha
     ) {
-        super(nome, email, telefone, cpf, username,dataCriacaoConta, dataAlteracaoConta,dataAlteracaoSenha);
+        super(nome, email, telefone, cpf, username, password,dataCriacaoConta, dataAlteracaoConta,dataAlteracaoSenha);
     }
 
     public Cliente(ClienteDTO cliente) {
