@@ -1,19 +1,28 @@
 version: '3.9'
 
 volumes:
-  postgre_data: {}
+  pgdata: {}
 
 services:
-  postresql:
-    image: postre:17
+  db:
+    image: postgres:17
     volumes:
-      - postgre_data:/var/lib/postre
+      - pgdata:/var/lib/postgresql/data
     restart: always
     environment:
-      POSTGRE_ROOT_PASSWORD: root
-      POSTGRE_DATABASE: techfood
-      POSTGRE_USER: techfood
-      POSTGRE_PASSWORD: techfood
+      POSTGRES_DB: techfood
+      POSTGRES_USER: techfood
+      POSTGRES_PASSWORD: techfood123
 
-  
-
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/techfood
+      SPRING_DATASOURCE_USERNAME: techfood
+      SPRING_DATASOURCE_PASSWORD: techfood123
+    ports:
+      - "8080:8080"
+    restart: always
