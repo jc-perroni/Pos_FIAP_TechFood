@@ -9,7 +9,7 @@ import lombok.Setter;
 public class Endereco {
     Long id;
 
-    String idEntidade;
+    Long idEntidade;
 
     TipoEndereco tipoEndereco;
 
@@ -31,7 +31,7 @@ public class Endereco {
     @Setter
     String numero;
 
-    public Endereco(Long id, String idEntidade, TipoEndereco tipoEndereco, String rua, String cep, String cidade, String bairro, String complemento, String numero) {
+    public Endereco(Long id, Long idEntidade, TipoEndereco tipoEndereco, String rua, String cep, String cidade, String bairro, String complemento, String numero) {
         this.id = id;
         this.idEntidade = idEntidade;
         this.tipoEndereco = tipoEndereco;

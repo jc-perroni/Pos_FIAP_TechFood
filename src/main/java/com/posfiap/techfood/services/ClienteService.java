@@ -2,12 +2,15 @@ package com.posfiap.techfood.services;
 
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.models.Cliente;
+import com.posfiap.techfood.models.Endereco;
 import com.posfiap.techfood.models.dto.ClienteDTO;
 import com.posfiap.techfood.models.dto.ClienteUpdateDTO;
 import com.posfiap.techfood.repositories.ClienteRepository;
+import com.posfiap.techfood.repositories.EnderecoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.Optional;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final EnderecoRepository enderecoRepository;
     private final UsuarioService usuarioService;
 
     public List<Cliente> findAllClientes(int page, int size){
@@ -54,6 +58,7 @@ public class ClienteService {
         var insert = clienteRepository.save(cl);
     }
 
+    @Transactional
     public void deleteCliente(Long id) {
         var delete = clienteRepository.delete(id);
         if (delete == 0){

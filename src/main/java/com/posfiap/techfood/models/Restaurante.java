@@ -15,8 +15,6 @@ public class Restaurante {
     private String nome;
     @Getter @Setter
     private String telefone;
-    @Getter
+    @Getter @Setter
     private Endereco endereco;
-
-
 }
