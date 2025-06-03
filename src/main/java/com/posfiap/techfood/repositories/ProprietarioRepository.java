@@ -39,7 +39,7 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
                         """
-                        SELECT p.*, u.* 
+                        SELECT p.*, u.*
                         FROM PROPRIETARIOS p
                         INNER JOIN USUARIOS u ON p.USERNAME = u.USERNAME
                         LIMIT :size
@@ -62,7 +62,7 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
                         """
                 )
                 .param("nome", proprietario.getNome())
-                .param("cpf", proprietario.getCPF())
+                .param("cpf", proprietario.getCpf())
                 .param("telefone", proprietario.getTelefone())
                 .param("email", proprietario.getEmail())
                 .param("id", id)
@@ -82,7 +82,7 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
                         """
                 )
                 .param("nome", proprietario.getNome())
-                .param("cpf", proprietario.getCPF())
+                .param("cpf", proprietario.getCpf())
                 .param("telefone", proprietario.getTelefone())
                 .param("email", proprietario.getEmail())
                 .param("username", proprietario.getUsername())

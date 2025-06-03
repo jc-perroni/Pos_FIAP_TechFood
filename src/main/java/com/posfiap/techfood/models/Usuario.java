@@ -1,5 +1,6 @@
 package com.posfiap.techfood.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,14 +8,13 @@ import java.time.LocalDate;
 
 public abstract class Usuario {
 
-    public Usuario(String nome, String email, String telefone, String CPF, String username, String password,
+    public Usuario(String nome, String email, String telefone, String cpf, String username,
                    LocalDate dataCriacaoConta, LocalDate dataAlteracaoConta, LocalDate dataAlteracaoSenha) {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
-        this.CPF = CPF;
+        this.cpf = cpf;
         this.username = username;
-        this.password = password;
         this.dataCriacaoConta = dataCriacaoConta;
         this.dataAlteracaoConta = dataAlteracaoConta;
         this.dataAlteracaoSenha = dataAlteracaoSenha;
@@ -32,7 +32,7 @@ public abstract class Usuario {
     private String telefone;
 
     @Getter @Setter
-    private String CPF;
+    private String cpf;
 
     @Getter
     private final String username;

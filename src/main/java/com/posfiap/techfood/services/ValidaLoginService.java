@@ -47,7 +47,8 @@ public class ValidaLoginService {
                 return proprietarioRepository.findByUsername(proprietario.getUsuario()).orElseThrow(() ->
                         new InvalidUserNameAccount("Username de proprietário inválido."));
             }
-            default -> throw new IllegalStateException("Não foi possível identificar o tipo de usuário: " + loginDTO);
+            default -> throw new IllegalStateException("Não foi possível identificar o tipo de usuário: " +
+                    loginDTO.getUsuario());
         }
         }
     }

@@ -8,12 +8,14 @@ services:
     image: postgres:17
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
     restart: always
     environment:
       POSTGRES_DB: techfood
       POSTGRES_USER: techfood
       POSTGRES_PASSWORD: techfood123
-
+    ports:
+      - "5432:5432"
   app:
     build: .
     depends_on:

@@ -4,6 +4,7 @@ import com.posfiap.techfood.models.dto.AlteracaoSenhaDTO;
 import com.posfiap.techfood.models.dto.ClienteAlteracaoSenhaDTO;
 import com.posfiap.techfood.models.dto.ProprietarioAlteracaoSenhaDTO;
 import com.posfiap.techfood.services.AlteracaoSenhaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/v1/alterar-senha")
 @RestController
+@Tag(name = "Alterar Senha", description = "Serviços relacionados a alteração de senha do usuário")
 public class AlteracaoSenhaController {
 
     private final AlteracaoSenhaService alteracaoSenhaService;

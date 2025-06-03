@@ -1,12 +1,19 @@
 package com.posfiap.techfood.repositories;
 
+import com.posfiap.techfood.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.models.Endereco;
+import com.posfiap.techfood.models.enums.TipoEndereco;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @Repository
 public class EnderecoRepository implements CrudRepository<Endereco> {
     private final JdbcClient jdbcClient;
@@ -25,7 +32,16 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                         """
                 )
                 .param("id", id)
-                .query(Endereco.class)
+                .query((queryResult, row) -> new Endereco(
+                        queryResult.getLong("ID"),
+                        queryResult.getString("ID_CLIENTE") == null ? queryResult.getLong("ID_RESTAURANTE") : queryResult.getLong("ID_CLIENTE"),
+                        queryResult.getString("TIPO").equals(TipoEndereco.CLIENTE.toString()) ? TipoEndereco.CLIENTE : TipoEndereco.RESTAURANTE,
+                        queryResult.getString("RUA"),
+                        queryResult.getString("CEP"),
+                        queryResult.getString("CIDADE"),
+                        queryResult.getString("BAIRRO"),
+                        queryResult.getString("COMPLEMENTO"),
+                        queryResult.getString("NUMERO")))
                 .optional();
     }
 
@@ -41,7 +57,16 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                 )
                 .param("size", size)
                 .param("offset", offset)
-                .query(Endereco.class)
+                .query((queryResult, row) -> new Endereco(
+                        queryResult.getLong("ID"),
+                        queryResult.getString("ID_CLIENTE") == null ? queryResult.getLong("ID_RESTAURANTE") : queryResult.getLong("ID_CLIENTE"),
+                        queryResult.getString("TIPO").equals(TipoEndereco.CLIENTE.toString()) ? TipoEndereco.CLIENTE : TipoEndereco.RESTAURANTE,
+                        queryResult.getString("RUA"),
+                        queryResult.getString("CEP"),
+                        queryResult.getString("CIDADE"),
+                        queryResult.getString("BAIRRO"),
+                        queryResult.getString("COMPLEMENTO"),
+                        queryResult.getString("NUMERO")))
                 .list();
     }
 
@@ -51,16 +76,16 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                 .sql(
                         """
                         UPDATE ENDERECOS SET RUA = :rua, CIDADE = :cidade, COMPLEMENTO = :complemento, BAIRRO = :bairro,
-                            NUMERO =:numero, CEP = :cep
+                        NUMERO =:numero, CEP = :cep
                         WHERE ID = :id
                         """
                 )
-                .param("rua", endereco.rua())
-                .param("cidade", endereco.cidade())
-                .param("complemento", endereco.complemento())
-                .param("bairro", endereco.bairro())
-                .param("numero", endereco.numero())
-                .param("cep", endereco.cep())
+                .param("rua", endereco.getRua())
+                .param("cidade", endereco.getCidade())
+                .param("complemento", endereco.getComplemento())
+                .param("bairro", endereco.getBairro())
+                .param("numero", endereco.getNumero())
+                .param("cep", endereco.getCep())
                 .param("id", id)
                 .update();
 
@@ -68,21 +93,64 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
 
     @Override
     public Integer save(Endereco endereco) {
-        return jdbcClient
-                .sql(
-                        """
-                                INSERT INTO ENDERECOS (ID_CLIENTE, RUA, CIDADE, COMPLEMENTO, BAIRRO, NUMERO, CEP)
-                                VALUES (:idCliente, :rua, :cidade, :complemento, :bairro, :numero, :cep)
+        // Tratativa para caso o Id do cliente ou do Restaurante não exista;
+        try {
+            if (Objects.equals(endereco.getTipoEndereco().toString(), TipoEndereco.CLIENTE.toString())) {
+                return jdbcClient
+                        .sql(
                                 """
-                )
-                .param("idCliente", endereco.idCliente())
-                .param("rua", endereco.rua())
-                .param("cidade", endereco.cidade())
-                .param("complemento", endereco.complemento())
-                .param("bairro", endereco.bairro())
-                .param("numero", endereco.numero())
-                .param("cep", endereco.cep())
-                .update();
+                                INSERT INTO ENDERECOS (ID_CLIENTE, RUA, CIDADE, COMPLEMENTO,
+                                BAIRRO, NUMERO, CEP, TIPO)
+                                VALUES (:idEntidade, :rua, :cidade, :complemento, :bairro, :numero, :cep, :tipoEndereco::tipo_endereco)
+                                """
+                        )
+                        .param("idEntidade", endereco.getIdEntidade())
+                        .param("rua", endereco.getRua())
+                        .param("cidade", endereco.getCidade())
+                        .param("complemento", endereco.getComplemento())
+                        .param("bairro", endereco.getBairro())
+                        .param("numero", endereco.getNumero())
+                        .param("cep", endereco.getCep())
+                        .param("tipoEndereco", endereco.getTipoEndereco().toString())
+                        .update();
+            }
+
+            return jdbcClient
+                    .sql(
+                            """
+                                    INSERT INTO ENDERECOS (ID_RESTAURANTE, RUA, CIDADE, COMPLEMENTO,
+                                    BAIRRO, NUMERO, CEP, TIPO)
+                                    VALUES (:idEntidade, :rua, :cidade, :complemento, :bairro, :numero, :cep, :tipoEndereco::tipo_endereco)
+                                    """
+                    )
+                    .param("idEntidade", endereco.getIdEntidade())
+                    .param("rua", endereco.getRua())
+                    .param("cidade", endereco.getCidade())
+                    .param("complemento", endereco.getComplemento())
+                    .param("bairro", endereco.getBairro())
+                    .param("numero", endereco.getNumero())
+                    .param("cep", endereco.getCep())
+                    .param("tipoEndereco", endereco.getTipoEndereco().toString())
+                    .update();
+
+        } catch (DataIntegrityViolationException ex) {
+            Throwable rootCause = ex.getRootCause();
+
+            if (rootCause instanceof SQLException sqlEx) {
+                String message = sqlEx.getMessage();
+
+                if (message.contains("foreign key") || message.contains("constraint") || message.contains("violates foreign key constraint")) {
+                    // Mensagens de erro diferentes para cliente e para restaurante
+                    if (endereco.getTipoEndereco() == TipoEndereco.CLIENTE) {
+                        throw new ResourceNotFoundException("ID de cliente não existe para atrela-lo a este endereço");
+                    } else {
+                        throw new ResourceNotFoundException("ID de restaurante não existe para atrela-lo a este endereço");
+                    }
+                }
+            }
+
+            throw ex;
+        }
     }
 
     @Override
@@ -90,7 +158,7 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
         return jdbcClient
                 .sql(
                         """
-                        DELETE ENDERECOS
+                        DELETE FROM ENDERECOS
                         WHERE ID = :id
                         """
                 )
