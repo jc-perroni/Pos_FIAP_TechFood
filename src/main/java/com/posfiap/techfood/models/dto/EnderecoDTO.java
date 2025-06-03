@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record EnderecoDTO(
         @NotNull(message = "O ID para criar o endereço não pode ser nulo")
-        String idEntidade,
+        Long idEntidade,
 
         @NotNull(message = "O tipo de endereço não pode ser nulo: 'CLIENTE' ou 'RESTAURANTE'")
         TipoEndereco tipoEndereco,

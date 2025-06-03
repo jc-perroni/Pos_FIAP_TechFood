@@ -34,7 +34,7 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                 .param("id", id)
                 .query((queryResult, row) -> new Endereco(
                         queryResult.getLong("ID"),
-                        queryResult.getString("ID_CLIENTE") == null ? queryResult.getString("ID_RESTAURANTE") : queryResult.getString("ID_CLIENTE"),
+                        queryResult.getString("ID_CLIENTE") == null ? queryResult.getLong("ID_RESTAURANTE") : queryResult.getLong("ID_CLIENTE"),
                         queryResult.getString("TIPO").equals(TipoEndereco.CLIENTE.toString()) ? TipoEndereco.CLIENTE : TipoEndereco.RESTAURANTE,
                         queryResult.getString("RUA"),
                         queryResult.getString("CEP"),
@@ -59,7 +59,7 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                 .param("offset", offset)
                 .query((queryResult, row) -> new Endereco(
                         queryResult.getLong("ID"),
-                        queryResult.getString("ID_CLIENTE") == null ? queryResult.getString("ID_RESTAURANTE") : queryResult.getString("ID_CLIENTE"),
+                        queryResult.getString("ID_CLIENTE") == null ? queryResult.getLong("ID_RESTAURANTE") : queryResult.getLong("ID_CLIENTE"),
                         queryResult.getString("TIPO").equals(TipoEndereco.CLIENTE.toString()) ? TipoEndereco.CLIENTE : TipoEndereco.RESTAURANTE,
                         queryResult.getString("RUA"),
                         queryResult.getString("CEP"),
@@ -101,7 +101,7 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                                 """
                                 INSERT INTO ENDERECOS (ID_CLIENTE, RUA, CIDADE, COMPLEMENTO,
                                 BAIRRO, NUMERO, CEP, TIPO)
-                                VALUES (:idEntidade, :rua, :cidade, :complemento, :bairro, :numero, :cep, :tipoEndereco)
+                                VALUES (:idEntidade, :rua, :cidade, :complemento, :bairro, :numero, :cep, :tipoEndereco::tipo_endereco)
                                 """
                         )
                         .param("idEntidade", endereco.getIdEntidade())
@@ -111,7 +111,7 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                         .param("bairro", endereco.getBairro())
                         .param("numero", endereco.getNumero())
                         .param("cep", endereco.getCep())
-                        .param("tipoEndereco", TipoEndereco.CLIENTE.toString())
+                        .param("tipoEndereco", endereco.getTipoEndereco().toString())
                         .update();
             }
 
@@ -120,7 +120,7 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                             """
                                     INSERT INTO ENDERECOS (ID_RESTAURANTE, RUA, CIDADE, COMPLEMENTO,
                                     BAIRRO, NUMERO, CEP, TIPO)
-                                    VALUES (:idEntidade, :rua, :cidade, :complemento, :bairro, :numero, :cep, :tipoEndereco)
+                                    VALUES (:idEntidade, :rua, :cidade, :complemento, :bairro, :numero, :cep, :tipoEndereco::tipo_endereco)
                                     """
                     )
                     .param("idEntidade", endereco.getIdEntidade())
@@ -130,7 +130,7 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                     .param("bairro", endereco.getBairro())
                     .param("numero", endereco.getNumero())
                     .param("cep", endereco.getCep())
-                    .param("tipoEndereco", TipoEndereco.RESTAURANTE.toString())
+                    .param("tipoEndereco", endereco.getTipoEndereco().toString())
                     .update();
 
         } catch (DataIntegrityViolationException ex) {
@@ -149,7 +149,6 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                 }
             }
 
-            // Caso não seja um caso tratável, joga a exception novamente
             throw ex;
         }
     }
@@ -159,7 +158,7 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
         return jdbcClient
                 .sql(
                         """
-                        DELETE ENDERECOS
+                        DELETE FROM ENDERECOS
                         WHERE ID = :id
                         """
                 )

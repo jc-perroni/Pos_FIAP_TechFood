@@ -13,17 +13,16 @@ public class Cliente extends Usuario {
     private List<Endereco> enderecos = new ArrayList<>();
 
     public Cliente(
-            String telefone,
-            String CPF,
             String nome,
             String email,
+            String telefone,
+            String cpf,
             String username,
-            String password,
             LocalDate dataCriacaoConta,
             LocalDate dataAlteracaoConta,
             LocalDate dataAlteracaoSenha
     ) {
-        super(nome, email, telefone, CPF, username, password,dataCriacaoConta, dataAlteracaoConta,dataAlteracaoSenha);
+        super(nome, email, telefone, cpf, username,dataCriacaoConta, dataAlteracaoConta,dataAlteracaoSenha);
     }
 
 }

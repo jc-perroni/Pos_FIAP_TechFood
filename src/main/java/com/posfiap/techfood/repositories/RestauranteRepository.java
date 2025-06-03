@@ -1,9 +1,12 @@
 package com.posfiap.techfood.repositories;
 
+import com.posfiap.techfood.models.Endereco;
 import com.posfiap.techfood.models.Restaurante;
+import com.posfiap.techfood.models.enums.TipoEndereco;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,31 +20,123 @@ public class RestauranteRepository implements CrudRepository<Restaurante> {
 
     @Override
     public Optional<Restaurante> findById(Long id) {
-        return jdbcClient
-                .sql(
-                        """
-                        SELECT * FROM RESTAURANTES
-                        WHERE ID = :id
-                        """
-                )
+        String sql = """
+        SELECT r.ID AS RESTAURANTE_ID, r.NOME, r.TELEFONE, r.ID_PROPRIETARIO,
+               e.ID AS ENDERECO_ID, e.RUA, e.CEP, e.CIDADE, e.BAIRRO, e.COMPLEMENTO, e.NUMERO
+        FROM RESTAURANTES r
+        LEFT JOIN ENDERECOS e ON r.ID = e.ID_RESTAURANTE AND e.TIPO = 'RESTAURANTE'
+        WHERE r.ID = :id
+    """;
+        return jdbcClient.sql(sql)
                 .param("id", id)
-                .query(Restaurante.class)
+                .query((rs, rowNum) -> {
+                    Restaurante restaurante = new Restaurante();
+                    Field idField = null;
+                    try {
+                        idField = Restaurante.class.getDeclaredField("id");
+                    } catch (NoSuchFieldException e) {
+                        throw new RuntimeException(e);
+                    }
+                    idField.setAccessible(true);
+                    try {
+                        idField.set(restaurante, rs.getLong("RESTAURANTE_ID"));
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Field idPropField = null;
+                    try {
+                        idPropField = Restaurante.class.getDeclaredField("idProprietario");
+                    } catch (NoSuchFieldException e) {
+                        throw new RuntimeException(e);
+                    }
+                    idPropField.setAccessible(true);
+                    try {
+                        idPropField.set(restaurante, rs.getLong("ID_PROPRIETARIO"));
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                    restaurante.setNome(rs.getString("NOME"));
+                    restaurante.setTelefone(rs.getString("TELEFONE"));
+                    long enderecoId = rs.getLong("ENDERECO_ID");
+                    if (enderecoId != 0 && !rs.wasNull()) {
+                        restaurante.setEndereco(
+                                new Endereco(
+                                        enderecoId,
+                                        rs.getLong("RESTAURANTE_ID"),
+                                        TipoEndereco.RESTAURANTE,
+                                        rs.getString("RUA"),
+                                        rs.getString("CEP"),
+                                        rs.getString("CIDADE"),
+                                        rs.getString("BAIRRO"),
+                                        rs.getString("COMPLEMENTO"),
+                                        rs.getString("NUMERO")
+                                )
+                        );
+                    }
+                    return restaurante;
+                })
                 .optional();
     }
 
     @Override
     public List<Restaurante> findAll(int size, int offset) {
-        return jdbcClient
-                .sql(
-                        """
-                        SELECT * FROM RESTAURANTES
-                        LIMIT :size
-                        OFFSET :offset
-                        """
-                )
+        String sql = """
+        SELECT r.ID AS RESTAURANTE_ID, r.NOME, r.TELEFONE, r.ID_PROPRIETARIO,
+               e.ID AS ENDERECO_ID, e.RUA, e.CEP, e.CIDADE, e.BAIRRO, e.COMPLEMENTO, e.NUMERO
+        FROM RESTAURANTES r
+        LEFT JOIN ENDERECOS e ON r.ID = e.ID_RESTAURANTE AND e.TIPO = 'RESTAURANTE'
+        ORDER BY r.ID, e.ID
+        LIMIT :size OFFSET :offset
+    """;
+        return jdbcClient.sql(sql)
                 .param("size", size)
                 .param("offset", offset)
-                .query(Restaurante.class)
+                .query((rs, rowNum) -> {
+                    Restaurante restaurante = new Restaurante();
+                    Field idField = null;
+                    try {
+                        idField = Restaurante.class.getDeclaredField("id");
+                    } catch (NoSuchFieldException e) {
+                        throw new RuntimeException(e);
+                    }
+                    idField.setAccessible(true);
+                    try {
+                        idField.set(restaurante, rs.getLong("RESTAURANTE_ID"));
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Field idPropField = null;
+                    try {
+                        idPropField = Restaurante.class.getDeclaredField("idProprietario");
+                    } catch (NoSuchFieldException e) {
+                        throw new RuntimeException(e);
+                    }
+                    idPropField.setAccessible(true);
+                    try {
+                        idPropField.set(restaurante, rs.getLong("ID_PROPRIETARIO"));
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                    restaurante.setNome(rs.getString("NOME"));
+                    restaurante.setTelefone(rs.getString("TELEFONE"));
+                    long enderecoId = rs.getLong("ENDERECO_ID");
+                    if (enderecoId != 0 && !rs.wasNull()) {
+                        restaurante.setEndereco(
+                                new Endereco(
+                                        enderecoId,
+                                        rs.getLong("RESTAURANTE_ID"),
+                                        TipoEndereco.RESTAURANTE,
+                                        rs.getString("RUA"),
+                                        rs.getString("CEP"),
+                                        rs.getString("CIDADE"),
+                                        rs.getString("BAIRRO"),
+                                        rs.getString("COMPLEMENTO"),
+                                        rs.getString("NUMERO")
+                                )
+                        );
+                    }
+                    return restaurante;
+                })
                 .list();
     }
 
@@ -68,8 +163,8 @@ public class RestauranteRepository implements CrudRepository<Restaurante> {
         return jdbcClient
                 .sql(
                         """
-                        INSERT INTO RESTAURANTES SET NOME = :nome, TELEFONE = :telefone,
-                        ID_PROPRIETARIO = :idProprietario
+                        INSERT INTO RESTAURANTES (NOME, TELEFONE, ID_PROPRIETARIO)
+                        VALUES (:nome, :telefone, :idProprietario)
                         """
                 )
                 .param("nome", restaurante.getNome())
