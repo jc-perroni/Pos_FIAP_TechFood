@@ -1,6 +1,8 @@
 package com.posfiap.techfood.controllers;
 
 import com.posfiap.techfood.models.Proprietario;
+import com.posfiap.techfood.models.dto.ProprietarioDTO;
+import com.posfiap.techfood.models.dto.ProprietarioUpdateDTO;
 import com.posfiap.techfood.services.ProprietarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,7 +35,7 @@ public class ProprietarioController {
 
     @Operation(summary = "Buscar proprietário por ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Proprietario>> findProprietarioById(
+    public ResponseEntity<Proprietario> findProprietarioById(
         @Parameter(description = "ID do proprietário") @PathVariable("id") Long id
     ){
         var proprietario = proprietarioService.findProprietarioById(id);
@@ -43,7 +45,7 @@ public class ProprietarioController {
     @Operation(summary = "Inserir novo proprietário")
     @PostMapping
     public ResponseEntity<Void> inserirProprietario(
-        @RequestBody Proprietario proprietario
+        @RequestBody ProprietarioDTO proprietario
     ){
         proprietarioService.insertProprietario(proprietario);
         return ResponseEntity.status(201).build();
@@ -53,7 +55,7 @@ public class ProprietarioController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> atualizarProprietario(
         @Parameter(description = "ID do proprietário") @PathVariable("id") Long id,
-        @RequestBody Proprietario proprietario
+        @RequestBody ProprietarioUpdateDTO proprietario
     ){
         proprietarioService.updateProprietario(proprietario, id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
