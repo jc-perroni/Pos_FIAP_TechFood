@@ -1,10 +1,13 @@
 package com.posfiap.techfood.controllers;
 
+
 import com.posfiap.techfood.models.Endereco;
+import com.posfiap.techfood.models.dto.EnderecoDTO;
 import com.posfiap.techfood.services.EnderecoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +36,8 @@ public class EnderecoController {
 
     @Operation(summary = "Buscar endereço por ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Endereco>> findEnderecoById(
-        @Parameter(description = "ID do endereço") @PathVariable("id") Long id
-    ){
+    public ResponseEntity<Endereco> findEnderecoById(
+            @Parameter(description = "ID do endereço") @PathVariable("id") Long id){
         var endereco = enderecoService.findEnderecoById(id);
         return ResponseEntity.ok(endereco);
     }
@@ -43,8 +45,8 @@ public class EnderecoController {
     @Operation(summary = "Inserir novo endereço")
     @PostMapping
     public ResponseEntity<Void> inserirEndereco(
-        @RequestBody Endereco endereco
-    ){
+        @Valid @RequestBody EnderecoDTO endereco
+        ){
         enderecoService.insertEndereco(endereco);
         return ResponseEntity.status(201).build();
     }
@@ -67,4 +69,7 @@ public class EnderecoController {
         enderecoService.deleteEndereco(id);
         return ResponseEntity.ok().build();
     }
+
+
 }
+

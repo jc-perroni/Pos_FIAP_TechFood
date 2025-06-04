@@ -9,8 +9,8 @@ import lombok.Setter;
 @Schema(description = "DTO base para login, contendo e-mail e senha")
 public class LoginDTO {
 
-    @Schema(description = "E-mail do usuário", example = "usuario@email.com")
-    private String email;
+    @Schema(description = "Username para login.", example = "usuario.cliente")
+    private String usuario;
 
     @Schema(description = "Senha do usuário", example = "senha123")
     private String senha;

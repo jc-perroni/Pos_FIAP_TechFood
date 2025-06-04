@@ -1,5 +1,6 @@
 package com.posfiap.techfood.repositories;
 
+import com.posfiap.techfood.models.Cliente;
 import com.posfiap.techfood.models.Proprietario;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -38,7 +39,7 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
                         """
-                        SELECT p.*, u.* 
+                        SELECT p.*, u.*
                         FROM PROPRIETARIOS p
                         INNER JOIN USUARIOS u ON p.USERNAME = u.USERNAME
                         LIMIT :size
@@ -57,13 +58,17 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
                 .sql(
                         """
                         UPDATE PROPRIETARIOS SET NOME = :nome, CPF = :cpf, TELEFONE = :telefone, EMAIL = :email
-                        WHERE ID = :id
+                        WHERE ID = :id;
+                        UPDATE USUARIOS SET DATA_ALTERACAO_CONTA = :dataAltarecaoConta
+                        WHERE USERNAME = :username;
                         """
                 )
                 .param("nome", proprietario.getNome())
-                .param("cpf", proprietario.getCPF())
+                .param("cpf", proprietario.getCpf())
                 .param("telefone", proprietario.getTelefone())
                 .param("email", proprietario.getEmail())
+                .param("dataAltarecaoConta", proprietario.getDataAlteracaoConta())
+                .param("username", proprietario.getUsername())
                 .param("id", id)
                 .update();
     }
@@ -81,7 +86,7 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
                         """
                 )
                 .param("nome", proprietario.getNome())
-                .param("cpf", proprietario.getCPF())
+                .param("cpf", proprietario.getCpf())
                 .param("telefone", proprietario.getTelefone())
                 .param("email", proprietario.getEmail())
                 .param("username", proprietario.getUsername())
@@ -95,11 +100,24 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
                         """
-                        DELETE PROPRIETARIOS
+                        DELETE FROM PROPRIETARIOS
                         WHERE ID = :id
                         """
                 )
                 .param("id", id)
+                .update();
+    }
+
+    @Transactional
+    public Integer deleteUsuario(String username) {
+        return jdbcClient
+                .sql(
+                        """
+                        DELETE FROM USUARIOS
+                        WHERE USERNAME = :username;
+                        """
+                )
+                .param("username", username)
                 .update();
     }
 
@@ -116,5 +134,19 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
                 .param("username", username)
                 .query(Proprietario.class)
                 .optional();
+    }
+
+    public Integer updatePassword(Proprietario proprietario) {
+        return jdbcClient
+                .sql(
+                        """
+                        UPDATE USUARIOS SET PASSWORD = :password, DATA_ALTERACAO_SENHA = :dataAlteracaoSenha
+                        WHERE USERNAME = :username
+                        """
+                )
+                .param("username", proprietario.getUsername())
+                .param("password", proprietario.getPassword())
+                .param("dataAlteracaoSenha", proprietario.getDataAlteracaoSenha())
+                .update();
     }
 }

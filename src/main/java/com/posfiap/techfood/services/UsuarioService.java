@@ -1,11 +1,10 @@
 package com.posfiap.techfood.services;
 
+import com.posfiap.techfood.exceptions.InvalidPasswordException;
 import com.posfiap.techfood.models.Usuario;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 
 import static com.posfiap.techfood.services.ValidaSenhaService.autenticarSenha;
 import static com.posfiap.techfood.utils.HashPassword.hashPassword;
@@ -23,7 +22,7 @@ public class UsuarioService {
             usuario.alterarSenha(hashPassword(senhaNova));
         }
         else {
-            log.warn("Senha incorreta.");
+            throw new InvalidPasswordException("Senha invalida");
         }
     }
 }
