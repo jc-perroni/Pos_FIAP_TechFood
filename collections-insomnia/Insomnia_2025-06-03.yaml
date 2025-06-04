@@ -5,12 +5,6 @@ meta:
   created: 1748991412327
   modified: 1748991412327
 collection:
-  - name: Food_Tech - H2
-    meta:
-      id: fld_3ab1aad8137b45ea86b87c8f4c570fcd
-      created: 1747575951975
-      modified: 1748818449511
-      sortKey: -1747575951975
   - name: Food_Tech - Docker
     meta:
       id: fld_bd358835832a41768523e9f228e96277
