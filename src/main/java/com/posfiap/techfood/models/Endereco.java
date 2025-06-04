@@ -3,9 +3,11 @@ package com.posfiap.techfood.models;
 import com.posfiap.techfood.models.dto.EnderecoDTO;
 import com.posfiap.techfood.models.enums.TipoEndereco;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
+@NoArgsConstructor
 public class Endereco {
     Long id;
 
@@ -51,6 +53,3 @@ public class Endereco {
         this.cidade = enderecoDTO.cidade();
         this.bairro = enderecoDTO.bairro();
         this.complemento = enderecoDTO.complemento();
-        this.numero = enderecoDTO.numero();
-    }
-}
