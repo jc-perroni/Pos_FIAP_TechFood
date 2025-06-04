@@ -8,13 +8,17 @@ import java.time.LocalDate;
 
 public abstract class Usuario {
 
-    public Usuario(String nome, String email, String telefone, String cpf, String username,
+    public Usuario() {
+    }
+
+    public Usuario(String nome, String email, String telefone, String cpf, String username, String password,
                    LocalDate dataCriacaoConta, LocalDate dataAlteracaoConta, LocalDate dataAlteracaoSenha) {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
         this.cpf = cpf;
         this.username = username;
+        this.password = password;
         this.dataCriacaoConta = dataCriacaoConta;
         this.dataAlteracaoConta = dataAlteracaoConta;
         this.dataAlteracaoSenha = dataAlteracaoSenha;
@@ -35,7 +39,7 @@ public abstract class Usuario {
     private String cpf;
 
     @Getter
-    private final String username;
+    private String username;
 
     @Getter
     private String password;

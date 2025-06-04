@@ -96,11 +96,24 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
         return jdbcClient
                 .sql(
                         """
-                        DELETE PROPRIETARIOS
+                        DELETE FROM PROPRIETARIOS
                         WHERE ID = :id
                         """
                 )
                 .param("id", id)
+                .update();
+    }
+
+    @Transactional
+    public Integer deleteUsuario(String username) {
+        return jdbcClient
+                .sql(
+                        """
+                        DELETE FROM USUARIOS
+                        WHERE USERNAME = :username;
+                        """
+                )
+                .param("username", username)
                 .update();
     }
 
