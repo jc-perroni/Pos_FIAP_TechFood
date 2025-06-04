@@ -227,6 +227,7 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                 .update();
     }
 
+    @Transactional
     @Override
     public Integer delete(long id) {
         return jdbcClient
@@ -237,6 +238,19 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                         """
                 )
                 .param("id", id)
+                .update();
+    }
+
+    @Transactional
+    public Integer deleteUsuario(String username) {
+        return jdbcClient
+                .sql(
+                        """
+                        DELETE FROM USUARIOS
+                        WHERE USERNAME = :username;
+                        """
+                )
+                .param("username", username)
                 .update();
     }
 

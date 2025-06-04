@@ -22,7 +22,6 @@ import java.util.Optional;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
-    private final EnderecoRepository enderecoRepository;
     private final UsuarioService usuarioService;
 
     public List<Cliente> findAllClientes(int page, int size){
@@ -60,8 +59,10 @@ public class ClienteService {
 
     @Transactional
     public void deleteCliente(Long id) {
+        Cliente cl = clienteRepository.findById(id).orElseThrow();
         var delete = clienteRepository.delete(id);
-        if (delete == 0){
+        var deleteUser = clienteRepository.deleteUsuario(cl.getUsername());
+        if (delete == 0 || deleteUser == 0){
             throw new ResourceNotFoundException("Cliente para deleção não encontrado com o ID: " + id);
         }
     }
