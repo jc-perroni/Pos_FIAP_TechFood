@@ -62,7 +62,10 @@ public class ProprietarioService {
 
     public void deleteProprietario(Long id) {
         log.info("Acessado o endpoint de deleção de proprietario");
+
+        Proprietario pr = proprietarioRepository.findById(id).orElseThrow();
         var delete = proprietarioRepository.delete(id);
+        var deleteUser = proprietarioRepository.deleteUsuario(pr.getUsername());
         if (delete == 0){
             throw new ResourceNotFoundException("Proprietario não encontrado com a ID: " + id);
         }

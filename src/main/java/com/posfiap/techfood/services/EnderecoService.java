@@ -55,17 +55,4 @@ public class EnderecoService {
         }
     }
 
-    public void addNewEndereco(Endereco endereco) {
-        if (endereco == null) {
-            throw new IllegalArgumentException("Endereço não pode ser nulo.");
-        }
-        this.enderecos.add(endereco);
-    }
-
-    public void removeEndereco(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("ID do endereço não pode ser nula.");
-        }
-        this.enderecos.removeIf(endereco -> endereco.getId().equals(id));
-    }
 }
