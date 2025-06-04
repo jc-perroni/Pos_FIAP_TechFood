@@ -178,7 +178,7 @@ public class RestauranteRepository implements CrudRepository<Restaurante> {
         return jdbcClient
                 .sql(
                         """
-                        DELETE RESTAURANTES
+                        DELETE FROM RESTAURANTES
                         WHERE ID = :id
                         """
                 )

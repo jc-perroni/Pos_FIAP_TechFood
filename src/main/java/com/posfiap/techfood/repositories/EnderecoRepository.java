@@ -18,7 +18,7 @@ import java.util.Optional;
 public class EnderecoRepository implements CrudRepository<Endereco> {
     private final JdbcClient jdbcClient;
 
-    EnderecoRepository(JdbcClient jdbcClient){
+    EnderecoRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }
 
@@ -27,9 +27,9 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
         return jdbcClient
                 .sql(
                         """
-                        SELECT * FROM ENDERECOS
-                        WHERE ID = :id
-                        """
+                                SELECT * FROM ENDERECOS
+                                WHERE ID = :id
+                                """
                 )
                 .param("id", id)
                 .query((queryResult, row) -> new Endereco(
@@ -50,10 +50,10 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
         return jdbcClient
                 .sql(
                         """
-                        SELECT * FROM ENDERECOS
-                        LIMIT :size
-                        OFFSET :offset
-                        """
+                                SELECT * FROM ENDERECOS
+                                LIMIT :size
+                                OFFSET :offset
+                                """
                 )
                 .param("size", size)
                 .param("offset", offset)
@@ -75,11 +75,11 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
         return jdbcClient
                 .sql(
                         """
-                        UPDATE ENDERECOS SET TIPO = :tipoEndereco ::tipo_Endereco,  RUA = :rua,
-                            CIDADE = :cidade, COMPLEMENTO = :complemento, BAIRRO = :bairro,
-                            NUMERO =:numero, CEP = :cep
-                        WHERE ID = :id
-                        """
+                                UPDATE ENDERECOS SET TIPO = :tipoEndereco ::tipo_Endereco,  RUA = :rua,
+                                    CIDADE = :cidade, COMPLEMENTO = :complemento, BAIRRO = :bairro,
+                                    NUMERO =:numero, CEP = :cep
+                                WHERE ID = :id
+                                """
                 )
                 .param("tipoEndereco", endereco.getTipoEndereco().toString())
                 .param("rua", endereco.getRua())
@@ -101,10 +101,10 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
                 return jdbcClient
                         .sql(
                                 """
-                                INSERT INTO ENDERECOS (ID_CLIENTE, RUA, CIDADE, COMPLEMENTO,
-                                BAIRRO, NUMERO, CEP, TIPO)
-                                VALUES (:idEntidade, :rua, :cidade, :complemento, :bairro, :numero, :cep, :tipoEndereco::tipo_endereco)
-                                """
+                                        INSERT INTO ENDERECOS (ID_CLIENTE, RUA, CIDADE, COMPLEMENTO,
+                                        BAIRRO, NUMERO, CEP, TIPO)
+                                        VALUES (:idEntidade, :rua, :cidade, :complemento, :bairro, :numero, :cep, :tipoEndereco::tipo_endereco)
+                                        """
                         )
                         .param("idEntidade", endereco.getIdEntidade())
                         .param("rua", endereco.getRua())
@@ -160,5 +160,11 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
         return jdbcClient
                 .sql(
                         """
-                        DELETE FROM ENDERECOS
-   
+                                DELETE ENDERECOS
+                                WHERE ID = :id
+                                """
+                )
+                .param("id", id)
+                .update();
+    }
+}

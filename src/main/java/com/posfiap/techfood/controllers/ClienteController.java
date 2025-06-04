@@ -1,10 +1,13 @@
 package com.posfiap.techfood.controllers;
 
 import com.posfiap.techfood.models.Cliente;
+import com.posfiap.techfood.models.dto.ClienteDTO;
+import com.posfiap.techfood.models.dto.ClienteUpdateDTO;
 import com.posfiap.techfood.services.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +36,7 @@ public class ClienteController {
 
     @Operation(summary = "Buscar cliente por ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Cliente>> findClienteById(
+    public ResponseEntity<Cliente> findClienteById(
         @Parameter(description = "ID do cliente") @PathVariable("id") Long id
     ){
         var cliente = clienteService.findClienteById(id);
@@ -43,7 +46,7 @@ public class ClienteController {
     @Operation(summary = "Inserir novo cliente")
     @PostMapping
     public ResponseEntity<Void> inserirCliente(
-        @RequestBody Cliente cliente
+        @Valid @RequestBody ClienteDTO cliente
     ){
         clienteService.insertCliente(cliente);
         return ResponseEntity.status(201).build();
@@ -53,7 +56,7 @@ public class ClienteController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> atualizarCliente(
         @Parameter(description = "ID do cliente") @PathVariable("id") Long id,
-        @RequestBody Cliente cliente
+        @Valid @RequestBody ClienteUpdateDTO cliente
     ){
         clienteService.updateCliente(cliente, id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

@@ -53,3 +53,6 @@ public class Endereco {
         this.cidade = enderecoDTO.cidade();
         this.bairro = enderecoDTO.bairro();
         this.complemento = enderecoDTO.complemento();
+        this.numero = enderecoDTO.numero();
+    }
+}
