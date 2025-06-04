@@ -58,13 +58,17 @@ public class ProprietarioRepository implements CrudRepository<Proprietario>{
                 .sql(
                         """
                         UPDATE PROPRIETARIOS SET NOME = :nome, CPF = :cpf, TELEFONE = :telefone, EMAIL = :email
-                        WHERE ID = :id
+                        WHERE ID = :id;
+                        UPDATE USUARIOS SET DATA_ALTERACAO_CONTA = :dataAltarecaoConta
+                        WHERE USERNAME = :username;
                         """
                 )
                 .param("nome", proprietario.getNome())
                 .param("cpf", proprietario.getCpf())
                 .param("telefone", proprietario.getTelefone())
                 .param("email", proprietario.getEmail())
+                .param("dataAltarecaoConta", proprietario.getDataAlteracaoConta())
+                .param("username", proprietario.getUsername())
                 .param("id", id)
                 .update();
     }

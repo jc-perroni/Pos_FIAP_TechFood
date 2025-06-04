@@ -38,7 +38,7 @@ public class ClienteService {
         Cliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
 
-        // Atualiza a entidade
+        clienteExistente.updateDataAlteracao();
         clienteExistente.setNome(cliente.nome());
         clienteExistente.setCpf(cliente.cpf());
         clienteExistente.setTelefone(cliente.telefone());

@@ -63,4 +63,8 @@ public abstract class Usuario {
         this.dataAlteracaoSenha = LocalDate.now();
     }
 
+    public void updateDataAlteracao() {
+        this.dataAlteracaoConta = LocalDate.now();
+    }
+
 }

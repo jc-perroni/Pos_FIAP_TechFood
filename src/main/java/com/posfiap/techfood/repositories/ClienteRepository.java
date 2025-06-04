@@ -194,13 +194,17 @@ public class ClienteRepository implements CrudRepository<Cliente> {
                 .sql(
                         """
                         UPDATE CLIENTES SET NOME = :nome, CPF = :cpf, TELEFONE = :telefone, EMAIL = :email
-                        WHERE ID = :id
+                        WHERE ID = :id;
+                        UPDATE USUARIOS SET DATA_ALTERACAO_CONTA = :dataAltarecaoConta
+                        WHERE USERNAME = :username;
                         """
                 )
                 .param("nome", cliente.getNome())
                 .param("cpf", cliente.getCpf())
                 .param("telefone", cliente.getTelefone())
                 .param("email", cliente.getEmail())
+                .param("username", cliente.getUsername())
+                .param("dataAltarecaoConta", cliente.getDataAlteracaoConta())
                 .param("id", id)
                 .update();
 

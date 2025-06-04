@@ -39,7 +39,7 @@ public class ProprietarioService {
         Proprietario proprietarioExistente = proprietarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Proprietario não encontrado"));
 
-        // Atualiza a entidade do código
+        proprietarioExistente.updateDataAlteracao();
         proprietarioExistente.setNome(proprietario.nome());
         proprietarioExistente.setCpf(proprietario.cpf());
         proprietarioExistente.setTelefone(proprietario.telefone());

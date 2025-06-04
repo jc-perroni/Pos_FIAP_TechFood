@@ -160,7 +160,7 @@ public class EnderecoRepository implements CrudRepository<Endereco> {
         return jdbcClient
                 .sql(
                         """
-                                DELETE ENDERECOS
+                                DELETE FROM ENDERECOS
                                 WHERE ID = :id
                                 """
                 )
