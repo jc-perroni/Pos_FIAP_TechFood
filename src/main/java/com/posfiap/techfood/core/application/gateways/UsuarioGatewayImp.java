@@ -116,6 +116,6 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
 
     @Override
     public Integer delete(long id) {
-        return 0;
+        return this.dataSource.delete(id);
     }
 }
