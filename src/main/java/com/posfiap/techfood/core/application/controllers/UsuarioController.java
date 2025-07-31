@@ -8,10 +8,7 @@ import com.posfiap.techfood.core.application.presenters.UsuarioPresenter;
 import com.posfiap.techfood.core.domain.entities.Usuario;
 import com.posfiap.techfood.core.domain.exceptions.UsuarioJaExistenteException;
 import com.posfiap.techfood.core.domain.exceptions.UsuarioNaoEncontradoException;
-import com.posfiap.techfood.core.domain.usecases.usuario.DeleteUsuarioUsecase;
-import com.posfiap.techfood.core.domain.usecases.usuario.FindAllUsuariosUsecase;
-import com.posfiap.techfood.core.domain.usecases.usuario.FindUsuarioByIdUsecase;
-import com.posfiap.techfood.core.domain.usecases.usuario.InsertUsuarioUsecase;
+import com.posfiap.techfood.core.domain.usecases.usuario.*;
 
 import java.util.List;
 
@@ -63,8 +60,16 @@ public class UsuarioController {
         }
     }
 
-    public void atualizarUsuario() {
+    public UsuarioDTO atualizarUsuario(UsuarioDTO usuarioDTO) {
+        var usuarioGateway = UsuarioGatewayImp.create(dataSource);
+        var useCase = UpdateUsuarioUsecase.create(usuarioGateway);
 
+        try {
+            Usuario usuario = useCase.run(usuarioDTO);
+            return UsuarioPresenter.toDTO(usuario);
+        } catch (UsuarioNaoEncontradoException e) {
+            return  null;
+        }
     }
 
     public Integer excluirUsuario(Long id) {
