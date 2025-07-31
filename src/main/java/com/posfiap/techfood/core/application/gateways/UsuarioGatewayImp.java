@@ -5,6 +5,7 @@ import com.posfiap.techfood.core.application.dto.UsuarioDTO;
 import com.posfiap.techfood.core.application.interfaces.IUsuarioDataSource;
 import com.posfiap.techfood.core.application.interfaces.IUsuarioGateway;
 import com.posfiap.techfood.core.domain.entities.Usuario;
+import com.posfiap.techfood.core.domain.exceptions.UsuarioNaoEncontradoException;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +22,27 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
     }
 
     @Override
-    public Optional findById(Long id) {
-        return Optional.empty();
+    public Optional<Usuario> findById(Long id) {
+        Optional<UsuarioDTO> usuarioCriado = this.dataSource.findById(id);
+
+        if (usuarioCriado.isEmpty()) {
+            return Optional.empty();
+        }
+
+        UsuarioDTO usuario = usuarioCriado.get();
+
+        return Optional.of(Usuario.create(
+                usuario.id(),
+                usuario.telefone(),
+                usuario.nome(),
+                usuario.tipoDeUsuario(),
+                usuario.cpf(),
+                usuario.email(),
+                usuario.username(),
+                usuario.password(),
+                usuario.dataCriacaoConta(),
+                usuario.dataAlteracaoConta(),
+                usuario.dataAlteracaoSenha()));
     }
 
     @Override
