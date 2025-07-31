@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record UsuarioDTO(String telefone,
-                         int id,
+                         Long id,
 
                          @NotNull(message = "O campo 'nome' não pode ser nulo")
                               String nome,

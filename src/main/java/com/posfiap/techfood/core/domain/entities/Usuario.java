@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 @EqualsAndHashCode
 public class Usuario {
-    private int id;
+    private Long id;
     private String tipoUsuario;
     private String nome;
     private String email;
@@ -105,7 +105,7 @@ public class Usuario {
         this.dataAlteracaoSenha = LocalDate.now();
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -140,7 +140,7 @@ public class Usuario {
         return usuario;
     }
 
-    public static Usuario create(int id, String tipoUsuario, String nome, String email, String telefone, String cpf, String username, String password, LocalDate dataCriacaoConta, LocalDate dataAlteracaoConta, LocalDate dataAlteracaoSenha) {
+    public static Usuario create(Long id, String tipoUsuario, String nome, String email, String telefone, String cpf, String username, String password, LocalDate dataCriacaoConta, LocalDate dataAlteracaoConta, LocalDate dataAlteracaoSenha) {
 
         Usuario usuario = new Usuario();
         usuario.setId(id);
