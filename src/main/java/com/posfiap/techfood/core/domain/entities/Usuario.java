@@ -2,6 +2,7 @@ package com.posfiap.techfood.core.domain.entities;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.time.LocalDate;
@@ -9,7 +10,9 @@ import java.time.LocalDate;
 @Getter
 @EqualsAndHashCode
 public class Usuario {
+    @Setter
     private Long id;
+    @Setter
     private String tipoUsuario;
     private String nome;
     private String email;
@@ -17,8 +20,11 @@ public class Usuario {
     private String cpf;
     private String username;
     private String password;
+    @Setter
     private LocalDate dataCriacaoConta;
+    @Setter
     private LocalDate dataAlteracaoConta;
+    @Setter
     private LocalDate dataAlteracaoSenha;
 
     private static void nomeValido(String nome) {
@@ -103,26 +109,6 @@ public class Usuario {
 
     public void setDataAlteracaoSenhaAtual() {
         this.dataAlteracaoSenha = LocalDate.now();
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
-    public void setDataCriacaoConta(LocalDate dataCriacaoConta) {
-        this.dataCriacaoConta = dataCriacaoConta;
-    }
-
-    public void setDataAlteracaoConta(LocalDate dataAlteracaoConta) {
-        this.dataAlteracaoConta = dataAlteracaoConta;
-    }
-
-    public void setDataAlteracaoSenha(LocalDate dataAlteracaoSenha) {
-        this.dataAlteracaoSenha = dataAlteracaoSenha;
     }
 
     public static Usuario create(String tipoUsuario, String nome, String email, String telefone, String cpf, String username, String password) {
