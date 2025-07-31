@@ -8,8 +8,11 @@ import com.posfiap.techfood.core.application.presenters.UsuarioPresenter;
 import com.posfiap.techfood.core.domain.entities.Usuario;
 import com.posfiap.techfood.core.domain.exceptions.UsuarioJaExistenteException;
 import com.posfiap.techfood.core.domain.exceptions.UsuarioNaoEncontradoException;
+import com.posfiap.techfood.core.domain.usecases.usuario.FindAllUsuariosUsecase;
 import com.posfiap.techfood.core.domain.usecases.usuario.FindUsuarioByIdUsecase;
 import com.posfiap.techfood.core.domain.usecases.usuario.InsertUsuarioUsecase;
+
+import java.util.List;
 
 public class UsuarioController {
     private final IUsuarioDataSource dataSource;
@@ -22,8 +25,17 @@ public class UsuarioController {
         return new UsuarioController(dataSource);
     }
 
-    public void findAllUsuarios() {
+    public List<UsuarioDTO> findAllUsuarios(int size, int offset) {
+        var usuarioGateway = UsuarioGatewayImp.create(dataSource);
+        var useCase = FindAllUsuariosUsecase.create(usuarioGateway);
 
+        try {
+            List<Usuario> usuarioList= useCase.run(size, offset);
+            return usuarioList.stream().map(
+                    usuario -> UsuarioPresenter.toDTO(usuario)).toList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public UsuarioDTO findUsuarioById(Long id) {

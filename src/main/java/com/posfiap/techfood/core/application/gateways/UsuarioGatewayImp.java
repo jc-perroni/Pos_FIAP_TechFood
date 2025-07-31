@@ -7,6 +7,7 @@ import com.posfiap.techfood.core.application.interfaces.IUsuarioGateway;
 import com.posfiap.techfood.core.domain.entities.Usuario;
 import com.posfiap.techfood.core.domain.exceptions.UsuarioNaoEncontradoException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,8 +57,29 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
     }
 
     @Override
-    public List findAll(int size, int offset) {
-        return List.of();
+    public List<Usuario> findAll(int size, int offset) {
+        List<UsuarioDTO> usuarioDTOList = this.dataSource.findAll(size, offset);
+        List<Usuario> usuarioList = new ArrayList<>();
+
+        usuarioDTOList.forEach(
+                usuarioDTO -> {
+                    var usario = Usuario.create(
+                            usuarioDTO.id(),
+                            usuarioDTO.telefone(),
+                            usuarioDTO.nome(),
+                            usuarioDTO.tipoDeUsuario(),
+                            usuarioDTO.cpf(),
+                            usuarioDTO.email(),
+                            usuarioDTO.username(),
+                            usuarioDTO.password(),
+                            usuarioDTO.dataCriacaoConta(),
+                            usuarioDTO.dataAlteracaoConta(),
+                            usuarioDTO.dataAlteracaoSenha());
+
+                    usuarioList.add(usario);
+                });
+
+        return usuarioList;
     }
 
     @Override
