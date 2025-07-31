@@ -19,25 +19,25 @@ public class InsertUsuarioUsecase {
         return new InsertUsuarioUsecase(usuarioGateway);
     }
 
-    public Usuario run(NovoUsuarioDTO clienteDTO) {
-        Optional usuarioExistente = this.usuarioGateway.findByEmail(clienteDTO.email());
+    public Usuario run(NovoUsuarioDTO usuarioDTO) {
+        Optional usuarioExistente = this.usuarioGateway.findByEmail(usuarioDTO.email());
         if (usuarioExistente.isPresent()) {
-            throw new UsuarioJaExistenteException("Usuario com email: " + clienteDTO.email() + " ja existe");
+            throw new UsuarioJaExistenteException("Usuario com email: " + usuarioDTO.email() + " ja existe");
         }
 
-        usuarioExistente = this.usuarioGateway.findByUserame(clienteDTO.username());
+        usuarioExistente = this.usuarioGateway.findByUserame(usuarioDTO.username());
         if (usuarioExistente.isPresent()) {
-            throw new UsuarioJaExistenteException("Usuario com username: " + clienteDTO.username() + " ja existe");
+            throw new UsuarioJaExistenteException("Usuario com username: " + usuarioDTO.username() + " ja existe");
         }
 
         final Usuario novoUsuario = Usuario.create(
-                clienteDTO.tipoDeUsuario(),
-                clienteDTO.nome(),
-                clienteDTO.email(),
-                clienteDTO.telefone(),
-                clienteDTO.cpf(),
-                clienteDTO.username(),
-                clienteDTO.password()
+                usuarioDTO.tipoDeUsuario(),
+                usuarioDTO.nome(),
+                usuarioDTO.email(),
+                usuarioDTO.telefone(),
+                usuarioDTO.cpf(),
+                usuarioDTO.username(),
+                usuarioDTO.password()
         );
 
         return this.usuarioGateway.save(novoUsuario);
