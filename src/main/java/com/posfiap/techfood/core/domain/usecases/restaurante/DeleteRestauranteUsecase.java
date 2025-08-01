@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class DeleteRestauranteUsecase {
 
-    private IRestauranteGateway restauranteGateway;
+    private final IRestauranteGateway restauranteGateway;
 
     private DeleteRestauranteUsecase(IRestauranteGateway restauranteGateway) {
         this.restauranteGateway = restauranteGateway;

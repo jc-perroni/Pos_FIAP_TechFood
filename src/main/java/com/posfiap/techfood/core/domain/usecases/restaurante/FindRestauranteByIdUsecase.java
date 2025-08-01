@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class FindRestauranteByIdUsecase {
 
-    private IRestauranteGateway restauranteGateway;
+    private final IRestauranteGateway restauranteGateway;
 
     private FindRestauranteByIdUsecase(IRestauranteGateway restauranteGateway) {
         this.restauranteGateway = restauranteGateway;

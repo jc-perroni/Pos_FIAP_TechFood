@@ -5,7 +5,7 @@ import com.posfiap.techfood.core.domain.entities.Restaurante;
 
 public class InsertRestauranteUsecase {
 
-    private IRestauranteGateway restauranteGateway;
+    private final IRestauranteGateway restauranteGateway;
 
     private InsertRestauranteUsecase(IRestauranteGateway restauranteGateway) {
         this.restauranteGateway = restauranteGateway;

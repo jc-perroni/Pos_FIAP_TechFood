@@ -7,7 +7,7 @@ import java.util.List;
 
 public class FindAllRestauranteUsecase {
 
-    private IRestauranteGateway restauranteGateway;
+    private final IRestauranteGateway restauranteGateway;
 
     private FindAllRestauranteUsecase(IRestauranteGateway restauranteGateway) {
         this.restauranteGateway = restauranteGateway;

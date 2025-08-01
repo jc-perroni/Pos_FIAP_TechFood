@@ -10,8 +10,11 @@ public class RestaurantePresenter {
                 restaurante.getId(),
                 restaurante.getIdProprietario(),
                 restaurante.getNome(),
+                restaurante.getTipoCozinha(),
                 restaurante.getTelefone(),
-                restaurante.getEndereco()
+                restaurante.getEndereco(),
+                restaurante.getHoraAbertura(),
+                restaurante.getHoraFechamento()
         );
     }
 }

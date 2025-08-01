@@ -1,28 +1,51 @@
 package com.posfiap.techfood.core.domain.entities;
 
 import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalTime;
 import java.util.Objects;
 
 @Getter
 public class Restaurante {
+    @Setter
     private Long id;
+
     private Long idProprietario;
+
     private String nome;
+
+    @Setter
+    private String tipoCozinha;
+
     private String telefone;
+
+    @Setter
     private String endereco;
 
-    public static Restaurante create(Long id, Long idProprietario, String nome, String telefone, String endereco) {
+    @Setter
+    private LocalTime horaAbertura;
+
+    @Setter
+    private LocalTime horaFechamento;
+
+    public static Restaurante create(Long id, Long idProprietario, String nome,
+                                     String telefone, String endereco, String tipoCozinha,
+                                     LocalTime horaAbertura, LocalTime horaFechamento) {
         Restaurante restaurante = new Restaurante();
         restaurante.setId(id);
         restaurante.setIdProprietario(idProprietario);
         restaurante.setNome(nome);
         restaurante.setTelefone(telefone);
         restaurante.setEndereco(endereco);
+        restaurante.setTipoCozinha(tipoCozinha);
+        restaurante.setHoraAbertura(horaAbertura);
+        restaurante.setHoraFechamento(horaFechamento);
 
         return restaurante;
     }
 
+    //TODO: possivelmente remover
     public static Restaurante create(Long idProprietario, String nome, String telefone, String endereco) {
         Restaurante restaurante = new Restaurante();
         restaurante.setIdProprietario(idProprietario);
@@ -31,10 +54,6 @@ public class Restaurante {
         restaurante.setEndereco(endereco);
 
         return restaurante;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setIdProprietario(Long idProprietario) {
@@ -50,10 +69,6 @@ public class Restaurante {
     public void setTelefone(String telefone) {
         telefoneValido(telefone);
         this.telefone = telefone;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
     }
 
     private static void nomeValido(String nome) {

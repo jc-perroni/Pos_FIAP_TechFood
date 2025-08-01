@@ -11,7 +11,10 @@ public class RestauranteMapper {
                 restauranteDTO.idProprietario(),
                 restauranteDTO.nome(),
                 restauranteDTO.telefone(),
-                restauranteDTO.endereco()
+                restauranteDTO.endereco(),
+                restauranteDTO.tipoCozinha(),
+                restauranteDTO.horaAbertura(),
+                restauranteDTO.horaFechamento()
         );
     }
 
@@ -20,8 +23,11 @@ public class RestauranteMapper {
                 restaurante.getId(),
                 restaurante.getIdProprietario(),
                 restaurante.getNome(),
+                restaurante.getTipoCozinha(),
                 restaurante.getTelefone(),
-                restaurante.getEndereco()
+                restaurante.getEndereco(),
+                restaurante.getHoraAbertura(),
+                restaurante.getHoraFechamento()
         );
     }
 }
