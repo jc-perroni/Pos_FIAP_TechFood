@@ -14,7 +14,7 @@ public class Endereco {
     @Getter
     @Setter
     @NotNull
-    private Long idRestaurante;
+    private Long idEntidade;
 
     @Getter
     @Setter
@@ -60,9 +60,9 @@ public class Endereco {
         this.cep = cep;
     }
 
-    public static Endereco create(Long idRestaurante, TipoEndereco tipoEndereco, String rua, String cep, String cidade, String bairro, String complemento, String numero) {
+    public static Endereco create(Long idEntidade, TipoEndereco tipoEndereco, String rua, String cep, String cidade, String bairro, String complemento, String numero) {
         Endereco endereco = new Endereco();
-        endereco.setIdRestaurante(idRestaurante);
+        endereco.setIdEntidade(idEntidade);
         endereco.setTipoEndereco(tipoEndereco);
         endereco.setRua(rua);
         endereco.setCep(cep);
@@ -74,10 +74,10 @@ public class Endereco {
         return endereco;
     }
 
-    public static Endereco create(Long id, Long idRestaurante, TipoEndereco tipoEndereco, String rua, String cep, String cidade, String bairro, String complemento, String numero) {
+    public static Endereco create(Long id, Long idEntidade, TipoEndereco tipoEndereco, String rua, String cep, String cidade, String bairro, String complemento, String numero) {
         Endereco endereco = new Endereco();
         endereco.setId(id);
-        endereco.setIdRestaurante(idRestaurante);
+        endereco.setIdEntidade(idEntidade);
         endereco.setTipoEndereco(tipoEndereco);
         endereco.setRua(rua);
         endereco.setCep(cep);

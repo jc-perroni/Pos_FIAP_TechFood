@@ -30,7 +30,7 @@ public class UsuarioController {
         try {
             List<Usuario> usuarioList= useCase.run(size, offset);
             return usuarioList.stream().map(
-                    usuario -> UsuarioPresenter.toDTO(usuario)).toList();
+                    UsuarioPresenter::toDTO).toList();
         } catch (Exception e) {
             return null;
         }

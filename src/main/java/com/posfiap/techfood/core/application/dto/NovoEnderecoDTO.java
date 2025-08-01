@@ -3,9 +3,7 @@ package com.posfiap.techfood.core.application.dto;
 import com.posfiap.techfood.core.domain.enums.TipoEndereco;
 import jakarta.validation.constraints.NotNull;
 
-public record EnderecoDTO(
-        Long id,
-
+public record NovoEnderecoDTO(
         @NotNull(message = "O ID para criar o endereço não pode ser nulo")
         Long idEntidade,
 

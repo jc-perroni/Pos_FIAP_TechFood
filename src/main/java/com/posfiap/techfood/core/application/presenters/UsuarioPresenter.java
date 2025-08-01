@@ -5,7 +5,7 @@ import com.posfiap.techfood.core.domain.entities.Usuario;
 
 public class UsuarioPresenter {
     public static UsuarioDTO toDTO(Usuario usuario) {
-        UsuarioDTO usuarioDTO = new UsuarioDTO(
+        return new UsuarioDTO(
                 usuario.getTelefone(),
                 usuario.getId(),
                 usuario.getNome(),
@@ -18,8 +18,6 @@ public class UsuarioPresenter {
                 usuario.getDataAlteracaoSenha(),
                 usuario.getDataAlteracaoSenha()
         );
-
-        return usuarioDTO;
     }
 
 }
