@@ -7,7 +7,9 @@ import com.posfiap.techfood.core.application.interfaces.IEnderecoDataSource;
 import com.posfiap.techfood.core.application.presenters.EnderecoPresenter;
 import com.posfiap.techfood.core.domain.entities.Endereco;
 import com.posfiap.techfood.core.domain.exceptions.UsuarioJaExistenteException;
+import com.posfiap.techfood.core.domain.exceptions.UsuarioNaoEncontradoException;
 import com.posfiap.techfood.core.domain.usecases.endereco.InsertEnderecoUsecase;
+import com.posfiap.techfood.core.domain.usecases.endereco.UpdateEnderecoUsecase;
 
 import java.util.List;
 
@@ -42,7 +44,16 @@ public class EnderecoController {
 
     }
 
-    public void atualizarEndereco(EnderecoDTO enderecoDTO) {
+    public EnderecoDTO atualizarEndereco(EnderecoDTO enderecoDTO) {
+        var enderecoGateway = EnderecoGatewayImp.create(dataSource);
+        var useCase = UpdateEnderecoUsecase.create(enderecoGateway);
+
+        try {
+            Endereco endereco = useCase.run(enderecoDTO);
+            return EnderecoPresenter.toDTO(endereco);
+        } catch (UsuarioNaoEncontradoException e) {
+            return  null;
+        }
 
     }
 
