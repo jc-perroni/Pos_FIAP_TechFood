@@ -18,11 +18,11 @@ public class UpdateRestauranteUsecase {
         return new UpdateRestauranteUsecase(restauranteGateway);
     }
 
-    public Restaurante run(Restaurante restaurante, long id) {
-        Optional<Restaurante> restauranteExistente = this.restauranteGateway.findById(id);
+    public Restaurante run(Restaurante restaurante) {
+        Optional<Restaurante> restauranteExistente = this.restauranteGateway.findById(restaurante.getId());
         if (restauranteExistente.isEmpty()) {
-            throw new RestauranteNaoEncontradoException("Restaurante do id "  + id + " não existe");
+            throw new RestauranteNaoEncontradoException("Restaurante do id "  + restaurante.getId() + " não existe");
         }
-        return this.restauranteGateway.update(restaurante, id);
+        return this.restauranteGateway.update(restaurante, restaurante.getId());
     }
 }

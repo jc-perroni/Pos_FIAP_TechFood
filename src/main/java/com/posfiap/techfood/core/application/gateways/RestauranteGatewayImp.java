@@ -4,6 +4,7 @@ import com.posfiap.techfood.core.application.dto.RestauranteDTO;
 import com.posfiap.techfood.core.application.interfaces.restaurante.IRestauranteDataSource;
 import com.posfiap.techfood.core.application.interfaces.restaurante.IRestauranteGateway;
 import com.posfiap.techfood.core.domain.entities.Restaurante;
+import com.posfiap.techfood.core.domain.mapper.RestauranteMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,25 +23,25 @@ public class RestauranteGatewayImp implements IRestauranteGateway {
     @Override
     public Optional<Restaurante> findById(Long id) {
         Optional<RestauranteDTO> restauranteDTOOptional = this.dataSource.findById(id);
-        return restauranteDTOOptional.map(RestauranteGatewayImp::toEntity);
+        return restauranteDTOOptional.map(RestauranteMapper::toEntity);
     }
 
     @Override
     public List<Restaurante> findAll(int size, int offset) {
         List<RestauranteDTO> restauranteDTOList = this.dataSource.findAll(size, offset);
-        return restauranteDTOList.stream().map(RestauranteGatewayImp::toEntity).toList();
+        return restauranteDTOList.stream().map(RestauranteMapper::toEntity).toList();
     }
 
     @Override
     public Restaurante update(Restaurante restaurante, long id) {
-        RestauranteDTO restauranteDTO = toDto(restaurante);
-        return toEntity(this.dataSource.update(restauranteDTO, id));
+        RestauranteDTO restauranteDTO = RestauranteMapper.toDto(restaurante);
+        return RestauranteMapper.toEntity(this.dataSource.update(restauranteDTO, id));
     }
 
     @Override
     public Restaurante save(Restaurante restaurante) {
-        RestauranteDTO restauranteDTO = toDto(restaurante);
-        return toEntity(this.dataSource.save(restauranteDTO));
+        RestauranteDTO restauranteDTO = RestauranteMapper.toDto(restaurante);
+        return RestauranteMapper.toEntity(this.dataSource.save(restauranteDTO));
     }
 
     @Override
@@ -48,23 +49,5 @@ public class RestauranteGatewayImp implements IRestauranteGateway {
         return this.dataSource.delete(id);
     }
 
-    private static Restaurante toEntity(RestauranteDTO restauranteDTO) {
-        return Restaurante.create(
-                restauranteDTO.id(),
-                restauranteDTO.idProprietario(),
-                restauranteDTO.nome(),
-                restauranteDTO.telefone(),
-                restauranteDTO.endereco()
-        );
-    }
 
-    private static RestauranteDTO toDto(Restaurante restaurante) {
-        return new RestauranteDTO(
-                restaurante.getId(),
-                restaurante.getIdProprietario(),
-                restaurante.getNome(),
-                restaurante.getTelefone(),
-                restaurante.getEndereco()
-        );
-    }
 }
