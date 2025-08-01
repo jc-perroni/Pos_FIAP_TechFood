@@ -2,10 +2,9 @@ package com.posfiap.techfood.core.application.gateways;
 
 import com.posfiap.techfood.core.application.dto.NovoUsuarioDTO;
 import com.posfiap.techfood.core.application.dto.UsuarioDTO;
-import com.posfiap.techfood.core.application.interfaces.IUsuarioDataSource;
-import com.posfiap.techfood.core.application.interfaces.IUsuarioGateway;
+import com.posfiap.techfood.core.application.interfaces.usuario.IUsuarioDataSource;
+import com.posfiap.techfood.core.application.interfaces.usuario.IUsuarioGateway;
 import com.posfiap.techfood.core.domain.entities.Usuario;
-import com.posfiap.techfood.core.domain.exceptions.UsuarioNaoEncontradoException;
 
 import java.util.ArrayList;
 import java.util.List;

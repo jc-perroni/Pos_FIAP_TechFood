@@ -3,7 +3,6 @@ package com.posfiap.techfood.core.application.gateways;
 import com.posfiap.techfood.core.application.dto.EnderecoDTO;
 import com.posfiap.techfood.core.application.interfaces.IEnderecoDataSource;
 import com.posfiap.techfood.core.application.interfaces.IEnderecoGateway;
-import com.posfiap.techfood.core.application.interfaces.IUsuarioDataSource;
 import com.posfiap.techfood.core.domain.entities.Endereco;
 
 import java.util.List;

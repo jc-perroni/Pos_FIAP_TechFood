@@ -1,8 +1,7 @@
-package com.posfiap.techfood.core.application.interfaces;
+package com.posfiap.techfood.core.application.interfaces.usuario;
 
 import com.posfiap.techfood.core.application.dto.NovoUsuarioDTO;
 import com.posfiap.techfood.core.application.dto.UsuarioDTO;
-import com.posfiap.techfood.core.domain.entities.Usuario;
 
 import java.util.List;
 import java.util.Optional;

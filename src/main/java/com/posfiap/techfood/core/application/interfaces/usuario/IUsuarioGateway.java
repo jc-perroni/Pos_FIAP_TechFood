@@ -1,4 +1,4 @@
-package com.posfiap.techfood.core.application.interfaces;
+package com.posfiap.techfood.core.application.interfaces.usuario;
 
 import com.posfiap.techfood.core.domain.entities.Usuario;
 
