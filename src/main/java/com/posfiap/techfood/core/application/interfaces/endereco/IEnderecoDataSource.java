@@ -1,4 +1,4 @@
-package com.posfiap.techfood.core.application.interfaces;
+package com.posfiap.techfood.core.application.interfaces.endereco;
 
 import com.posfiap.techfood.core.application.dto.EnderecoDTO;
 import com.posfiap.techfood.core.application.dto.NovoEnderecoDTO;

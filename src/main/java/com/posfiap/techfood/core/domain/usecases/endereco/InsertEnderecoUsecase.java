@@ -1,7 +1,7 @@
 package com.posfiap.techfood.core.domain.usecases.endereco;
 
 import com.posfiap.techfood.core.application.dto.NovoEnderecoDTO;
-import com.posfiap.techfood.core.application.interfaces.IEnderecoGateway;
+import com.posfiap.techfood.core.application.interfaces.endereco.IEnderecoGateway;
 import com.posfiap.techfood.core.domain.entities.Endereco;
 
 public class InsertEnderecoUsecase {
