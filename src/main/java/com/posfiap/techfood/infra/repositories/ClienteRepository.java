@@ -1,6 +1,6 @@
 package com.posfiap.techfood.infra.repositories;
 
-import com.posfiap.techfood.infra.models.enums.TipoEndereco;
+import com.posfiap.techfood.core.domain.enums.TipoEndereco;
 import com.posfiap.techfood.infra.models.Cliente;
 import com.posfiap.techfood.infra.models.Endereco;
 import org.springframework.jdbc.core.simple.JdbcClient;

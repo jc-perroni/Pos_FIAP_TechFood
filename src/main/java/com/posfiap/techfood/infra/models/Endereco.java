@@ -1,7 +1,7 @@
 package com.posfiap.techfood.infra.models;
 
 import com.posfiap.techfood.infra.models.dto.EnderecoDTO;
-import com.posfiap.techfood.infra.models.enums.TipoEndereco;
+import com.posfiap.techfood.core.domain.enums.TipoEndereco;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

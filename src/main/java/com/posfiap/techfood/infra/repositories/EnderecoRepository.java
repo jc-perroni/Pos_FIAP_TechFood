@@ -2,7 +2,7 @@ package com.posfiap.techfood.infra.repositories;
 
 import com.posfiap.techfood.infra.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.infra.models.Endereco;
-import com.posfiap.techfood.infra.models.enums.TipoEndereco;
+import com.posfiap.techfood.core.domain.enums.TipoEndereco;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.simple.JdbcClient;
