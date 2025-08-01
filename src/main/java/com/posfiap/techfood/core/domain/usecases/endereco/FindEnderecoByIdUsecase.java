@@ -3,27 +3,26 @@ package com.posfiap.techfood.core.domain.usecases.endereco;
 import com.posfiap.techfood.core.application.interfaces.IEnderecoGateway;
 import com.posfiap.techfood.core.domain.entities.Endereco;
 import com.posfiap.techfood.core.domain.exceptions.EnderecoNaoEncontradoException;
-import com.posfiap.techfood.core.domain.exceptions.UsuarioNaoEncontradoException;
 
 import java.util.Optional;
 
-public class DeleteEnderecoUsecase {
+public class FindEnderecoByIdUsecase {
     private final IEnderecoGateway enderecoGateway;
 
-    private DeleteEnderecoUsecase(IEnderecoGateway enderecoGateway) {
+    private FindEnderecoByIdUsecase(IEnderecoGateway enderecoGateway) {
         this.enderecoGateway = enderecoGateway;
     }
 
-    public static DeleteEnderecoUsecase create(IEnderecoGateway enderecoGateway) {
-        return new DeleteEnderecoUsecase(enderecoGateway);
+    public static FindEnderecoByIdUsecase create(IEnderecoGateway enderecoGateway) {
+        return new FindEnderecoByIdUsecase(enderecoGateway);
     }
 
-    public Integer run(Long id) {
+    public Endereco run(Long id) {
         Optional<Endereco> endereco = this.enderecoGateway.findById(id);
         if (endereco.isEmpty()) {
-            throw new EnderecoNaoEncontradoException("Usuario do id " + id + " não encontrado na base dados");
+            throw new EnderecoNaoEncontradoException("O endereço do id " + id + " não foi encontrado na base dados");
         }
 
-        return this.enderecoGateway.delete(id);
+        return endereco.get();
     }
 }

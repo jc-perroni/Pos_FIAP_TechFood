@@ -3,18 +3,15 @@ package com.posfiap.techfood.core.application.controllers;
 import com.posfiap.techfood.core.application.dto.EnderecoDTO;
 import com.posfiap.techfood.core.application.dto.NovoEnderecoDTO;
 import com.posfiap.techfood.core.application.gateways.EnderecoGatewayImp;
-import com.posfiap.techfood.core.application.gateways.UsuarioGatewayImp;
 import com.posfiap.techfood.core.application.interfaces.IEnderecoDataSource;
 import com.posfiap.techfood.core.application.presenters.EnderecoPresenter;
 import com.posfiap.techfood.core.domain.entities.Endereco;
 import com.posfiap.techfood.core.domain.exceptions.UsuarioJaExistenteException;
 import com.posfiap.techfood.core.domain.exceptions.UsuarioNaoEncontradoException;
 import com.posfiap.techfood.core.domain.usecases.endereco.DeleteEnderecoUsecase;
+import com.posfiap.techfood.core.domain.usecases.endereco.FindEnderecoByIdUsecase;
 import com.posfiap.techfood.core.domain.usecases.endereco.InsertEnderecoUsecase;
 import com.posfiap.techfood.core.domain.usecases.endereco.UpdateEnderecoUsecase;
-import com.posfiap.techfood.core.domain.usecases.usuario.DeleteUsuarioUsecase;
-
-import java.util.List;
 
 public class EnderecoController {
     private final IEnderecoDataSource dataSource;
@@ -30,8 +27,16 @@ public class EnderecoController {
     public void findAllEnderecos(int size, int offset) {
     }
 
-    public void findEnderecoByID(Long id) {
+    public EnderecoDTO findEnderecoByID(Long id) {
+        var enderecoGateway = EnderecoGatewayImp.create(dataSource);
+        var useCase = FindEnderecoByIdUsecase.create(enderecoGateway);
 
+        try {
+            var endereco = useCase.run(id);
+            return EnderecoPresenter.toDTO(endereco);
+        } catch (UsuarioNaoEncontradoException e) {
+            return null;
+        }
     }
 
     public EnderecoDTO inserirEndereco(NovoEnderecoDTO novoEnderecoDTO) {
