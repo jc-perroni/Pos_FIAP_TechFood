@@ -2,16 +2,20 @@ package com.posfiap.techfood.core.application.controllers;
 
 import com.posfiap.techfood.core.application.dto.EnderecoDTO;
 import com.posfiap.techfood.core.application.dto.NovoEnderecoDTO;
+import com.posfiap.techfood.core.application.dto.UsuarioDTO;
 import com.posfiap.techfood.core.application.gateways.EnderecoGatewayImp;
+import com.posfiap.techfood.core.application.gateways.UsuarioGatewayImp;
 import com.posfiap.techfood.core.application.interfaces.IEnderecoDataSource;
 import com.posfiap.techfood.core.application.presenters.EnderecoPresenter;
+import com.posfiap.techfood.core.application.presenters.UsuarioPresenter;
 import com.posfiap.techfood.core.domain.entities.Endereco;
+import com.posfiap.techfood.core.domain.entities.Usuario;
 import com.posfiap.techfood.core.domain.exceptions.UsuarioJaExistenteException;
 import com.posfiap.techfood.core.domain.exceptions.UsuarioNaoEncontradoException;
-import com.posfiap.techfood.core.domain.usecases.endereco.DeleteEnderecoUsecase;
-import com.posfiap.techfood.core.domain.usecases.endereco.FindEnderecoByIdUsecase;
-import com.posfiap.techfood.core.domain.usecases.endereco.InsertEnderecoUsecase;
-import com.posfiap.techfood.core.domain.usecases.endereco.UpdateEnderecoUsecase;
+import com.posfiap.techfood.core.domain.usecases.endereco.*;
+import com.posfiap.techfood.core.domain.usecases.usuario.FindAllUsuariosUsecase;
+
+import java.util.List;
 
 public class EnderecoController {
     private final IEnderecoDataSource dataSource;
@@ -24,7 +28,17 @@ public class EnderecoController {
         return new EnderecoController(dataSource);
     }
 
-    public void findAllEnderecos(int size, int offset) {
+    public List<EnderecoDTO> findAllEnderecos(int size, int offset) {
+        var enderecoGateway = EnderecoGatewayImp.create(dataSource);
+        var useCase = FindAllEnderecosUsecase.create(enderecoGateway);
+
+        try {
+            List<Endereco> enderecoList = useCase.run(size, offset);
+            return enderecoList.stream().map(
+                    EnderecoPresenter::toDTO).toList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public EnderecoDTO findEnderecoByID(Long id) {
