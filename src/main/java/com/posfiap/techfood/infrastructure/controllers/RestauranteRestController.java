@@ -1,5 +1,8 @@
 package com.posfiap.techfood.infrastructure.controllers;
 
+import com.posfiap.techfood.core.application.controllers.RestauranteController;
+import com.posfiap.techfood.core.application.dto.RestauranteDTO;
+import com.posfiap.techfood.core.application.dto.RestauranteSalvamentoDTO;
 import com.posfiap.techfood.infrastructure.models.Restaurante;
 import com.posfiap.techfood.infrastructure.services.RestauranteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,45 +19,45 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/v1/restaurantes")
 @Tag(name = "Restaurantes", description = "Operações relacionadas aos restaurantes")
-public class RestauranteController {
+public class RestauranteRestController {
 
-    private final RestauranteService restauranteService;
+    //private final RestauranteService restauranteService;
+    
+    private final RestauranteController restauranteController;
 
     @Operation(summary = "Listar todos os restaurantes com paginação")
     @GetMapping
-    public ResponseEntity<List<Restaurante>> findAllRestaurantes(
+    public ResponseEntity<List<RestauranteDTO>> findAllRestaurantes(
             @RequestParam("page") int page,
             @RequestParam("size") int size) {
-        var restaurantes = restauranteService.findAllRestaurantes(page, size);
-        return ResponseEntity.ok(restaurantes);
+        return ResponseEntity.ok(
+                restauranteController.findAllRestaurante(page, size));
     }
 
     @Operation(summary = "Buscar restaurante por ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Restaurante>> findRestauranteById(@PathVariable("id") Long id){
-        var restaurante = restauranteService.findRestauranteById(id);
-        return ResponseEntity.ok(restaurante);
+    public ResponseEntity<RestauranteDTO> findRestauranteById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(
+                restauranteController.findRestauranteById(id));
     }
 
     @Operation(summary = "Cadastrar novo restaurante")
     @PostMapping
-    public ResponseEntity<Void> inserirRestaurante(@RequestBody Restaurante restaurante){
-        restauranteService.insertRestaurante(restaurante);
-        return ResponseEntity.status(201).build();
+    public ResponseEntity<RestauranteDTO> inserirRestaurante(@RequestBody RestauranteSalvamentoDTO restaurante){
+        return ResponseEntity.ok(restauranteController.inserirRestaurante(restaurante));
     }
 
     @Operation(summary = "Atualizar restaurante existente")
     @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizarRestaurante(@PathVariable("id") Long id,
-                                                     @RequestBody Restaurante restaurante){
-        restauranteService.updateRestaurante(restaurante, id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<RestauranteDTO> atualizarRestaurante(@PathVariable("id") Long id,
+                                                     @RequestBody RestauranteSalvamentoDTO restaurante){
+        return ResponseEntity.ok(restauranteController.atualizarRestaurante(restaurante, id));
     }
 
     @Operation(summary = "Excluir restaurante")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirRestaurante(@PathVariable("id") Long id){
-        restauranteService.deleteRestaurante(id);
+        restauranteController.excluirRestaurante(id);
         return ResponseEntity.ok().build();
     }
 }

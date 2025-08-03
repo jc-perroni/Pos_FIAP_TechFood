@@ -1,6 +1,7 @@
 package com.posfiap.techfood.core.application.controllers;
 
 import com.posfiap.techfood.core.application.dto.RestauranteDTO;
+import com.posfiap.techfood.core.application.dto.RestauranteSalvamentoDTO;
 import com.posfiap.techfood.core.application.gateways.RestauranteGatewayImp;
 import com.posfiap.techfood.core.application.interfaces.restaurante.IRestauranteDataSource;
 import com.posfiap.techfood.core.application.presenters.RestaurantePresenter;
@@ -46,7 +47,7 @@ public class RestauranteController {
         }
     }
 
-    public RestauranteDTO inserirRestaurante(RestauranteDTO restauranteDTO) {
+    public RestauranteDTO inserirRestaurante(RestauranteSalvamentoDTO restauranteDTO) {
         var restauranteGateway = RestauranteGatewayImp.create(dataSource);
         var insertRestauranteUsecase = InsertRestauranteUsecase.create(restauranteGateway);
 
@@ -58,12 +59,14 @@ public class RestauranteController {
         }
     }
 
-    public RestauranteDTO atualizarRestaurante(RestauranteDTO restauranteDTO) {
+    public RestauranteDTO atualizarRestaurante(RestauranteSalvamentoDTO restauranteDTO, Long id) {
         var restauranteGateway = RestauranteGatewayImp.create(dataSource);
         var updateRestauranteUsecase = UpdateRestauranteUsecase.create(restauranteGateway);
 
         try {
-            Restaurante restaurante = updateRestauranteUsecase.run(RestauranteMapper.toEntity(restauranteDTO));
+            Restaurante restaurante = RestauranteMapper.toEntity(restauranteDTO);
+            restaurante.setId(id);
+            restaurante = updateRestauranteUsecase.run(RestauranteMapper.toEntity(restauranteDTO));
             return RestaurantePresenter.toDto(restaurante);
         } catch (Exception e) {
             return  null;
