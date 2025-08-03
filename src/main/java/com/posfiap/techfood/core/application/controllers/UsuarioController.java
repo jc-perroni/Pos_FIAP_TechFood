@@ -1,5 +1,6 @@
 package com.posfiap.techfood.core.application.controllers;
 
+import com.posfiap.techfood.core.application.dto.LoginDTO;
 import com.posfiap.techfood.core.application.dto.NovoUsuarioDTO;
 import com.posfiap.techfood.core.application.dto.UsuarioDTO;
 import com.posfiap.techfood.core.application.gateways.UsuarioGatewayImp;
@@ -28,7 +29,7 @@ public class UsuarioController {
         var useCase = FindAllUsuariosUsecase.create(usuarioGateway);
 
         try {
-            List<Usuario> usuarioList= useCase.run(size, offset);
+            List<Usuario> usuarioList = useCase.run(size, offset);
             return usuarioList.stream().map(
                     UsuarioPresenter::toDTO).toList();
         } catch (Exception e) {
@@ -81,5 +82,12 @@ public class UsuarioController {
         } catch (UsuarioNaoEncontradoException e) {
             return null;
         }
+    }
+
+    public void validarLogin(LoginDTO loginDTO) {
+        var usuarioGateway = UsuarioGatewayImp.create(dataSource);
+        var useCase = ValidarLoginUsecase.create(usuarioGateway);
+
+        useCase.run(loginDTO);
     }
 }

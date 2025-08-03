@@ -13,4 +13,5 @@ public interface IUsuarioGateway<T> {
     Usuario update(Usuario usuario, long id);
     Usuario save(Usuario usuario);
     Integer delete(long id);
+    Boolean verificarSenha(String senhaInformada, String senhaUsuario);
 }
