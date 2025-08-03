@@ -1,6 +1,7 @@
 package com.posfiap.techfood.controllers;
 
 import com.posfiap.techfood.models.Restaurante;
+import com.posfiap.techfood.models.dto.restaurante.RestauranteDTO;
 import com.posfiap.techfood.services.RestauranteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +27,7 @@ public class RestauranteController {
             @RequestParam("page") int page,
             @RequestParam("size") int size) {
         var restaurantes = restauranteService.findAllRestaurantes(page, size);
-        return ResponseEntity.ok(restaurantes);
+        return ResponseEntity.ok(restaurantes.getContent());
     }
 
     @Operation(summary = "Buscar restaurante por ID")
@@ -38,8 +39,8 @@ public class RestauranteController {
 
     @Operation(summary = "Cadastrar novo restaurante")
     @PostMapping
-    public ResponseEntity<Void> inserirRestaurante(@RequestBody Restaurante restaurante){
-        restauranteService.insertRestaurante(restaurante);
+    public ResponseEntity<Void> inserirRestaurante(@RequestBody RestauranteDTO restauranteDto){
+        restauranteService.insertRestaurante(restauranteDto);
         return ResponseEntity.status(201).build();
     }
 

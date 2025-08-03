@@ -1,4 +1,4 @@
-package com.posfiap.techfood.models.dto;
+package com.posfiap.techfood.models.dto.proprietario;
 
 import jakarta.validation.constraints.NotNull;
 

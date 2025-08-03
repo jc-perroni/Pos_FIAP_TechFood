@@ -1,48 +1,49 @@
 package com.posfiap.techfood.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
+@RequiredArgsConstructor
+
+@Entity
+@Table(name = "USUARIOS")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Usuario {
 
-    public Usuario() {
-    }
-
-    public Usuario(String nome, String email, String telefone, String cpf, String username, String password,
-                   LocalDate dataCriacaoConta, LocalDate dataAlteracaoConta, LocalDate dataAlteracaoSenha) {
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.cpf = cpf;
-        this.username = username;
-        this.password = password;
-        this.dataCriacaoConta = dataCriacaoConta;
-        this.dataAlteracaoConta = dataAlteracaoConta;
-        this.dataAlteracaoSenha = dataAlteracaoSenha;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     private Long id;
 
     @Getter @Setter
+    @Column(length = 50)
     private String nome;
 
     @Getter @Setter
+    @Column(length = 50)
     private String email;
 
     @Getter @Setter
+    @Column(length = 15)
     private String telefone;
 
+    @Column(length = 35, unique = true, nullable = false)
     @Getter @Setter
-    private String cpf;
-
-    @Getter
     private String username;
 
     @Getter
+    @Column(length = 60)
     private String password;
+
+    @Getter @Setter
+    @Column(length = 14)
+    private String cpf;
 
     @Getter
     private LocalDate dataCriacaoConta;
@@ -66,5 +67,4 @@ public abstract class Usuario {
     public void updateDataAlteracao() {
         this.dataAlteracaoConta = LocalDate.now();
     }
-
 }

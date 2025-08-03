@@ -1,8 +1,8 @@
 package com.posfiap.techfood.controllers;
 
 import com.posfiap.techfood.models.Cliente;
-import com.posfiap.techfood.models.dto.ClienteDTO;
-import com.posfiap.techfood.models.dto.ClienteUpdateDTO;
+import com.posfiap.techfood.models.dto.cliente.ClienteDTO;
+import com.posfiap.techfood.models.dto.cliente.ClienteUpdateDTO;
 import com.posfiap.techfood.services.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -31,7 +30,7 @@ public class ClienteController {
         @Parameter(description = "Quantidade de registros por página") @RequestParam("size") int size
     ) {
         var clientes = clienteService.findAllClientes(page, size);
-        return ResponseEntity.ok(clientes);
+        return ResponseEntity.ok(clientes.getContent());
     }
 
     @Operation(summary = "Buscar cliente por ID")

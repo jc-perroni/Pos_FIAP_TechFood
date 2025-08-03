@@ -1,33 +1,29 @@
 package com.posfiap.techfood.models;
 
-import com.posfiap.techfood.models.dto.ProprietarioDTO;
+import com.posfiap.techfood.models.dto.proprietario.ProprietarioDTO;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
 
+@RequiredArgsConstructor
+@Entity
+@Table(name = "PROPRIETARIOS")
 public class Proprietario extends Usuario{
 
-    private List<Restaurante> managerBusiness;
+    @OneToMany(mappedBy = "proprietario")
+    private List<Restaurante> restaurantes;
 
-    public Proprietario() {
-        super();
-    }
-
-    public Proprietario(String telefone,
-                        String nome,
-                        String cpf,
-                        String email,
-                        String username,
-                        String password,
-                        LocalDate dataCriacaoConta,
-                        LocalDate dataAlteracaoConta,
-                        LocalDate dataAlteracaoSenha) {
-        super(nome, cpf, telefone, email, username, password, dataCriacaoConta, dataAlteracaoConta, dataAlteracaoSenha);
-    }
-
-    public Proprietario(ProprietarioDTO proprietarioDTO) {
-        super(proprietarioDTO.nome(), proprietarioDTO.email(), proprietarioDTO.telefone(), proprietarioDTO.cpf(),
-                proprietarioDTO.username(), proprietarioDTO.password(), proprietarioDTO.dataCriacaoConta(),
-                proprietarioDTO.dataAlteracaoConta(), proprietarioDTO.dataAlteracaoSenha());
+    public static Proprietario fromDTO(ProprietarioDTO dto) {
+        Proprietario proprietario = new Proprietario();
+        proprietario.setNome(dto.nome());
+        proprietario.setCpf(dto.cpf());
+        proprietario.setTelefone(dto.telefone());
+        proprietario.setEmail(dto.email());
+        proprietario.setUsername(dto.username());
+        proprietario.criarConta(dto.password());
+        return proprietario;
     }
 }

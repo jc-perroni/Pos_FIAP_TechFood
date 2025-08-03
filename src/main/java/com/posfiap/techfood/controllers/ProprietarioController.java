@@ -1,8 +1,8 @@
 package com.posfiap.techfood.controllers;
 
 import com.posfiap.techfood.models.Proprietario;
-import com.posfiap.techfood.models.dto.ProprietarioDTO;
-import com.posfiap.techfood.models.dto.ProprietarioUpdateDTO;
+import com.posfiap.techfood.models.dto.proprietario.ProprietarioDTO;
+import com.posfiap.techfood.models.dto.proprietario.ProprietarioUpdateDTO;
 import com.posfiap.techfood.services.ProprietarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,7 +29,7 @@ public class ProprietarioController {
         @Parameter(description = "Quantidade de registros por página") @RequestParam("size") int size
     ) {
         var proprietarios = proprietarioService.findAllProprietarios(page, size);
-        return ResponseEntity.ok(proprietarios);
+        return ResponseEntity.ok(proprietarios.getContent());
     }
 
     @Operation(summary = "Buscar proprietário por ID")

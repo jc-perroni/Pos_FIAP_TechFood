@@ -1,42 +1,36 @@
 package com.posfiap.techfood.models;
 
-import com.posfiap.techfood.models.dto.ClienteDTO;
-import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.posfiap.techfood.models.dto.cliente.ClienteDTO;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
+@Entity
+@Table(name = "CLIENTES")
 public class Cliente extends Usuario {
 
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     @Getter @Setter
+    @JsonManagedReference("cliente-endereco")
     private List<Endereco> enderecos = new ArrayList<>();
 
-    public Cliente() {
-        super();
-    }
+    @Getter
+    private Long id;
 
-    public Cliente(
-            String nome,
-            String email,
-            String telefone,
-            String cpf,
-            String username,
-            String password,
-            LocalDate dataCriacaoConta,
-            LocalDate dataAlteracaoConta,
-            LocalDate dataAlteracaoSenha
-    ) {
-        super(nome, email, telefone, cpf, username, password,dataCriacaoConta, dataAlteracaoConta,dataAlteracaoSenha);
+    public static Cliente fromDTO(ClienteDTO dto) {
+        Cliente cliente = new Cliente();
+        cliente.setNome(dto.nome());
+        cliente.setCpf(dto.cpf());
+        cliente.setTelefone(dto.telefone());
+        cliente.setUsername(dto.username());
+        cliente.setEmail(dto.email());
+        cliente.criarConta(dto.password());
+        return cliente;
     }
-
-    public Cliente(ClienteDTO cliente) {
-        super(cliente.nome(), cliente.email(), cliente.telefone(),
-                cliente.cpf(), cliente.username(), cliente.password(),
-                cliente.dataCriacaoConta(), cliente.dataAlteracaoConta(),
-                cliente.dataAlteracaoSenha());
-    }
-
 }

@@ -1,8 +1,8 @@
 package com.posfiap.techfood.controllers;
 
-import com.posfiap.techfood.models.dto.ClienteLoginDTO;
-import com.posfiap.techfood.models.dto.ProprietarioLoginDTO;
-import com.posfiap.techfood.models.dto.UsuarioDTO;
+import com.posfiap.techfood.models.dto.cliente.ClienteLoginDTO;
+import com.posfiap.techfood.models.dto.proprietario.ProprietarioLoginDTO;
+import com.posfiap.techfood.models.dto.usuario.UsuarioDTO;
 import com.posfiap.techfood.services.ValidaLoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
