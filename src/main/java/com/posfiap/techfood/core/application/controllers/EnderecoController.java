@@ -36,7 +36,7 @@ public class EnderecoController {
         }
     }
 
-    public EnderecoDTO findEnderecoByID(Long id) {
+    public EnderecoDTO findEnderecoById(Long id) {
         var enderecoGateway = EnderecoGatewayImp.create(dataSource);
         var useCase = FindEnderecoByIdUsecase.create(enderecoGateway);
 
@@ -61,12 +61,12 @@ public class EnderecoController {
 
     }
 
-    public EnderecoDTO atualizarEndereco(EnderecoDTO enderecoDTO) {
+    public EnderecoDTO atualizarEndereco(NovoEnderecoDTO enderecoDTO, Long id) {
         var enderecoGateway = EnderecoGatewayImp.create(dataSource);
         var useCase = UpdateEnderecoUsecase.create(enderecoGateway);
 
         try {
-            Endereco endereco = useCase.run(enderecoDTO);
+            Endereco endereco = useCase.run(enderecoDTO, id);
             return EnderecoPresenter.toDTO(endereco);
         } catch (UsuarioNaoEncontradoException e) {
             return  null;

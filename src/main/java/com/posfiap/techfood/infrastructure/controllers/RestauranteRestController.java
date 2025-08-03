@@ -18,8 +18,6 @@ import java.util.List;
 @Tag(name = "Restaurantes", description = "Operações relacionadas aos restaurantes")
 public class RestauranteRestController {
 
-    //private final RestauranteController restauranteController;
-
     @Operation(summary = "Listar todos os restaurantes com paginação")
     @GetMapping
     public ResponseEntity<List<RestauranteDTO>> findAllRestaurantes(

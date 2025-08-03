@@ -1,6 +1,6 @@
 package com.posfiap.techfood.core.domain.usecases.endereco;
 
-import com.posfiap.techfood.core.application.dto.EnderecoDTO;
+import com.posfiap.techfood.core.application.dto.NovoEnderecoDTO;
 import com.posfiap.techfood.core.application.interfaces.endereco.IEnderecoGateway;
 import com.posfiap.techfood.core.domain.entities.Endereco;
 import com.posfiap.techfood.core.domain.exceptions.EnderecoNaoEncontradoException;
@@ -18,10 +18,10 @@ public class UpdateEnderecoUsecase {
         return new UpdateEnderecoUsecase(enderecoGateway);
     }
 
-    public Endereco run(EnderecoDTO enderecoDTO) {
-        Optional<Endereco> enderecoExistente = this.enderecoGateway.findById(enderecoDTO.id());
+    public Endereco run(NovoEnderecoDTO enderecoDTO, long id) {
+        Optional<Endereco> enderecoExistente = this.enderecoGateway.findById(id);
         if (enderecoExistente.isEmpty()) {
-            throw new EnderecoNaoEncontradoException("O endereço do id "+ enderecoDTO.id() + " não foi encontrado na base dados");
+            throw new EnderecoNaoEncontradoException("O endereço do id "+ id + " não foi encontrado na base dados");
         }
 
         final Endereco novoEndereco = Endereco.create(
@@ -35,6 +35,6 @@ public class UpdateEnderecoUsecase {
                 enderecoDTO.numero()
         );
 
-        return this.enderecoGateway.save(novoEndereco);
+        return this.enderecoGateway.update(novoEndereco, id);
     }
 }
