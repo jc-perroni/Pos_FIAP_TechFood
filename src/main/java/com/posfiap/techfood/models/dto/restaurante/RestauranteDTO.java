@@ -1,3 +1,5 @@
 package com.posfiap.techfood.models.dto.restaurante;
 
-public record RestauranteDTO(String nome, String telefone, Long idProprietario) {}
+import com.posfiap.techfood.models.enums.TipoCozinha;
+
+public record RestauranteDTO(String nome, String telefone, Long idProprietario, TipoCozinha tipoCozinha, String horarioFuncionamento) {}

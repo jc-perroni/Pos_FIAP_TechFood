@@ -1,6 +1,6 @@
 package com.posfiap.techfood.controllers;
 
-import com.posfiap.techfood.models.Proprietario;
+import com.posfiap.techfood.models.Usuario;
 import com.posfiap.techfood.models.dto.proprietario.ProprietarioDTO;
 import com.posfiap.techfood.models.dto.proprietario.ProprietarioUpdateDTO;
 import com.posfiap.techfood.services.ProprietarioService;
@@ -24,7 +24,7 @@ public class ProprietarioController {
 
     @Operation(summary = "Listar todos os proprietários paginados")
     @GetMapping
-    public ResponseEntity<List<Proprietario>> findAllProprietarios(
+    public ResponseEntity<List<Usuario>> findAllProprietarios(
         @Parameter(description = "Número da página (começa em 0)") @RequestParam("page") int page,
         @Parameter(description = "Quantidade de registros por página") @RequestParam("size") int size
     ) {
@@ -34,7 +34,7 @@ public class ProprietarioController {
 
     @Operation(summary = "Buscar proprietário por ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Proprietario> findProprietarioById(
+    public ResponseEntity<Usuario> findProprietarioById(
         @Parameter(description = "ID do proprietário") @PathVariable("id") Long id
     ){
         var proprietario = proprietarioService.findProprietarioById(id);

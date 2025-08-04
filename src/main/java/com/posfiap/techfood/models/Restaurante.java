@@ -1,36 +1,52 @@
 package com.posfiap.techfood.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.posfiap.techfood.models.enums.TipoCozinha;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "RESTAURANTES")
 public class Restaurante {
 
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter @Setter
+    @Setter
     @ManyToOne
     @JoinColumn(name = "ID_PROPRIETARIO")
-    private Proprietario proprietario;
+    private Usuario usuario;
 
-    @Getter @Setter
+    @Setter
     @Column(length = 100)
     private String nome;
 
-    @Getter @Setter
+    @Setter
     @Column(length = 100)
     private String telefone;
 
-    @Getter @Setter
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(name = "GASTRONOMIA", nullable = false)
+    private TipoCozinha tipoCozinha;
+
+    @Setter
+    @Column(length = 100, nullable = false)
+    private String horarioFuncionamento;
+
+    @Setter
     @JsonManagedReference("restaurante-endereco")
-    @OneToMany(mappedBy = "restaurante")
+    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Endereco> enderecos;
+
+    @Setter
+    @OneToOne(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Cardapio cardapio;
 }

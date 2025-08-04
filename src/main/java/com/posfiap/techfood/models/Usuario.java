@@ -1,5 +1,7 @@
 package com.posfiap.techfood.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.posfiap.techfood.models.enums.PerfilUsuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,14 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-
 @Entity
 @Table(name = "USUARIOS")
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Usuario {
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +46,19 @@ public abstract class Usuario {
     @Getter @Setter
     @Column(length = 14)
     private String cpf;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Getter @Setter
+    private PerfilUsuario perfil;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Getter @Setter
+    @JsonManagedReference("cliente-endereco")
+    private List<Endereco> enderecos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Restaurante> restaurantes;
 
     @Getter
     private LocalDate dataCriacaoConta;

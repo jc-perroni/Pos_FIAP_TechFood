@@ -1,13 +1,13 @@
 package com.posfiap.techfood.services;
 
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
-import com.posfiap.techfood.models.Cliente;
 import com.posfiap.techfood.models.Endereco;
 import com.posfiap.techfood.models.Restaurante;
+import com.posfiap.techfood.models.Usuario;
 import com.posfiap.techfood.models.dto.endereco.EnderecoDTO;
 import com.posfiap.techfood.repositories.EnderecoRepository;
-import com.posfiap.techfood.repositories.ClienteRepository;
 import com.posfiap.techfood.repositories.RestauranteRepository;
+import com.posfiap.techfood.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,9 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class EnderecoService {
 
     private final EnderecoRepository enderecoRepository;
-    private final ClienteRepository clienteRepository;
     private final RestauranteRepository restauranteRepository;
-
+    private final UsuarioRepository usuarioRepository;
 
 
     public Page<Endereco> findAllEnderecos(int page, int size){
@@ -58,7 +57,7 @@ public class EnderecoService {
         log.info("Acessado o endpoint de salvamento de endereço");
         switch(endereco.tipoEndereco()){
             case CLIENTE -> {
-                    Cliente cliente = clienteRepository.findById(endereco.idEntidade())
+                    Usuario cliente = usuarioRepository.findById(endereco.idEntidade())
                     .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado para cadastro do endereço"));
                 enderecoRepository.save(Endereco.fromDTO(endereco, cliente));
             }

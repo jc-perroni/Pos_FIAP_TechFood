@@ -1,16 +1,17 @@
 package com.posfiap.techfood.services;
 
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
-import com.posfiap.techfood.models.Proprietario;
 import com.posfiap.techfood.models.Restaurante;
+import com.posfiap.techfood.models.Usuario;
+import com.posfiap.techfood.models.dto.proprietario.ProprietarioInfoBasicaDTO;
 import com.posfiap.techfood.models.dto.restaurante.RestauranteDTO;
-import com.posfiap.techfood.repositories.EnderecoRepository;
-import com.posfiap.techfood.repositories.ProprietarioRepository;
+import com.posfiap.techfood.models.dto.restaurante.RestauranteResponseDTO;
 import com.posfiap.techfood.repositories.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,15 +23,30 @@ import java.util.Optional;
 public class RestauranteService {
 
     private final RestauranteRepository restauranteRepository;
-    private final ProprietarioRepository proprietarioRepository;
-    private final EnderecoRepository enderecoRepository;
+    private final ProprietarioService proprietarioService;
 
-    public Page<Restaurante> findAllRestaurantes(int page, int size){
-        return restauranteRepository.findAll(PageRequest.of(page, size));
+    public Page<RestauranteResponseDTO> findAllRestaurantes(int page, int size) {
+        Page<Restaurante> restaurantes = restauranteRepository.findAll(PageRequest.of(page, size));
+        return restaurantes.map(restaurante -> {
+            ProprietarioInfoBasicaDTO proprietarioInfo = new ProprietarioInfoBasicaDTO(
+                    restaurante.getUsuario().getNome(),
+                    restaurante.getUsuario().getEmail(),
+                    restaurante.getUsuario().getPerfil()
+            );
+            return new RestauranteResponseDTO(
+                    restaurante.getNome(),
+                    restaurante.getTelefone(),
+                    restaurante.getTipoCozinha(),
+                    restaurante.getHorarioFuncionamento(),
+                    proprietarioInfo,
+                    restaurante.getEnderecos(),
+                    restaurante.getCardapio()
+            );
+        });
     }
 
     public Optional<Restaurante> findRestauranteById(Long id){
-        return Optional.ofNullable(restauranteRepository.findById(id))
+        return Optional.of(restauranteRepository.findById(id))
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
     }
     @Transactional
@@ -45,9 +61,11 @@ public class RestauranteService {
         Restaurante restaurante = new Restaurante();
         restaurante.setNome(dto.nome());
         restaurante.setTelefone(dto.telefone());
-        Proprietario proprietario = proprietarioRepository.findById(dto.idProprietario())
-                .orElseThrow(() -> new ResourceNotFoundException("Proprietário não encontrado para cadastro no estabelecimento"));
-        restaurante.setProprietario(proprietario);
+        restaurante.setTipoCozinha(dto.tipoCozinha());
+        restaurante.setHorarioFuncionamento(dto.horarioFuncionamento());
+
+        Usuario proprietario = proprietarioService.retornarProprietario(dto.idProprietario());
+        restaurante.setUsuario(proprietario);
         restauranteRepository.save(restaurante);
     }
     @Transactional

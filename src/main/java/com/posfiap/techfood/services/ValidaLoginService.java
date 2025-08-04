@@ -7,8 +7,7 @@ import com.posfiap.techfood.models.dto.cliente.ClienteLoginDTO;
 import com.posfiap.techfood.models.dto.usuario.LoginDTO;
 import com.posfiap.techfood.models.dto.proprietario.ProprietarioLoginDTO;
 import com.posfiap.techfood.models.dto.usuario.UsuarioDTO;
-import com.posfiap.techfood.repositories.ClienteRepository;
-import com.posfiap.techfood.repositories.ProprietarioRepository;
+import com.posfiap.techfood.repositories.UsuarioRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +20,7 @@ import static com.posfiap.techfood.services.ValidaSenhaService.autenticarSenha;
 @RequiredArgsConstructor
 public class ValidaLoginService {
 
-    private final ClienteRepository clienteRepository;
-    private final ProprietarioRepository proprietarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public UsuarioDTO validarLogin(@NotNull LoginDTO loginDTO){
 
@@ -36,20 +34,8 @@ public class ValidaLoginService {
     }
 
     private Usuario validarUsuario(LoginDTO loginDTO){
-        switch (loginDTO){
-            case ClienteLoginDTO cliente-> {
-                log.info("Usuário do tipo Cliente...");
-                return clienteRepository.findByUsername(cliente.getUsuario()).orElseThrow(() ->
-                        new InvalidUserNameAccount("Username de cliente inválido."));
+        return usuarioRepository.findByUsername(loginDTO.getUsuario()).orElseThrow(() ->
+                new InvalidUserNameAccount("Username de cliente inválido."));
             }
-            case ProprietarioLoginDTO proprietario  -> {
-                log.info("Usuário do tipo Proprietário...");
-                return proprietarioRepository.findByUsername(proprietario.getUsuario()).orElseThrow(() ->
-                        new InvalidUserNameAccount("Username de proprietário inválido."));
-            }
-            default -> throw new IllegalStateException("Não foi possível identificar o tipo de usuário: " +
-                    loginDTO.getUsuario());
-        }
-        }
     }
 

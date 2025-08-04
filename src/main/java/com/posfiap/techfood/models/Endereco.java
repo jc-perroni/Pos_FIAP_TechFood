@@ -20,14 +20,14 @@ public class Endereco {
     private Long id;
 
     @ManyToOne
-    @Getter @Setter
+    @Setter
     @JsonBackReference("cliente-endereco")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JoinColumn(name = "ID_CLIENTE")
-    private Cliente cliente;
+    private Usuario usuario;
 
     @ManyToOne
-    @Getter @Setter
+    @Setter
     @JsonBackReference("restaurante-endereco")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JoinColumn(name = "ID_RESTAURANTE")
@@ -62,9 +62,9 @@ public class Endereco {
     @Column(nullable = false, length = 10)
     private String numero;
 
-    public static Endereco fromDTO(EnderecoDTO dto, Cliente cliente) {
+    public static Endereco fromDTO(EnderecoDTO dto, Usuario cliente) {
         Endereco endereco = new Endereco();
-        endereco.setCliente(cliente);
+        endereco.setUsuario(cliente);
         endereco.setRua(dto.rua());
         endereco.setCep(dto.cep());
         endereco.setBairro(dto.bairro());
