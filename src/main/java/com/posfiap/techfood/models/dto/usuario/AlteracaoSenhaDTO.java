@@ -1,10 +1,10 @@
-package com.posfiap.techfood.models.dto;
+package com.posfiap.techfood.models.dto.usuario;
 
 import lombok.Getter;
 
 @Getter
 public abstract class AlteracaoSenhaDTO {
-    private String usuario;
+    private String username;
     private String senhaNova;
     private String senhaAntiga;
 }

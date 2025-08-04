@@ -2,16 +2,18 @@ package com.posfiap.techfood.services;
 
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.models.Endereco;
-import com.posfiap.techfood.models.dto.EnderecoDTO;
+import com.posfiap.techfood.models.Restaurante;
+import com.posfiap.techfood.models.Usuario;
+import com.posfiap.techfood.models.dto.endereco.EnderecoDTO;
 import com.posfiap.techfood.repositories.EnderecoRepository;
+import com.posfiap.techfood.repositories.RestauranteRepository;
+import com.posfiap.techfood.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,12 +21,13 @@ import java.util.Optional;
 public class EnderecoService {
 
     private final EnderecoRepository enderecoRepository;
-    private final List<Endereco> enderecos = new ArrayList<>();
+    private final RestauranteRepository restauranteRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public List<Endereco> findAllEnderecos(int page, int size){
+
+    public Page<Endereco> findAllEnderecos(int page, int size){
         log.info("Acessado o endpoint de retornar todos os endereços");
-        int offset = (page - 1) * size;
-        return enderecoRepository.findAll(size, offset);
+        return enderecoRepository.findAll(PageRequest.of(page, size));
     }
 
     public Endereco findEnderecoById(Long id){
@@ -33,26 +36,44 @@ public class EnderecoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
     }
 
-    public void updateEndereco(Endereco endereco, Long id){
+    @Transactional
+    public Endereco updateEndereco(Endereco endereco, Long id){
         log.info("Acessado o endpoint de atualização de endereço");
-        var update = enderecoRepository.update(endereco, id);
-        if(update ==0) {
-            throw new ResourceNotFoundException("O endereço de id " + id + " não está cadastrado e não pode ser atualizado");
-        }
+        var enderecoAlterado = findEnderecoById(id);
+
+        if (endereco.getBairro() != null) enderecoAlterado.setBairro(endereco.getBairro());
+        if (endereco.getCidade() != null) enderecoAlterado.setCidade(endereco.getCidade());
+        if (endereco.getCep() != null) enderecoAlterado.setCep(endereco.getCep());
+        if (endereco.getRua() != null) enderecoAlterado.setRua(endereco.getRua());
+        if (endereco.getNumero() != null) enderecoAlterado.setNumero(endereco.getNumero());
+        if (endereco.getComplemento() != null) enderecoAlterado.setComplemento(endereco.getComplemento());
+
+        enderecoRepository.save(enderecoAlterado);
         log.info("Atualização realizada com sucesso.");
+        return enderecoAlterado;
     }
 
     public void insertEndereco(EnderecoDTO endereco){
         log.info("Acessado o endpoint de salvamento de endereço");
-        var insert = enderecoRepository.save(new Endereco(endereco));
+        switch(endereco.tipoEndereco()){
+            case CLIENTE -> {
+                    Usuario cliente = usuarioRepository.findById(endereco.idEntidade())
+                    .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado para cadastro do endereço"));
+                enderecoRepository.save(Endereco.fromDTO(endereco, cliente));
+            }
+
+            case RESTAURANTE -> {
+                Restaurante restaurante =  restauranteRepository.findById(endereco.idEntidade())
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurante não encontraddo para cadastro do endereço"));
+                enderecoRepository.save(Endereco.fromDTO(endereco, restaurante));
+            }
+
+            default -> throw new IllegalStateException("Não foi possível identificar o tipo do endereço");
+    }
     }
 
     public void deleteEndereco(Long id) {
         log.info("Acessado o endpoint de deleção de endereço");
-        var delete = enderecoRepository.delete(id);
-        if (delete == 0){
-            throw new ResourceNotFoundException("ID do endereço não existe");
-        }
+        enderecoRepository.deleteById(id);
     }
-
 }

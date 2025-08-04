@@ -2,7 +2,7 @@ package com.posfiap.techfood.controllers;
 
 
 import com.posfiap.techfood.models.Endereco;
-import com.posfiap.techfood.models.dto.EnderecoDTO;
+import com.posfiap.techfood.models.dto.endereco.EnderecoDTO;
 import com.posfiap.techfood.services.EnderecoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -31,7 +30,7 @@ public class EnderecoController {
         @Parameter(description = "Quantidade de registros por página") @RequestParam("size") int size
     ) {
         var enderecos = enderecoService.findAllEnderecos(page, size);
-        return ResponseEntity.ok(enderecos);
+        return ResponseEntity.ok(enderecos.getContent());
     }
 
     @Operation(summary = "Buscar endereço por ID")

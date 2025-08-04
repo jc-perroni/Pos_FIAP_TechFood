@@ -1,9 +1,7 @@
-package com.posfiap.techfood.models.dto;
+package com.posfiap.techfood.models.dto.cliente;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-
-import java.time.LocalDate;
 
 public record ClienteUpdateDTO(@NotNull(message = "O campo 'nome' não pode ser nulo")
                                String nome,

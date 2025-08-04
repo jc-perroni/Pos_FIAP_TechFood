@@ -1,8 +1,8 @@
 package com.posfiap.techfood.controllers;
 
-import com.posfiap.techfood.models.dto.AlteracaoSenhaDTO;
-import com.posfiap.techfood.models.dto.ClienteAlteracaoSenhaDTO;
-import com.posfiap.techfood.models.dto.ProprietarioAlteracaoSenhaDTO;
+import com.posfiap.techfood.models.dto.usuario.AlteracaoSenhaDTO;
+import com.posfiap.techfood.models.dto.cliente.ClienteAlteracaoSenhaDTO;
+import com.posfiap.techfood.models.dto.proprietario.ProprietarioAlteracaoSenhaDTO;
 import com.posfiap.techfood.services.AlteracaoSenhaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.posfiap.techfood.models.dto;
+package com.posfiap.techfood.models.dto.usuario;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -9,6 +9,6 @@ public record UsuarioDTO(
     String nome,
 
     @Schema(description = "ID único do usuário", example = "123")
-    Long id
+    long id
 
 ) {}

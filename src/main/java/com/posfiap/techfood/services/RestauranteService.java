@@ -1,17 +1,20 @@
 package com.posfiap.techfood.services;
 
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
-import com.posfiap.techfood.models.Endereco;
 import com.posfiap.techfood.models.Restaurante;
-import com.posfiap.techfood.repositories.EnderecoRepository;
+import com.posfiap.techfood.models.Usuario;
+import com.posfiap.techfood.models.dto.proprietario.ProprietarioInfoBasicaDTO;
+import com.posfiap.techfood.models.dto.restaurante.RestauranteDTO;
+import com.posfiap.techfood.models.dto.restaurante.RestauranteResponseDTO;
 import com.posfiap.techfood.repositories.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -20,35 +23,53 @@ import java.util.Optional;
 public class RestauranteService {
 
     private final RestauranteRepository restauranteRepository;
-    private final EnderecoRepository enderecoRepository;
+    private final ProprietarioService proprietarioService;
 
-    public List<Restaurante> findAllRestaurantes(int page, int size){
-        int offset = (page - 1) * size;
-        return restauranteRepository.findAll(size, offset);
+    public Page<RestauranteResponseDTO> findAllRestaurantes(int page, int size) {
+        Page<Restaurante> restaurantes = restauranteRepository.findAll(PageRequest.of(page, size));
+        return restaurantes.map(restaurante -> {
+            ProprietarioInfoBasicaDTO proprietarioInfo = new ProprietarioInfoBasicaDTO(
+                    restaurante.getUsuario().getNome(),
+                    restaurante.getUsuario().getEmail(),
+                    restaurante.getUsuario().getPerfil()
+            );
+            return new RestauranteResponseDTO(
+                    restaurante.getNome(),
+                    restaurante.getTelefone(),
+                    restaurante.getTipoCozinha(),
+                    restaurante.getHorarioFuncionamento(),
+                    proprietarioInfo,
+                    restaurante.getEnderecos(),
+                    restaurante.getCardapio()
+            );
+        });
     }
 
     public Optional<Restaurante> findRestauranteById(Long id){
-        return Optional.ofNullable(restauranteRepository.findById(id))
+        return Optional.of(restauranteRepository.findById(id))
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
     }
-
+    @Transactional
     public void updateRestaurante(Restaurante restaurante, Long id){
-        var update = restauranteRepository.update(restaurante, id);
-        if(update ==0) {
-            throw new RuntimeException("O restaurante de id " + id + " não está cadastrado e não pode ser atualizado");
-        }
+        Restaurante restauranteAlterado = findRestauranteById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Restaurante não encontrado"));
+        restauranteRepository.save(restaurante);
         log.info("Atualização realizada com sucesso.");
     }
+    @Transactional
+    public void insertRestaurante(RestauranteDTO dto){
+        Restaurante restaurante = new Restaurante();
+        restaurante.setNome(dto.nome());
+        restaurante.setTelefone(dto.telefone());
+        restaurante.setTipoCozinha(dto.tipoCozinha());
+        restaurante.setHorarioFuncionamento(dto.horarioFuncionamento());
 
-    public void insertRestaurante(Restaurante restaurante){
-        var insert = restauranteRepository.save(restaurante);
-        Assert.state(insert ==1, "Erro ao tentar gravar o restaurante.");
+        Usuario proprietario = proprietarioService.retornarProprietario(dto.idProprietario());
+        restaurante.setUsuario(proprietario);
+        restauranteRepository.save(restaurante);
     }
     @Transactional
     public void deleteRestaurante(Long id) {
-        var delete = restauranteRepository.delete(id);
-        if (delete == 0){
-            throw new RuntimeException("Não foi possível excluir o restaurante com ID: " + id);
-        }
+        restauranteRepository.deleteById(id);
     }
 }

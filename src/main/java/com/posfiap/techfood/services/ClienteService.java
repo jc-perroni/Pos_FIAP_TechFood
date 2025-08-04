@@ -1,70 +1,78 @@
 package com.posfiap.techfood.services;
 
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
-import com.posfiap.techfood.models.Cliente;
-import com.posfiap.techfood.models.Endereco;
-import com.posfiap.techfood.models.dto.ClienteDTO;
-import com.posfiap.techfood.models.dto.ClienteUpdateDTO;
-import com.posfiap.techfood.repositories.ClienteRepository;
-import com.posfiap.techfood.repositories.EnderecoRepository;
+import com.posfiap.techfood.models.Usuario;
+import com.posfiap.techfood.models.dto.cliente.ClienteDTO;
+import com.posfiap.techfood.models.dto.cliente.ClienteUpdateDTO;
+import com.posfiap.techfood.models.enums.PerfilUsuario;
+import com.posfiap.techfood.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class ClienteService {
 
-    private final ClienteRepository clienteRepository;
+    private final UsuarioRepository usuarioRepository;
     private final UsuarioService usuarioService;
 
-    public List<Cliente> findAllClientes(int page, int size){
-        int offset = (page - 1) * size;
-        return clienteRepository.findAll(size, offset);
+    private final List<PerfilUsuario> perfilCliente = List.of(PerfilUsuario.CLIENTE, PerfilUsuario.PROPRIETARIO_CLIENTE);
+
+    public Page<Usuario> findAllClientes(int page, int size){
+        return usuarioRepository.findAllByPerfilIn(perfilCliente, PageRequest.of(page, size));
     }
 
-    public Cliente findClienteById(Long id){
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
+    public Usuario findClienteById(Long id){
+        return retornarCliente(id);
     }
 
+    @Transactional
     public void updateCliente(ClienteUpdateDTO cliente, Long id){
-        Cliente clienteExistente = clienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
-
+        Usuario clienteExistente = retornarCliente(id);
         clienteExistente.updateDataAlteracao();
         clienteExistente.setNome(cliente.nome());
         clienteExistente.setCpf(cliente.cpf());
         clienteExistente.setTelefone(cliente.telefone());
         clienteExistente.setEmail(cliente.email());
 
-        int update = clienteRepository.update(clienteExistente, id);
-        if(update ==0) {
-            throw new ResourceNotFoundException("O cliente de id " + id + " não está cadastrado e não pode ser atualizado");
-        }
+        usuarioRepository.save(clienteExistente);
         log.info("Atualização realizada com sucesso.");
+
     }
 
+    @Transactional
     public void insertCliente(ClienteDTO cliente){
-        Cliente cl = new Cliente(cliente);
-        usuarioService.alterarSenha(cliente.password(), cl);
-        var insert = clienteRepository.save(cl);
+        Usuario novoUsuario = new Usuario();
+        novoUsuario.setPerfil(PerfilUsuario.CLIENTE);
+        novoUsuario.setNome(cliente.nome());
+        novoUsuario.setCpf(cliente.cpf());
+        novoUsuario.setTelefone(cliente.telefone());
+        novoUsuario.setEmail(cliente.email());
+        novoUsuario.setUsername(cliente.username());
+        usuarioService.alterarSenha(cliente.password(), novoUsuario);
+        usuarioRepository.save(novoUsuario);
     }
 
     @Transactional
     public void deleteCliente(Long id) {
-        Cliente cl = clienteRepository.findById(id).orElseThrow();
-        var delete = clienteRepository.delete(id);
-        var deleteUser = clienteRepository.deleteUsuario(cl.getUsername());
-        if (delete == 0 || deleteUser == 0){
-            throw new ResourceNotFoundException("Cliente para deleção não encontrado com o ID: " + id);
+        log.info("Acessado o endpoint de deleção de cliente");
+        Usuario usuario = retornarCliente(id);
+        if(usuario.getPerfil().equals(PerfilUsuario.CLIENTE)) {
+            usuarioRepository.deleteById(usuario.getId());
         }
+        else usuarioService.alterarPerfil(id, PerfilUsuario.PROPRIETARIO);
     }
 
+    private Usuario retornarCliente(Long id){
+        return usuarioRepository.findByIdAndPerfilIn(id, perfilCliente)
+                .orElseThrow(() -> new ResourceNotFoundException("Proprietario não encontrado"));
+    }
 }
+
