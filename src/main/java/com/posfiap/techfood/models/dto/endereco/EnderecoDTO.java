@@ -1,4 +1,4 @@
-package com.posfiap.techfood.models.dto;
+package com.posfiap.techfood.models.dto.endereco;
 
 import com.posfiap.techfood.core.domain.enums.TipoEndereco;
 import jakarta.validation.constraints.NotNull;

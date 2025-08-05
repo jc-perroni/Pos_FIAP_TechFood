@@ -1,58 +1,90 @@
 package com.posfiap.techfood.models;
 
-import com.posfiap.techfood.models.dto.EnderecoDTO;
-import com.posfiap.techfood.core.domain.enums.TipoEndereco;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.posfiap.techfood.models.dto.endereco.EnderecoDTO;
+import com.posfiap.techfood.models.enums.TipoEndereco;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
+@Entity
+@Table(name = "ENDERECOS")
 public class Endereco {
-    Long id;
 
-    Long idEntidade;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    TipoEndereco tipoEndereco;
+    @ManyToOne
+    @Setter
+    @JsonBackReference("cliente-endereco")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JoinColumn(name = "ID_CLIENTE")
+    private Usuario usuario;
+
+    @ManyToOne
+    @Setter
+    @JsonBackReference("restaurante-endereco")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JoinColumn(name = "ID_RESTAURANTE")
+    private Restaurante restaurante;
+
+    @Enumerated(EnumType.STRING)
+    @Setter
+    @Column(name = "TIPO_ENDERECO", nullable = false)
+    private TipoEndereco tipoEndereco;
 
     @Setter
-    String rua;
+    @Column(nullable = false, length = 50)
+    private String rua;
 
     @Setter
-    String cep;
+    @Column(nullable = false, length = 15)
+    private String cep;
 
     @Setter
-    String cidade;
+    @Column(nullable = false, length = 15)
+    private String cidade;
 
     @Setter
-    String bairro;
+    @Column(nullable = false, length = 20)
+    private String bairro;
 
     @Setter
-    String complemento;
+    @Column(length = 30)
+    private String complemento;
 
     @Setter
-    String numero;
+    @Column(nullable = false, length = 10)
+    private String numero;
 
-    public Endereco(Long id, Long idEntidade, TipoEndereco tipoEndereco, String rua, String cep, String cidade, String bairro, String complemento, String numero) {
-        this.id = id;
-        this.idEntidade = idEntidade;
-        this.tipoEndereco = tipoEndereco;
-        this.rua = rua;
-        this.cep = cep;
-        this.cidade = cidade;
-        this.bairro = bairro;
-        this.complemento = complemento;
-        this.numero = numero;
+    public static Endereco fromDTO(EnderecoDTO dto, Usuario cliente) {
+        Endereco endereco = new Endereco();
+        endereco.setUsuario(cliente);
+        endereco.setRua(dto.rua());
+        endereco.setCep(dto.cep());
+        endereco.setBairro(dto.bairro());
+        endereco.setComplemento(dto.complemento());
+        endereco.setNumero(dto.numero());
+        endereco.setCidade(dto.cidade());
+        endereco.setTipoEndereco(dto.tipoEndereco());
+        return endereco;
     }
 
-    public Endereco(EnderecoDTO enderecoDTO) {
-        this.idEntidade = enderecoDTO.idEntidade();
-        this.tipoEndereco = enderecoDTO.tipoEndereco();
-        this.rua = enderecoDTO.rua();
-        this.cep = enderecoDTO.cep();
-        this.cidade = enderecoDTO.cidade();
-        this.bairro = enderecoDTO.bairro();
-        this.complemento = enderecoDTO.complemento();
-        this.numero = enderecoDTO.numero();
+    public static Endereco fromDTO(EnderecoDTO dto, Restaurante restaurante) {
+        Endereco endereco = new Endereco();
+        endereco.setRestaurante(restaurante);
+        endereco.setRua(dto.rua());
+        endereco.setCep(dto.cep());
+        endereco.setBairro(dto.bairro());
+        endereco.setComplemento(dto.complemento());
+        endereco.setNumero(dto.numero());
+        endereco.setCidade(dto.cidade());
+        endereco.setTipoEndereco(dto.tipoEndereco());
+        return endereco;
     }
 }

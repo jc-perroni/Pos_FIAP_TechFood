@@ -1,8 +1,8 @@
 package com.posfiap.techfood.controllers;
 
-import com.posfiap.techfood.models.Cliente;
-import com.posfiap.techfood.models.dto.UsuarioEntidadeDTO;
-import com.posfiap.techfood.models.dto.ClienteUpdateDTO;
+import com.posfiap.techfood.models.Usuario;
+import com.posfiap.techfood.models.dto.cliente.ClienteDTO;
+import com.posfiap.techfood.models.dto.cliente.ClienteUpdateDTO;
 import com.posfiap.techfood.services.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,17 +25,17 @@ public class ClienteController {
 
     @Operation(summary = "Listar todos os clientes paginados")
     @GetMapping
-    public ResponseEntity<List<Cliente>> findAllClientes(
+    public ResponseEntity<List<Usuario>> findAllClientes(
         @Parameter(description = "Número da página (começa em 0)") @RequestParam("page") int page,
         @Parameter(description = "Quantidade de registros por página") @RequestParam("size") int size
     ) {
         var clientes = clienteService.findAllClientes(page, size);
-        return ResponseEntity.ok(clientes);
+        return ResponseEntity.ok(clientes.getContent());
     }
 
     @Operation(summary = "Buscar cliente por ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> findClienteById(
+    public ResponseEntity<Usuario> findClienteById(
         @Parameter(description = "ID do cliente") @PathVariable("id") Long id
     ){
         var cliente = clienteService.findClienteById(id);
@@ -45,7 +45,7 @@ public class ClienteController {
     @Operation(summary = "Inserir novo cliente")
     @PostMapping
     public ResponseEntity<Void> inserirCliente(
-        @Valid @RequestBody UsuarioEntidadeDTO cliente
+        @Valid @RequestBody ClienteDTO cliente
     ){
         clienteService.insertCliente(cliente);
         return ResponseEntity.status(201).build();

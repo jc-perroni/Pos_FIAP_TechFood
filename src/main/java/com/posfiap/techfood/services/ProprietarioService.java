@@ -1,12 +1,15 @@
 package com.posfiap.techfood.services;
 
 import com.posfiap.techfood.exceptions.ResourceNotFoundException;
-import com.posfiap.techfood.models.Proprietario;
-import com.posfiap.techfood.models.dto.ProprietarioDTO;
-import com.posfiap.techfood.models.dto.ProprietarioUpdateDTO;
-import com.posfiap.techfood.repositories.ProprietarioRepository;
+import com.posfiap.techfood.models.Usuario;
+import com.posfiap.techfood.models.dto.proprietario.ProprietarioDTO;
+import com.posfiap.techfood.models.dto.proprietario.ProprietarioUpdateDTO;
+import com.posfiap.techfood.models.enums.PerfilUsuario;
+import com.posfiap.techfood.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,56 +19,58 @@ import java.util.List;
 @Service
 public class ProprietarioService {
 
-    private final ProprietarioRepository proprietarioRepository;
+    private final UsuarioRepository usuarioRepository;
     private final UsuarioService usuarioService;
+    private final List<PerfilUsuario> perfilProprietario = List.of(PerfilUsuario.PROPRIETARIO, PerfilUsuario.PROPRIETARIO_CLIENTE);
 
-    public List<Proprietario> findAllProprietarios(int page, int size){
+
+    public Page<Usuario> findAllProprietarios(int page, int size){
         log.info("Acessado o endpoint de retornar todos os proprietarios");
-        int offset = (page - 1) * size;
-        return proprietarioRepository.findAll(size, offset);
+        return usuarioRepository.findAllByPerfilIn(perfilProprietario, PageRequest.of(page, size));
     }
 
-    public Proprietario findProprietarioById(Long id){
+    public Usuario findProprietarioById(Long id){
         log.info("Acessado o endpoint de de encontrar proprietario pelo ID");
-        return proprietarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Proprietario com esse ID não existe"));
+        return retornarProprietario(id);
     }
 
     public void updateProprietario(ProprietarioUpdateDTO proprietario, Long id){
         log.info("Acessado o endpoint de atualização de proprietario");
-        Proprietario proprietarioExistente = proprietarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Proprietario não encontrado"));
-
+        Usuario proprietarioExistente = retornarProprietario(id);
         proprietarioExistente.updateDataAlteracao();
         proprietarioExistente.setNome(proprietario.nome());
         proprietarioExistente.setCpf(proprietario.cpf());
         proprietarioExistente.setTelefone(proprietario.telefone());
         proprietarioExistente.setEmail(proprietario.email());
 
-        // Atualiza a entidade no banco
-        int update = proprietarioRepository.update(proprietarioExistente, id);
-        if(update ==0) {
-            throw new ResourceNotFoundException("O proprietario de id " + id + " não está cadastrado e não pode ser atualizado");
-        }
+        usuarioRepository.save(proprietarioExistente);
         log.info("Atualização realizada com sucesso.");
     }
 
     public void insertProprietario(ProprietarioDTO proprietario){
         log.info("Acessado o endpoint de criação de proprietario");
-        Proprietario pr = new Proprietario(proprietario);
-        usuarioService.alterarSenha(proprietario.password() , pr);
-        var insert = proprietarioRepository.save(pr);
+        Usuario novoUsuario = new Usuario();
+        novoUsuario.setNome(proprietario.nome());
+        novoUsuario.setCpf(proprietario.cpf());
+        novoUsuario.setTelefone(proprietario.telefone());
+        novoUsuario.setEmail(proprietario.email());
+        novoUsuario.setUsername(proprietario.username());
+        novoUsuario.setPerfil(PerfilUsuario.PROPRIETARIO);
+        usuarioService.alterarSenha(proprietario.password() , novoUsuario);
+        usuarioRepository.save(novoUsuario);
     }
 
     public void deleteProprietario(Long id) {
         log.info("Acessado o endpoint de deleção de proprietario");
-
-        Proprietario pr = proprietarioRepository.findById(id).orElseThrow();
-        var delete = proprietarioRepository.delete(id);
-        var deleteUser = proprietarioRepository.deleteUsuario(pr.getUsername());
-        if (delete == 0){
-            throw new ResourceNotFoundException("Proprietario não encontrado com a ID: " + id);
+        Usuario usuario = retornarProprietario(id);
+        if(usuario.getPerfil().equals(PerfilUsuario.PROPRIETARIO)) {
+            usuarioRepository.deleteById(usuario.getId());
         }
+        else usuarioService.alterarPerfil(id, PerfilUsuario.CLIENTE);
     }
 
+    public Usuario retornarProprietario(Long id){
+        return usuarioRepository.findByIdAndPerfilIn(id, perfilProprietario)
+                .orElseThrow(() -> new ResourceNotFoundException("Proprietario não encontrado"));
+    }
 }
