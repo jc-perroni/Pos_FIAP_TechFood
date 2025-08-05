@@ -3,12 +3,13 @@ package integrationTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import com.posfiap.techfood.models.Endereco;
-import com.posfiap.techfood.models.Restaurante;
-import com.posfiap.techfood.models.Usuario;
-import com.posfiap.techfood.models.dto.cliente.ClienteAlteracaoSenhaDTO;
+import com.posfiap.techfood.models.*;
 import com.posfiap.techfood.models.dto.cliente.ClienteDTO;
 import com.posfiap.techfood.models.dto.cliente.ClienteLoginDTO;
+import com.posfiap.techfood.models.dto.cliente.ClienteUpdateDTO;
+import com.posfiap.techfood.models.dto.prato.PratoUpdateDTO;
+import com.posfiap.techfood.models.dto.proprietario.ProprietarioDTO;
+import com.posfiap.techfood.models.dto.proprietario.ProprietarioUpdateDTO;
 import com.posfiap.techfood.models.dto.restaurante.RestauranteDTO;
 import com.posfiap.techfood.models.dto.restaurante.RestauranteResponseDTO;
 import com.posfiap.techfood.models.enums.PerfilUsuario;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -103,7 +105,7 @@ public class IntegrationTest {
 
         Usuario cliente = objectMapper.readValue(byId.getResponse().getContentAsString(), Usuario.class);
 
-        var updateDTO = new com.posfiap.techfood.models.dto.cliente.ClienteUpdateDTO(
+        var updateDTO = new ClienteUpdateDTO(
                 "Nome Alterado",
                 cliente.getCpf(),
                 cliente.getTelefone(),
@@ -147,7 +149,7 @@ public class IntegrationTest {
     void deveAdicionarProprietarios() throws Exception {
         List<Usuario> proprietarios = dataFactory.gerarProprietarios();
         var proprietariosDTO = proprietarios.stream()
-                .map(p -> new com.posfiap.techfood.models.dto.proprietario.ProprietarioDTO(
+                .map(p -> new ProprietarioDTO(
                         p.getTelefone(),
                         p.getNome(),
                         p.getCpf(),
@@ -191,7 +193,7 @@ public class IntegrationTest {
 
         Usuario proprietario = objectMapper.readValue(byId.getResponse().getContentAsString(), Usuario.class);
 
-        var updateDTO = new com.posfiap.techfood.models.dto.proprietario.ProprietarioUpdateDTO(
+        var updateDTO = new ProprietarioUpdateDTO(
                 "Nome Proprietario Alterado",
                 proprietario.getCpf(),
                 proprietario.getTelefone(),
@@ -281,7 +283,7 @@ public class IntegrationTest {
                 .andReturn();
 
         com.fasterxml.jackson.databind.JsonNode restauranteJson = objectMapper.readTree(byId.getResponse().getContentAsString());
-        com.posfiap.techfood.models.Restaurante restaurante = objectMapper.treeToValue(restauranteJson, Restaurante.class);
+        Restaurante restaurante = objectMapper.treeToValue(restauranteJson, Restaurante.class);
 
         restaurante.setNome("Restaurante Alterado");
         restaurante.setTelefone("9999-9999");
@@ -386,9 +388,9 @@ public class IntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        com.posfiap.techfood.models.Endereco endereco = objectMapper.readValue(
+        Endereco endereco = objectMapper.readValue(
                 byId.getResponse().getContentAsString(),
-                com.posfiap.techfood.models.Endereco.class
+                Endereco.class
         );
 
         endereco.setRua("Rua Alterada");
@@ -404,9 +406,9 @@ public class IntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        com.posfiap.techfood.models.Endereco enderecoAtualizado = objectMapper.readValue(
+        Endereco enderecoAtualizado = objectMapper.readValue(
                 byId.getResponse().getContentAsString(),
-                com.posfiap.techfood.models.Endereco.class
+                Endereco.class
         );
         assertEquals("Rua Alterada", enderecoAtualizado.getRua());
         assertEquals("999", enderecoAtualizado.getNumero());
@@ -487,4 +489,329 @@ public class IntegrationTest {
                         .content(objectMapper.writeValueAsString(loginNovo)))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @Order(16)
+    void deveAdicionarCardapioComDataFactory() throws Exception {
+        List<Restaurante> listaRestaurantes = new ArrayList<>();
+
+        MvcResult restauranteResult = mockMvc.perform(get("/v1/restaurantes")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<RestauranteResponseDTO> restaurantes = objectMapper.readValue(
+                restauranteResult.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, RestauranteResponseDTO.class)
+        );
+
+        for (RestauranteResponseDTO restaurante : restaurantes) {
+            MvcResult resultado = mockMvc.perform(get("/v1/restaurantes/" + restaurante.id())).andExpect(status().isOk()).andReturn();
+            listaRestaurantes.add(objectMapper.readValue(resultado.getResponse().getContentAsString(), Restaurante.class));
+        }
+        Cardapio cardapio = dataFactory.gerarCardapiosComPratos(listaRestaurantes).getFirst();
+        mockMvc.perform(post("/v1/cardapio")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cardapio)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @Order(17)
+    void deveBuscarCardapios() throws Exception {
+        MvcResult result = mockMvc.perform(get("/v1/cardapio")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<?> cardapios = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Cardapio.class)
+        );
+        assertFalse(cardapios.isEmpty());
+    }
+
+    @Test
+    @Order(18)
+    void deveBuscarCardapioPorId() throws Exception {
+        MvcResult result = mockMvc.perform(get("/v1/cardapio")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Cardapio> cardapios = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Cardapio.class)
+        );
+
+        Long id = cardapios.getFirst().getId();
+
+        mockMvc.perform(get("/v1/cardapio/" + id))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Order(19)
+    void deveAtualizarCardapio() throws Exception {
+        MvcResult cardapiosResult = mockMvc.perform(get("/v1/cardapio")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Cardapio> cardapios = objectMapper.readValue(
+                cardapiosResult.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Cardapio.class)
+        );
+        assertFalse(cardapios.isEmpty(), "Nenhum cardápio encontrado para teste");
+
+        Cardapio cardapio = cardapios.getFirst();
+
+        MvcResult cardapioResult = mockMvc.perform(get("/v1/cardapio/" + cardapio.getId()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Cardapio cardapioBuscado = objectMapper.readValue(
+                cardapioResult.getResponse().getContentAsString(),
+                Cardapio.class
+        );
+
+        assertFalse(cardapioBuscado.getPratos().isEmpty(), "Cardápio não possui pratos");
+        String nomeAntigo = cardapioBuscado.getPratos().getFirst().getNome();
+        cardapioBuscado.getPratos().getFirst().setNome("Prato Alterado");
+
+        mockMvc.perform(put("/v1/cardapio/" + cardapioBuscado.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cardapioBuscado)))
+                .andExpect(status().isNoContent());
+
+        MvcResult cardapioAtualizadoResult = mockMvc.perform(get("/v1/cardapio/" + cardapioBuscado.getId()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Cardapio cardapioAtualizado = objectMapper.readValue(
+                cardapioAtualizadoResult.getResponse().getContentAsString(),
+                Cardapio.class
+        );
+
+        assertEquals("Prato Alterado", cardapioAtualizado.getPratos().getFirst().getNome());
+        assertNotEquals(nomeAntigo, cardapioAtualizado.getPratos().getFirst().getNome());
+    }
+
+    @Test
+    @Order(26)
+    void deveDeletarCardapio() throws Exception {
+        MvcResult result = mockMvc.perform(get("/v1/cardapio")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Cardapio> cardapios = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Cardapio.class)
+        );
+
+        Long id = cardapios.getFirst().getId();
+
+        mockMvc.perform(delete("/v1/cardapio/" + id))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Order(21)
+    void deveAdicionarPrato() throws Exception {
+        MvcResult cardapiosResult = mockMvc.perform(get("/v1/cardapio")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Cardapio> cardapios = objectMapper.readValue(
+                cardapiosResult.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Cardapio.class)
+        );
+        assertFalse(cardapios.isEmpty());
+        Long cardapioId = cardapios.getFirst().getId();
+
+        var pratoDTO = dataFactory.getPratoDTO();
+
+        mockMvc.perform(post("/v1/prato")
+                        .param("cardapioId", cardapioId.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(pratoDTO)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @Order(22)
+    void deveBuscarPratos() throws Exception {
+        MvcResult result = mockMvc.perform(get("/v1/prato")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Prato> pratos = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Prato.class)
+        );
+        assertFalse(pratos.isEmpty());
+    }
+
+    @Test
+    @Order(23)
+    void deveBuscarPratoPorId() throws Exception {
+        MvcResult result = mockMvc.perform(get("/v1/prato")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Prato> pratos = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Prato.class)
+        );
+        assertFalse(pratos.isEmpty());
+        Long id = pratos.getFirst().getId();
+
+        mockMvc.perform(get("/v1/prato/" + id))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Order(24)
+    void deveAtualizarPrato() throws Exception {
+        MvcResult result = mockMvc.perform(get("/v1/prato")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Prato> pratos = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Prato.class)
+        );
+        assertFalse(pratos.isEmpty());
+        Prato prato = pratos.getFirst();
+
+        var updateDTO = new PratoUpdateDTO(
+                "Nome Prato Atualizado",
+                prato.getDescricao(),
+                prato.getPreco() + 1.0,
+                prato.getApenasConsumoLocal(),
+                prato.getLinkImagem()
+        );
+
+        mockMvc.perform(put("/v1/prato/" + prato.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateDTO)))
+                .andExpect(status().isNoContent());
+
+        MvcResult byId = mockMvc.perform(get("/v1/prato/" + prato.getId()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Prato pratoAtualizado = objectMapper.readValue(
+                byId.getResponse().getContentAsString(),
+                Prato.class
+        );
+        assertEquals("Nome Prato Atualizado", pratoAtualizado.getNome());
+        assertEquals(prato.getPreco() + 1.0, pratoAtualizado.getPreco());
+    }
+
+    @Test
+    @Order(25)
+    void deveDeletarPrato() throws Exception {
+        // Buscar um prato existente
+        MvcResult result = mockMvc.perform(get("/v1/prato")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Prato> pratos = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Prato.class)
+        );
+        assertFalse(pratos.isEmpty());
+        Long id = pratos.getFirst().getId();
+
+        mockMvc.perform(delete("/v1/prato/" + id))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Order(27)
+    void deveAlterarPerfilUsuario() throws Exception {
+        MvcResult clientesResult = mockMvc.perform(get("/v1/clientes")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+        List<Usuario> clientes = objectMapper.readValue(
+                clientesResult.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Usuario.class)
+        );
+        assertFalse(clientes.isEmpty());
+        Usuario cliente = clientes.getFirst();
+
+        var alterarPerfilCliente = objectMapper.createObjectNode();
+        alterarPerfilCliente.put("idUsuario", cliente.getId());
+        alterarPerfilCliente.put("novoPerfil", "PROPRIETARIO");
+
+        mockMvc.perform(post("/v1/usuarios/alterar-perfil")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(alterarPerfilCliente)))
+                .andExpect(status().isNoContent());
+
+        MvcResult clienteAlteradoResult = mockMvc.perform(get("/v1/proprietarios/" + cliente.getId()))
+                .andExpect(status().isOk())
+                .andReturn();
+        Usuario clienteAlterado = objectMapper.readValue(
+                clienteAlteradoResult.getResponse().getContentAsString(),
+                Usuario.class
+        );
+        assertEquals(PerfilUsuario.PROPRIETARIO, clienteAlterado.getPerfil());
+
+        MvcResult proprietariosResult = mockMvc.perform(get("/v1/proprietarios")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andReturn();
+        List<Usuario> proprietarios = objectMapper.readValue(
+                proprietariosResult.getResponse().getContentAsString(),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Usuario.class)
+        );
+        assertFalse(proprietarios.isEmpty());
+        Usuario proprietario = proprietarios.getFirst();
+
+        var alterarPerfilProprietario = objectMapper.createObjectNode();
+        alterarPerfilProprietario.put("idUsuario", proprietario.getId());
+        alterarPerfilProprietario.put("novoPerfil", "CLIENTE");
+
+        mockMvc.perform(post("/v1/usuarios/alterar-perfil")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(alterarPerfilProprietario)))
+                .andExpect(status().isNoContent());
+
+        MvcResult proprietarioAlteradoResult = mockMvc.perform(get("/v1/clientes/" + proprietario.getId()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        mockMvc.perform(get("/v1/proprietarios/" + proprietario.getId()))
+                .andExpect(status().isNotFound());
+
+        Usuario proprietarioAlterado = objectMapper.readValue(
+                proprietarioAlteradoResult.getResponse().getContentAsString(),
+                Usuario.class
+        );
+        assertEquals(PerfilUsuario.CLIENTE, proprietarioAlterado.getPerfil());
+    }
+
+
+
 }

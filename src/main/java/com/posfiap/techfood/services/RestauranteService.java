@@ -34,6 +34,7 @@ public class RestauranteService {
                     restaurante.getUsuario().getPerfil()
             );
             return new RestauranteResponseDTO(
+                    restaurante.getId(),
                     restaurante.getNome(),
                     restaurante.getTelefone(),
                     restaurante.getTipoCozinha(),

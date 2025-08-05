@@ -190,114 +190,120 @@ public class DataFactory {
 
         return enderecos;
     }
-
     public List<Cardapio> gerarCardapiosComPratos(List<Restaurante> restaurantes) {
         List<Cardapio> cardapios = new ArrayList<>();
+        int max = Math.min(restaurantes.size(), 5);
 
-        Cardapio c1 = new Cardapio();
-        Prato p1a = new Prato();
-        p1a.setNome("Feijoada Completa");
-        p1a.setDescricao("Feijoada tradicional com acompanhamentos");
-        p1a.setPreco(29.90);
-        p1a.setApenasConsumoLocal(true);
-        p1a.setLinkImagem("https://exemplo.com/feijoada.jpg");
-        p1a.setCardapio(c1);
+        if (max > 0) {
+            Cardapio c1 = new Cardapio();
+            Prato p1a = new Prato();
+            p1a.setNome("Feijoada Completa");
+            p1a.setDescricao("Feijoada tradicional com acompanhamentos");
+            p1a.setPreco(29.90);
+            p1a.setApenasConsumoLocal(true);
+            p1a.setLinkImagem("https://exemplo.com/feijoada.jpg");
+            p1a.setCardapio(c1);
 
-        Prato p1b = new Prato();
-        p1b.setNome("Moqueca Baiana");
-        p1b.setDescricao("Moqueca de peixe com dendê");
-        p1b.setPreco(34.90);
-        p1b.setApenasConsumoLocal(false);
-        p1b.setLinkImagem("https://exemplo.com/moqueca.jpg");
-        p1b.setCardapio(c1);
+            Prato p1b = new Prato();
+            p1b.setNome("Moqueca Baiana");
+            p1b.setDescricao("Moqueca de peixe com dendê");
+            p1b.setPreco(34.90);
+            p1b.setApenasConsumoLocal(false);
+            p1b.setLinkImagem("https://exemplo.com/moqueca.jpg");
+            p1b.setCardapio(c1);
 
-        c1.getPratos().addAll(Arrays.asList(p1a, p1b));
-        c1.setRestaurante(restaurantes.get(0));
-        cardapios.add(c1);
+            c1.setPratos(Arrays.asList(p1a, p1b));
+            c1.setRestaurante(restaurantes.getFirst());
+            cardapios.add(c1);
+        }
+        if (max > 1) {
+            Cardapio c2 = new Cardapio();
+            Prato p2a = new Prato();
+            p2a.setNome("Pizza Margherita");
+            p2a.setDescricao("Pizza clássica italiana");
+            p2a.setPreco(39.90);
+            p2a.setApenasConsumoLocal(true);
+            p2a.setLinkImagem("https://exemplo.com/margherita.jpg");
+            p2a.setCardapio(c2);
 
-        Cardapio c2 = new Cardapio();
-        Prato p2a = new Prato();
-        p2a.setNome("Pizza Margherita");
-        p2a.setDescricao("Pizza clássica italiana");
-        p2a.setPreco(39.90);
-        p2a.setApenasConsumoLocal(true);
-        p2a.setLinkImagem("https://exemplo.com/margherita.jpg");
-        p2a.setCardapio(c2);
+            Prato p2b = new Prato();
+            p2b.setNome("Pizza Calabresa");
+            p2b.setDescricao("Pizza de calabresa com cebola");
+            p2b.setPreco(42.90);
+            p2b.setApenasConsumoLocal(false);
+            p2b.setLinkImagem("https://exemplo.com/calabresa.jpg");
+            p2b.setCardapio(c2);
 
-        Prato p2b = new Prato();
-        p2b.setNome("Pizza Calabresa");
-        p2b.setDescricao("Pizza de calabresa com cebola");
-        p2b.setPreco(42.90);
-        p2b.setApenasConsumoLocal(false);
-        p2b.setLinkImagem("https://exemplo.com/calabresa.jpg");
-        p2b.setCardapio(c2);
+            c2.setPratos(Arrays.asList(p2a, p2b));
+            c2.setRestaurante(restaurantes.get(1));
+            cardapios.add(c2);
+        }
+        if (max > 2) {
+            Cardapio c3 = new Cardapio();
+            Prato p3a = new Prato();
+            p3a.setNome("Sushi Combo");
+            p3a.setDescricao("Combo de sushis variados");
+            p3a.setPreco(49.90);
+            p3a.setApenasConsumoLocal(true);
+            p3a.setLinkImagem("https://exemplo.com/sushi.jpg");
+            p3a.setCardapio(c3);
 
-        c2.getPratos().addAll(Arrays.asList(p2a, p2b));
-        c2.setRestaurante(restaurantes.get(1));
-        cardapios.add(c2);
+            Prato p3b = new Prato();
+            p3b.setNome("Yakissoba");
+            p3b.setDescricao("Yakissoba de carne e legumes");
+            p3b.setPreco(27.90);
+            p3b.setApenasConsumoLocal(false);
+            p3b.setLinkImagem("https://exemplo.com/yakissoba.jpg");
+            p3b.setCardapio(c3);
 
-        Cardapio c3 = new Cardapio();
-        Prato p3a = new Prato();
-        p3a.setNome("Sushi Combo");
-        p3a.setDescricao("Combo de sushis variados");
-        p3a.setPreco(49.90);
-        p3a.setApenasConsumoLocal(true);
-        p3a.setLinkImagem("https://exemplo.com/sushi.jpg");
-        p3a.setCardapio(c3);
+            c3.setPratos(Arrays.asList(p3a, p3b));
+            c3.setRestaurante(restaurantes.get(2));
+            cardapios.add(c3);
+        }
+        if (max > 3) {
+            Cardapio c4 = new Cardapio();
+            Prato p4a = new Prato();
+            p4a.setNome("Cheeseburger");
+            p4a.setDescricao("Hambúrguer artesanal com queijo");
+            p4a.setPreco(24.90);
+            p4a.setApenasConsumoLocal(true);
+            p4a.setLinkImagem("https://exemplo.com/cheeseburger.jpg");
+            p4a.setCardapio(c4);
 
-        Prato p3b = new Prato();
-        p3b.setNome("Yakissoba");
-        p3b.setDescricao("Yakissoba de carne e legumes");
-        p3b.setPreco(27.90);
-        p3b.setApenasConsumoLocal(false);
-        p3b.setLinkImagem("https://exemplo.com/yakissoba.jpg");
-        p3b.setCardapio(c3);
+            Prato p4b = new Prato();
+            p4b.setNome("Batata Frita");
+            p4b.setDescricao("Porção de batata frita crocante");
+            p4b.setPreco(14.90);
+            p4b.setApenasConsumoLocal(false);
+            p4b.setLinkImagem("https://exemplo.com/batata.jpg");
+            p4b.setCardapio(c4);
 
-        c3.getPratos().addAll(Arrays.asList(p3a, p3b));
-        c3.setRestaurante(restaurantes.get(2));
-        cardapios.add(c3);
+            c4.setPratos(Arrays.asList(p4a, p4b));
+            c4.setRestaurante(restaurantes.get(3));
+            cardapios.add(c4);
+        }
+        if (max > 4) {
+            Cardapio c5 = new Cardapio();
+            Prato p5a = new Prato();
+            p5a.setNome("Salada Vegana");
+            p5a.setDescricao("Salada fresca com grão de bico");
+            p5a.setPreco(22.90);
+            p5a.setApenasConsumoLocal(true);
+            p5a.setLinkImagem("https://exemplo.com/salada.jpg");
+            p5a.setCardapio(c5);
 
-        Cardapio c4 = new Cardapio();
-        Prato p4a = new Prato();
-        p4a.setNome("Cheeseburger");
-        p4a.setDescricao("Hambúrguer artesanal com queijo");
-        p4a.setPreco(24.90);
-        p4a.setApenasConsumoLocal(true);
-        p4a.setLinkImagem("https://exemplo.com/cheeseburger.jpg");
-        p4a.setCardapio(c4);
+            Prato p5b = new Prato();
+            p5b.setNome("Quiche de Espinafre");
+            p5b.setDescricao("Quiche vegetariana de espinafre");
+            p5b.setPreco(18.90);
+            p5b.setApenasConsumoLocal(false);
+            p5b.setLinkImagem("https://exemplo.com/quiche.jpg");
+            p5b.setCardapio(c5);
 
-        Prato p4b = new Prato();
-        p4b.setNome("Batata Frita");
-        p4b.setDescricao("Porção de batata frita crocante");
-        p4b.setPreco(14.90);
-        p4b.setApenasConsumoLocal(false);
-        p4b.setLinkImagem("https://exemplo.com/batata.jpg");
-        p4b.setCardapio(c4);
-
-        c4.getPratos().addAll(Arrays.asList(p4a, p4b));
-        c4.setRestaurante(restaurantes.get(3));
-        cardapios.add(c4);
-
-        Cardapio c5 = new Cardapio();
-        Prato p5a = new Prato();
-        p5a.setNome("Salada Vegana");
-        p5a.setDescricao("Salada fresca com grão de bico");
-        p5a.setPreco(22.90);
-        p5a.setApenasConsumoLocal(true);
-        p5a.setLinkImagem("https://exemplo.com/salada.jpg");
-        p5a.setCardapio(c5);
-
-        Prato p5b = new Prato();
-        p5b.setNome("Quiche de Espinafre");
-        p5b.setDescricao("Quiche vegetariana de espinafre");
-        p5b.setPreco(18.90);
-        p5b.setApenasConsumoLocal(false);
-        p5b.setLinkImagem("https://exemplo.com/quiche.jpg");
-        p5b.setCardapio(c5);
-
-        c5.getPratos().addAll(Arrays.asList(p5a, p5b));
-        c5.setRestaurante(restaurantes.get(4));
-        cardapios.add(c5);
+            c5.setPratos(Arrays.asList(p5a, p5b));
+            c5.setRestaurante(restaurantes.get(4));
+            cardapios.add(c5);
+        }
 
         return cardapios;
     }
