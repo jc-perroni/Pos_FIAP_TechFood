@@ -1,5 +1,6 @@
 package com.posfiap.techfood.infrastructure.models.dto.usuario;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
