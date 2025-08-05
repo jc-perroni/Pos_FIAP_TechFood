@@ -1,16 +1,15 @@
 package integrationTests.utils;
 
-import com.posfiap.techfood.models.Cardapio;
-import com.posfiap.techfood.models.Prato;
-import com.posfiap.techfood.models.Restaurante;
-import com.posfiap.techfood.models.Usuario;
-import com.posfiap.techfood.models.dto.endereco.EnderecoDTO;
-import com.posfiap.techfood.models.dto.prato.PratoDTO;
-import com.posfiap.techfood.models.dto.restaurante.RestauranteDTO;
-import com.posfiap.techfood.models.dto.restaurante.RestauranteResponseDTO;
-import com.posfiap.techfood.models.enums.PerfilUsuario;
-import com.posfiap.techfood.models.enums.TipoCozinha;
-import com.posfiap.techfood.models.enums.TipoEndereco;
+import com.posfiap.techfood.infrastructure.models.Cardapio;
+import com.posfiap.techfood.infrastructure.models.Prato;
+import com.posfiap.techfood.infrastructure.models.Restaurante;
+import com.posfiap.techfood.infrastructure.models.Usuario;
+import com.posfiap.techfood.infrastructure.models.dto.endereco.EnderecoDTO;
+import com.posfiap.techfood.infrastructure.models.dto.prato.PratoDTO;
+import com.posfiap.techfood.infrastructure.models.dto.restaurante.RestauranteDTO;
+import com.posfiap.techfood.infrastructure.models.enums.PerfilUsuario;
+import com.posfiap.techfood.infrastructure.models.enums.TipoCozinha;
+import com.posfiap.techfood.infrastructure.models.enums.TipoEndereco;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -316,7 +315,5 @@ public class DataFactory {
                 true,
                 "https://exemplo.com/prato_teste.jpg"
         );
-
     }
-
 }

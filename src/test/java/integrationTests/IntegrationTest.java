@@ -3,16 +3,16 @@ package integrationTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import com.posfiap.techfood.models.*;
-import com.posfiap.techfood.models.dto.cliente.ClienteDTO;
-import com.posfiap.techfood.models.dto.cliente.ClienteLoginDTO;
-import com.posfiap.techfood.models.dto.cliente.ClienteUpdateDTO;
-import com.posfiap.techfood.models.dto.prato.PratoUpdateDTO;
-import com.posfiap.techfood.models.dto.proprietario.ProprietarioDTO;
-import com.posfiap.techfood.models.dto.proprietario.ProprietarioUpdateDTO;
-import com.posfiap.techfood.models.dto.restaurante.RestauranteDTO;
-import com.posfiap.techfood.models.dto.restaurante.RestauranteResponseDTO;
-import com.posfiap.techfood.models.enums.PerfilUsuario;
+import com.posfiap.techfood.infrastructure.models.*;
+import com.posfiap.techfood.infrastructure.models.dto.cliente.ClienteDTO;
+import com.posfiap.techfood.infrastructure.models.dto.cliente.ClienteLoginDTO;
+import com.posfiap.techfood.infrastructure.models.dto.cliente.ClienteUpdateDTO;
+import com.posfiap.techfood.infrastructure.models.dto.prato.PratoUpdateDTO;
+import com.posfiap.techfood.infrastructure.models.dto.proprietario.ProprietarioDTO;
+import com.posfiap.techfood.infrastructure.models.dto.proprietario.ProprietarioUpdateDTO;
+import com.posfiap.techfood.infrastructure.models.dto.restaurante.RestauranteDTO;
+import com.posfiap.techfood.infrastructure.models.dto.restaurante.RestauranteResponseDTO;
+import com.posfiap.techfood.infrastructure.models.enums.PerfilUsuario;
 import integrationTests.utils.DataFactory;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +60,6 @@ public class IntegrationTest {
                         null,
                         null
                 )).toList();
-
         for (ClienteDTO cliente : clientesDTO) {
             mockMvc.perform(post("/v1/clientes")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -351,14 +349,12 @@ public class IntegrationTest {
         var enderecosClientes = dataFactory.gerarEnderecosClientes(clientesPersistidos);
         var enderecosRestaurantes = dataFactory.gerarEnderecosRestaurantesPorIds(List.of(2L, 3L, 4L));
 
-        // Adicionar endereços de clientes
         for (var dto : enderecosClientes) {
             mockMvc.perform(post("/v1/enderecos")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isCreated());
         }
-        // Adicionar endereços de restaurantes
         for (var dto : enderecosRestaurantes) {
             mockMvc.perform(post("/v1/enderecos")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -366,7 +362,6 @@ public class IntegrationTest {
                     .andExpect(status().isCreated());
         }
 
-        // Verificar se foram persistidos 4 endereços
         MvcResult result = mockMvc.perform(get("/v1/enderecos")
                         .param("page", "0")
                         .param("size", "10"))
@@ -383,7 +378,6 @@ public class IntegrationTest {
     @Test
     @Order(11)
     void deveAlterarEnderecoPersistido() throws Exception {
-        // Buscar endereço de id 1
         MvcResult byId = mockMvc.perform(get("/v1/enderecos/1"))
                 .andExpect(status().isOk())
                 .andReturn();

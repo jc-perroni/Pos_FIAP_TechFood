@@ -7,6 +7,6 @@ import com.posfiap.techfood.infrastructure.models.enums.TipoCozinha;
 
 import java.util.List;
 
-public record RestauranteResponseDTO(String nome, String telefone, TipoCozinha tipoCozinha, String horarioFuncionamento,
+public record RestauranteResponseDTO(long id, String nome, String telefone, TipoCozinha tipoCozinha, String horarioFuncionamento,
                                      ProprietarioInfoBasicaDTO proprietario, List<Endereco> endereco, Cardapio cardapio) {
 }
