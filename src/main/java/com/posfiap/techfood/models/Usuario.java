@@ -3,7 +3,6 @@ package com.posfiap.techfood.models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.posfiap.techfood.models.enums.PerfilUsuario;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -11,7 +10,6 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Entity
