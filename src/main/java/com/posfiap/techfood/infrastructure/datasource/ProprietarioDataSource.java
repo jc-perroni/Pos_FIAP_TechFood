@@ -2,6 +2,7 @@ package com.posfiap.techfood.infrastructure.datasource;
 
 import com.posfiap.techfood.core.application.dto.NovoUsuarioDTO;
 import com.posfiap.techfood.core.application.dto.UsuarioDTO;
+import com.posfiap.techfood.core.application.enums.PerfilUsuario;
 import com.posfiap.techfood.core.application.interfaces.usuario.IUsuarioDataSource;
 import com.posfiap.techfood.infrastructure.models.Usuario;
 import com.posfiap.techfood.infrastructure.models.dto.proprietario.ProprietarioDTO;
@@ -77,7 +78,8 @@ public class ProprietarioDataSource implements IUsuarioDataSource {
                 proprietarioDTO.password(),
                 proprietarioDTO.dataCriacaoConta(),
                 proprietarioDTO.dataAlteracaoConta(),
-                proprietarioDTO.dataAlteracaoSenha()
+                proprietarioDTO.dataAlteracaoSenha(),
+                PerfilUsuario.PROPRIETARIO
         );
     }
 
@@ -92,7 +94,8 @@ public class ProprietarioDataSource implements IUsuarioDataSource {
                 usuario.getPassword(),
                 usuario.getDataCriacaoConta(),
                 usuario.getDataAlteracaoConta(),
-                usuario.getDataAlteracaoSenha()
+                usuario.getDataAlteracaoSenha(),
+                PerfilUsuario.valueOf(usuario.getPerfil().name())
         );
     }
 

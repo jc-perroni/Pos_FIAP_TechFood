@@ -5,6 +5,7 @@ import com.posfiap.techfood.core.application.dto.NovoEnderecoDTO;
 import com.posfiap.techfood.core.application.interfaces.endereco.IEnderecoDataSource;
 import com.posfiap.techfood.infrastructure.models.Endereco;
 import com.posfiap.techfood.infrastructure.models.dto.endereco.EnderecoDTO;
+import com.posfiap.techfood.infrastructure.models.enums.TipoEndereco;
 import com.posfiap.techfood.infrastructure.services.EnderecoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -53,7 +54,9 @@ public class EnderecoDataSource implements IEnderecoDataSource {
     private static EnderecoComIdDTO toDto(Endereco endereco) {
         return new EnderecoComIdDTO(
                 endereco.getId(),
-                endereco.getUsuario().getId(),
+                endereco.getTipoEndereco().equals(TipoEndereco.CLIENTE)
+                        ? endereco.getUsuario().getId()
+                        : endereco.getRestaurante().getId(),
                 endereco.getTipoEndereco(),
                 endereco.getRua(),
                 endereco.getCep(),

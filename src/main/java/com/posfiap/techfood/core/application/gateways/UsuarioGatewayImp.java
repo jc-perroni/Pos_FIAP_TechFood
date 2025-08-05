@@ -41,7 +41,8 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
                 usuarioDTO.password(),
                 usuarioDTO.dataCriacaoConta(),
                 usuarioDTO.dataAlteracaoConta(),
-                usuarioDTO.dataAlteracaoSenha()));
+                usuarioDTO.dataAlteracaoSenha(),
+                usuarioDTO.perfil()));
     }
 
     @Override
@@ -71,7 +72,8 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
                             usuarioDTO.password(),
                             usuarioDTO.dataCriacaoConta(),
                             usuarioDTO.dataAlteracaoConta(),
-                            usuarioDTO.dataAlteracaoSenha());
+                            usuarioDTO.dataAlteracaoSenha(),
+                            usuarioDTO.perfil());
 
                     usuarioList.add(usario);
                 });
@@ -91,7 +93,8 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
                 usuario.getPassword(),
                 usuario.getDataCriacaoConta(),
                 usuario.getDataAlteracaoConta(),
-                usuario.getDataAlteracaoSenha()
+                usuario.getDataAlteracaoSenha(),
+                usuario.getPerfil()
         );
         UsuarioDTO usuarioCriado = this.dataSource.update(usuarioDto, id);
         return Usuario.create(
@@ -104,7 +107,8 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
                 usuarioCriado.password(),
                 usuarioCriado.dataCriacaoConta(),
                 usuarioCriado.dataAlteracaoConta(),
-                usuarioCriado.dataAlteracaoSenha());
+                usuarioCriado.dataAlteracaoSenha(),
+                usuarioCriado.perfil());
     }
 
     @Override
@@ -129,7 +133,8 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
                 usuarioCriado.password(),
                 usuarioCriado.dataCriacaoConta(),
                 usuarioCriado.dataAlteracaoConta(),
-                usuarioCriado.dataAlteracaoSenha());
+                usuarioCriado.dataAlteracaoSenha(),
+                usuarioCriado.perfil());
     }
 
     @Override

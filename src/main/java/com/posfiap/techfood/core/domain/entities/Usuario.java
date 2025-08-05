@@ -1,5 +1,6 @@
 package com.posfiap.techfood.core.domain.entities;
 
+import com.posfiap.techfood.core.application.enums.PerfilUsuario;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +36,9 @@ public class Usuario {
 
     @Setter
     private LocalDate dataAlteracaoSenha;
+
+    @Setter
+    private PerfilUsuario perfil;
 
     private static void nomeValido(String nome) {
         if (nome.length() < 2) {
@@ -111,7 +115,7 @@ public class Usuario {
         return usuario;
     }
 
-    public static Usuario create(Long id, String nome, String email, String telefone, String cpf, String username, String password, LocalDate dataCriacaoConta, LocalDate dataAlteracaoConta, LocalDate dataAlteracaoSenha) {
+    public static Usuario create(Long id, String nome, String email, String telefone, String cpf, String username, String password, LocalDate dataCriacaoConta, LocalDate dataAlteracaoConta, LocalDate dataAlteracaoSenha, PerfilUsuario perfil) {
 
         Usuario usuario = new Usuario();
         usuario.setId(id);
@@ -124,6 +128,7 @@ public class Usuario {
         usuario.setDataCriacaoConta(dataCriacaoConta);
         usuario.setDataAlteracaoConta(dataAlteracaoConta);
         usuario.setDataAlteracaoSenha(dataAlteracaoSenha);
+        usuario.setPerfil(perfil);
 
         return usuario;
     }

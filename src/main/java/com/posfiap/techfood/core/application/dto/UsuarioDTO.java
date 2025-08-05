@@ -1,5 +1,6 @@
 package com.posfiap.techfood.core.application.dto;
 
+import com.posfiap.techfood.core.application.enums.PerfilUsuario;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -23,6 +24,10 @@ public record UsuarioDTO(String telefone,
                               String password,
 
                          LocalDate dataCriacaoConta,
+
                          LocalDate dataAlteracaoConta,
-                         LocalDate dataAlteracaoSenha) {
+
+                         LocalDate dataAlteracaoSenha,
+
+                         PerfilUsuario perfil) {
 }

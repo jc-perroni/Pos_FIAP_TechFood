@@ -1,5 +1,7 @@
 package integrationTests.utils;
 
+import com.posfiap.techfood.core.application.dto.EnderecoComIdDTO;
+import com.posfiap.techfood.core.application.dto.NovoEnderecoDTO;
 import com.posfiap.techfood.infrastructure.models.Cardapio;
 import com.posfiap.techfood.infrastructure.models.Prato;
 import com.posfiap.techfood.infrastructure.models.Restaurante;
@@ -189,6 +191,19 @@ public class DataFactory {
 
         return enderecos;
     }
+
+    public NovoEnderecoDTO gerarNovoEnderecoDTOComAlteracao(EnderecoComIdDTO endereco) {
+        return new NovoEnderecoDTO(
+                endereco.idEntidade(),
+                endereco.tipoEndereco(),
+                "Rua Alterada",
+                endereco.cep(),
+                endereco.cidade(),
+                "Bairro Novo",
+                endereco.complemento(),
+                "999");
+    }
+
     public List<Cardapio> gerarCardapiosComPratos(List<Restaurante> restaurantes) {
         List<Cardapio> cardapios = new ArrayList<>();
         int max = Math.min(restaurantes.size(), 5);

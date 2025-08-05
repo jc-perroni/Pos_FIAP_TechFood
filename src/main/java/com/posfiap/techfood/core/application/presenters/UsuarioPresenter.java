@@ -15,7 +15,8 @@ public class UsuarioPresenter {
                 "***",
                 usuario.getDataCriacaoConta(),
                 usuario.getDataAlteracaoSenha(),
-                usuario.getDataAlteracaoSenha()
+                usuario.getDataAlteracaoSenha(),
+                usuario.getPerfil()
         );
     }
 
