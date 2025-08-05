@@ -486,7 +486,7 @@ public class IntegrationTest {
 
     @Test
     @Order(16)
-    void deveAdicionarCardapioComDataFactory() throws Exception {
+    void deveAdicionarCardapio() throws Exception {
         List<Restaurante> listaRestaurantes = new ArrayList<>();
 
         MvcResult restauranteResult = mockMvc.perform(get("/v1/restaurantes")
