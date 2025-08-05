@@ -117,4 +117,9 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
     public Integer delete(long id) {
         return this.dataSource.delete(id);
     }
+
+    @Override
+    public Boolean verificarSenha(String senhaInformada, String senhaUsuario) {
+        return this.dataSource.verificarSenha(senhaInformada, senhaUsuario);
+    }
 }

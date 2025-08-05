@@ -14,4 +14,5 @@ public interface IUsuarioDataSource {
     UsuarioDTO update(UsuarioDTO usuario, long id);
     UsuarioDTO save(NovoUsuarioDTO usuario);
     Integer delete(long id);
+    Boolean verificarSenha(String senhaInformada, String senhaUsuario);
 }
