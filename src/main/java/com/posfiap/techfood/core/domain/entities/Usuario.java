@@ -41,26 +41,26 @@ public class Usuario {
     }
 
     private static void telefoneValido(String telefone) {
-        int digitosMinimosParaTelefoneValido = 8;
-        if (telefone.isBlank()) {
-            return;
-        }
-
-        if (telefone.length() < digitosMinimosParaTelefoneValido) {
-            throw new IllegalArgumentException("Telefone não válido");
-        }
+        // int digitosMinimosParaTelefoneValido = 8;
+        // if (telefone.isBlank()) {
+        //     return;
+        // }
+        //
+        // if (telefone.length() < digitosMinimosParaTelefoneValido) {
+        //     throw new IllegalArgumentException("Telefone não válido");
+        // }
     }
 
     private static void cpfValido(String cpf) {
-        if (cpf.length() != 11) {
-            throw new IllegalArgumentException("CPF não válido");
-        }
+        // if (cpf.length() != 11) {
+        //     throw new IllegalArgumentException("CPF não válido");
+        // }
     }
 
     private static void usernameValido(String username) {
-        if (username.length() < 3) {
-            throw new IllegalArgumentException("username não válido");
-        }
+        // if (username.length() < 3) {
+        //     throw new IllegalArgumentException("username não válido");
+        // }
     }
 
     private static void senhaValida(String senha) {
@@ -70,27 +70,27 @@ public class Usuario {
     }
 
     public void setNome(String nome) {
-        nomeValido(nome);
+        // nomeValido(nome);
         this.nome = nome;
     }
 
     public void setEmail(String email) {
-        enderecoEmailValido(email);
+        // enderecoEmailValido(email);
         this.email = email;
     }
 
     public void setTelefone(String telefone) {
-        telefoneValido(telefone);
+        // telefoneValido(telefone);
         this.telefone = telefone;
     }
 
     public void setCpf(String cpf) {
-        cpfValido(cpf);
+        // cpfValido(cpf);
         this.cpf = cpf;
     }
 
     public void setUsername(String username) {
-        usernameValido(username);
+        // usernameValido(username);
         this.username = username;
     }
 
