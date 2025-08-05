@@ -3,7 +3,7 @@ package com.posfiap.techfood.infrastructure.services;
 import com.posfiap.techfood.infrastructure.exceptions.InvalidPasswordException;
 import com.posfiap.techfood.infrastructure.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.infrastructure.models.Usuario;
-import com.posfiap.techfood.models.enums.PerfilUsuario;
+import com.posfiap.techfood.infrastructure.models.enums.PerfilUsuario;
 import com.posfiap.techfood.infrastructure.repositories.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package com.posfiap.techfood.infrastructure.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.posfiap.techfood.core.domain.enums.TipoEndereco;
+import com.posfiap.techfood.infrastructure.models.enums.TipoEndereco;
 import com.posfiap.techfood.infrastructure.models.dto.endereco.EnderecoDTO;
 import jakarta.persistence.*;
 import lombok.Getter;

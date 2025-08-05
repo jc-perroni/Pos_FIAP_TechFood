@@ -1,4 +1,4 @@
-package com.posfiap.techfood.core.domain.enums;
+package com.posfiap.techfood.infrastructure.models.enums;
 
 public enum TipoEndereco {
 

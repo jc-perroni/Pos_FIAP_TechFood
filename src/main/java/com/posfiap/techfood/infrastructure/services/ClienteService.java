@@ -4,7 +4,7 @@ import com.posfiap.techfood.infrastructure.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.infrastructure.models.Usuario;
 import com.posfiap.techfood.infrastructure.models.dto.cliente.ClienteDTO;
 import com.posfiap.techfood.infrastructure.models.dto.cliente.ClienteUpdateDTO;
-import com.posfiap.techfood.models.enums.PerfilUsuario;
+import com.posfiap.techfood.infrastructure.models.enums.PerfilUsuario;
 import com.posfiap.techfood.infrastructure.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
