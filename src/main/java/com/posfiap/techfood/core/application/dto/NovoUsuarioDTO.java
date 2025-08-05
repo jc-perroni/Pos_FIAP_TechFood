@@ -15,7 +15,7 @@ public record NovoUsuarioDTO(String telefone,
                              @NotNull(message = "O campo 'email' não pode ser nulo")
                               String email,
 
-                             @NotNull(message = "O campo 'usernam' não pode ser nulo")
+                             @NotNull(message = "O campo 'username' não pode ser nulo")
                               String username,
 
                              @NotNull(message = "O campo 'password' não pode ser nulo")

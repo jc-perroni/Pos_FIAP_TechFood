@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotNull;
 public record UsuarioUpdateDto(@NotNull(message = "O campo 'nome' não pode ser nulo")
                                String nome,
 
+                               @NotNull(message = "O campo 'cpf' não pode ser nulo")
                                String cpf,
 
-                               @NotNull(message = "O campo 'username' não pode ser nulo")
                                String telefone,
 
                                @Email
