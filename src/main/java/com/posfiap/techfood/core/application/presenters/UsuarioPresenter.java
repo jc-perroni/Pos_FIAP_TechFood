@@ -9,7 +9,6 @@ public class UsuarioPresenter {
                 usuario.getTelefone(),
                 usuario.getId(),
                 usuario.getNome(),
-                usuario.getTipoUsuario(),
                 usuario.getCpf(),
                 usuario.getEmail(),
                 usuario.getUsername(),

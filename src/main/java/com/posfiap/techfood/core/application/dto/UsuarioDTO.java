@@ -10,9 +10,6 @@ public record UsuarioDTO(String telefone,
                          @NotNull(message = "O campo 'nome' não pode ser nulo")
                               String nome,
 
-                         @NotNull(message = "O campo 'tipoDeUsuario' não pode ser nulo")
-                              String tipoDeUsuario,
-
                          @NotNull(message = "O campo 'CPF' não pode ser nulo")
                               String cpf,
 

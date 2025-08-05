@@ -16,8 +16,8 @@ public class FindAllUsuariosUsecase {
         return new FindAllUsuariosUsecase(usuarioGateway);
     }
 
-    public List<Usuario> run(int size, int offset) {
-        return this.usuarioGateway.findAll(size, offset);
+    public List<Usuario> run(int page, int size) {
+        return this.usuarioGateway.findAll(page, size);
     }
 
 }

@@ -9,7 +9,7 @@ public interface IUsuarioGateway<T> {
     Optional<Usuario> findById(Long id);
     Optional<Usuario> findByEmail(String email);
     Optional<Usuario> findByUserame(String username);
-    List<Usuario> findAll(int size, int offset);
+    List<Usuario> findAll(int page, int size);
     Usuario update(Usuario usuario, long id);
     Usuario save(Usuario usuario);
     Integer delete(long id);

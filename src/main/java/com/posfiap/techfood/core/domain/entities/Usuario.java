@@ -3,40 +3,42 @@ package com.posfiap.techfood.core.domain.entities;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.validator.routines.EmailValidator;
 
 import java.time.LocalDate;
 
 @Getter
 @EqualsAndHashCode
 public class Usuario {
+
     @Setter
     private Long id;
-    @Setter
-    private String tipoUsuario;
+
     private String nome;
+
+    @Setter
     private String email;
+
     private String telefone;
+
+    @Setter
     private String cpf;
+
     private String username;
+
     private String password;
+
     @Setter
     private LocalDate dataCriacaoConta;
+
     @Setter
     private LocalDate dataAlteracaoConta;
+
     @Setter
     private LocalDate dataAlteracaoSenha;
 
     private static void nomeValido(String nome) {
         if (nome.length() < 2) {
            throw new IllegalArgumentException("Nome não válido");
-        }
-    }
-
-    private static void enderecoEmailValido(String email) {
-        EmailValidator emailValidator = EmailValidator.getInstance();
-        if(!emailValidator.isValid(email)) {
-            throw new IllegalArgumentException("Endereço de email não válido");
         }
     }
 
@@ -48,12 +50,6 @@ public class Usuario {
 
         if (telefone.length() < digitosMinimosParaTelefoneValido) {
             throw new IllegalArgumentException("Telefone não válido");
-        }
-    }
-
-    private static void cpfValido(String cpf) {
-        if (cpf.length() != 11) {
-            throw new IllegalArgumentException("CPF não válido");
         }
     }
 
@@ -74,19 +70,9 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public void setEmail(String email) {
-        enderecoEmailValido(email);
-        this.email = email;
-    }
-
     public void setTelefone(String telefone) {
         telefoneValido(telefone);
         this.telefone = telefone;
-    }
-
-    public void setCpf(String cpf) {
-        cpfValido(cpf);
-        this.cpf = cpf;
     }
 
     public void setUsername(String username) {
@@ -111,10 +97,9 @@ public class Usuario {
         this.dataAlteracaoSenha = LocalDate.now();
     }
 
-    public static Usuario create(String tipoUsuario, String nome, String email, String telefone, String cpf, String username, String password) {
+    public static Usuario create(String nome, String email, String telefone, String cpf, String username, String password) {
         // Cria novo usuario
         Usuario usuario = new Usuario();
-        usuario.setTipoUsuario(tipoUsuario);
         usuario.setNome(nome);
         usuario.setEmail(email);
         usuario.setTelefone(telefone);
@@ -126,11 +111,10 @@ public class Usuario {
         return usuario;
     }
 
-    public static Usuario create(Long id, String tipoUsuario, String nome, String email, String telefone, String cpf, String username, String password, LocalDate dataCriacaoConta, LocalDate dataAlteracaoConta, LocalDate dataAlteracaoSenha) {
+    public static Usuario create(Long id, String nome, String email, String telefone, String cpf, String username, String password, LocalDate dataCriacaoConta, LocalDate dataAlteracaoConta, LocalDate dataAlteracaoSenha) {
 
         Usuario usuario = new Usuario();
         usuario.setId(id);
-        usuario.setTipoUsuario(tipoUsuario);
         usuario.setNome(nome);
         usuario.setEmail(email);
         usuario.setTelefone(telefone);
