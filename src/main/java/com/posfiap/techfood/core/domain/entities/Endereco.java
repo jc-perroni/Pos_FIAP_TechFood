@@ -28,6 +28,7 @@ public class Endereco {
 
     @Getter
     @NotNull
+    @Setter
     private String cep;
 
     @Getter
@@ -48,17 +49,6 @@ public class Endereco {
     @NotNull
     @Setter
     private String numero;
-
-    private static void cepValido(String cep) {
-        if (cep.length() != 8) {
-            throw new CepNaoValidoException("Cep: " + cep + " não contem o numero mínimo de dígitos necessários");
-        }
-    }
-
-    public void setCep(String cep) {
-        cepValido(cep);
-        this.cep = cep;
-    }
 
     public static Endereco create(Long idEntidade, TipoEndereco tipoEndereco, String rua, String cep, String cidade, String bairro, String complemento, String numero) {
         Endereco endereco = new Endereco();

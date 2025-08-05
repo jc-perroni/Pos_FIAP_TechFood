@@ -37,7 +37,7 @@ public class ClienteDataSource implements IUsuarioDataSource {
 
     @Override
     public List<UsuarioDTO> findAll(int page, int size) {
-        List <Usuario> usuarioList = clienteService.findAllClientes(page, size).getContent();
+        List<Usuario> usuarioList = clienteService.findAllClientes(page, size).getContent();
         return usuarioList.stream().map(ClienteDataSource::usuarioToUsuarioDto).toList();
     }
 
