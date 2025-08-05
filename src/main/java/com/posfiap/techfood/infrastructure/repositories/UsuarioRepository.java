@@ -1,7 +1,7 @@
 package com.posfiap.techfood.infrastructure.repositories;
 
 import com.posfiap.techfood.infrastructure.models.Usuario;
-import com.posfiap.techfood.models.enums.PerfilUsuario;
+import com.posfiap.techfood.infrastructure.models.enums.PerfilUsuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
