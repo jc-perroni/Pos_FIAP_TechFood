@@ -42,6 +42,7 @@ public class EnderecoService {
         var enderecoAlterado = findEnderecoById(id);
 
         if (endereco.getBairro() != null) enderecoAlterado.setBairro(endereco.getBairro());
+        if (endereco.getTipoEndereco() != null) enderecoAlterado.setTipoEndereco(endereco.getTipoEndereco());
         if (endereco.getCidade() != null) enderecoAlterado.setCidade(endereco.getCidade());
         if (endereco.getCep() != null) enderecoAlterado.setCep(endereco.getCep());
         if (endereco.getRua() != null) enderecoAlterado.setRua(endereco.getRua());

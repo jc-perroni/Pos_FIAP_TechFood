@@ -72,7 +72,7 @@ public class ClienteService {
 
     private Usuario retornarCliente(Long id){
         return usuarioRepository.findByIdAndPerfilIn(id, perfilCliente)
-                .orElseThrow(() -> new ResourceNotFoundException("Proprietario não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
     }
 }
 
