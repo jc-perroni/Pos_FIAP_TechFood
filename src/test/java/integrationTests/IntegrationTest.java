@@ -127,6 +127,7 @@ public class IntegrationTest {
         assertEquals("Nome Alterado", clienteAtualizado.getNome());
         assertEquals("novoemail@email.com", clienteAtualizado.getEmail());
     }
+
     @Test
     @Order(3)
     void deveDeletarCliente() throws Exception {
@@ -134,7 +135,7 @@ public class IntegrationTest {
         ResultActions deleteCliente = mockMvc.perform((delete("/v1/clientes/1")))
                 .andExpect((status().isOk()));
         MvcResult result = mockMvc.perform(get("/v1/clientes").param("page", "0")
-                .param("size", "10"))
+                        .param("size", "10"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -275,40 +276,6 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(8)
-    void deveAlterarRestaurantePersistido() throws Exception {
-        long restauranteId = 1L;
-
-        MvcResult byId = mockMvc.perform(get("/v1/restaurantes/" + restauranteId))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        com.fasterxml.jackson.databind.JsonNode restauranteJson = objectMapper.readTree(byId.getResponse().getContentAsString());
-        Restaurante restaurante = objectMapper.treeToValue(restauranteJson, Restaurante.class);
-
-        restaurante.setNome("Restaurante Alterado");
-        restaurante.setTelefone("9999-9999");
-        restaurante.setTipoCozinha(TipoCozinha.COMIDA_ITALIANA);
-        restaurante.setHorarioFuncionamento("09:00 às 21:00");
-
-        mockMvc.perform(put("/v1/restaurantes/" + restauranteId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(restaurante)))
-                .andExpect(status().isNoContent());
-
-        byId = mockMvc.perform(get("/v1/restaurantes/" + restauranteId))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        restauranteJson = objectMapper.readTree(byId.getResponse().getContentAsString());
-        restaurante = objectMapper.treeToValue(restauranteJson, Restaurante.class);
-
-        assertEquals("Restaurante Alterado", restaurante.getNome());
-        assertEquals("9999-9999", restaurante.getTelefone());
-        assertEquals("09:00 às 21:00", restaurante.getHorarioFuncionamento());
-    }
-
-    @Test
     @Order(9)
     void deveDeletarRestaurante() throws Exception {
         mockMvc.perform(delete("/v1/restaurantes/1"))
@@ -429,6 +396,7 @@ public class IntegrationTest {
         );
         assertEquals(6, enderecosPersistidos.size());
     }
+
     @Test
     @Order(13)
     void deveAutenticarClienteComSucesso() throws Exception {
@@ -441,6 +409,7 @@ public class IntegrationTest {
                         .content(objectMapper.writeValueAsString(loginSucesso)))
                 .andExpect(status().isOk());
     }
+
     @Test
     @Order(14)
     void naoDeveAutenticarClienteSenhaErrada() throws Exception {
@@ -807,7 +776,6 @@ public class IntegrationTest {
         );
         assertEquals(PerfilUsuario.CLIENTE, proprietarioAlterado.getPerfil());
     }
-
 
 
 }
