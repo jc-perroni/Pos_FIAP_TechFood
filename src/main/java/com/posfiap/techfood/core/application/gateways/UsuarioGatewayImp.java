@@ -33,11 +33,11 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
 
         return Optional.of(Usuario.create(
                 usuario.id(),
-                usuario.telefone(),
-                usuario.nome(),
                 usuario.tipoDeUsuario(),
-                usuario.cpf(),
+                usuario.nome(),
                 usuario.email(),
+                usuario.telefone(),
+                usuario.cpf(),
                 usuario.username(),
                 usuario.password(),
                 usuario.dataCriacaoConta(),
@@ -46,13 +46,51 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
     }
 
     @Override
-    public Optional findByEmail(String email) {
-        return Optional.empty();
+    public Optional<Usuario> findByEmail(String email) {
+        Optional<UsuarioDTO> usuarioCriado = this.dataSource.findByEmail(email);
+
+        if (usuarioCriado.isEmpty()) {
+            return Optional.empty();
+        }
+
+        UsuarioDTO usuario = usuarioCriado.get();
+
+        return Optional.of(Usuario.create(
+                usuario.id(),
+                usuario.tipoDeUsuario(),
+                usuario.nome(),
+                usuario.email(),
+                usuario.telefone(),
+                usuario.cpf(),
+                usuario.username(),
+                usuario.password(),
+                usuario.dataCriacaoConta(),
+                usuario.dataAlteracaoConta(),
+                usuario.dataAlteracaoSenha()));
     }
 
     @Override
-    public Optional findByUserame(String username) {
-        return Optional.empty();
+    public Optional<Usuario> findByUserame(String username) {
+        Optional<UsuarioDTO> usuarioCriado = this.dataSource.findByUserame(username);
+
+        if (usuarioCriado.isEmpty()) {
+            return Optional.empty();
+        }
+
+        UsuarioDTO usuario = usuarioCriado.get();
+
+        return Optional.of(Usuario.create(
+                usuario.id(),
+                usuario.tipoDeUsuario(),
+                usuario.nome(),
+                usuario.email(),
+                usuario.telefone(),
+                usuario.cpf(),
+                usuario.username(),
+                usuario.password(),
+                usuario.dataCriacaoConta(),
+                usuario.dataAlteracaoConta(),
+                usuario.dataAlteracaoSenha()));
     }
 
     @Override
@@ -64,11 +102,11 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
                 usuarioDTO -> {
                     var usario = Usuario.create(
                             usuarioDTO.id(),
-                            usuarioDTO.telefone(),
-                            usuarioDTO.nome(),
                             usuarioDTO.tipoDeUsuario(),
-                            usuarioDTO.cpf(),
+                            usuarioDTO.nome(),
                             usuarioDTO.email(),
+                            usuarioDTO.telefone(),
+                            usuarioDTO.cpf(),
                             usuarioDTO.username(),
                             usuarioDTO.password(),
                             usuarioDTO.dataCriacaoConta(),
@@ -101,11 +139,11 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
         UsuarioDTO usuarioCriado = this.dataSource.save(novoUsuarioDTO);
         return Usuario.create(
                 usuarioCriado.id(),
-                usuarioCriado.telefone(),
-                usuarioCriado.nome(),
                 usuarioCriado.tipoDeUsuario(),
-                usuarioCriado.cpf(),
+                usuarioCriado.nome(),
                 usuarioCriado.email(),
+                usuarioCriado.telefone(),
+                usuarioCriado.cpf(),
                 usuarioCriado.username(),
                 usuarioCriado.password(),
                 usuarioCriado.dataCriacaoConta(),
