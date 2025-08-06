@@ -1,7 +1,7 @@
 package com.posfiap.techfood.infrastructure.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.posfiap.techfood.models.enums.PerfilUsuario;
+import com.posfiap.techfood.infrastructure.models.enums.PerfilUsuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

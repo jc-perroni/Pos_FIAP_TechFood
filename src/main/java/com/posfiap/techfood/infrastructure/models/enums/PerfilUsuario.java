@@ -1,4 +1,4 @@
-package com.posfiap.techfood.models.enums;
+package com.posfiap.techfood.infrastructure.models.enums;
 
 public enum PerfilUsuario {
 

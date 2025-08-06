@@ -1,6 +1,6 @@
 package com.posfiap.techfood.core.domain.entities;
 
-import com.posfiap.techfood.core.domain.enums.TipoEndereco;
+import com.posfiap.techfood.infrastructure.models.enums.TipoEndereco;
 import com.posfiap.techfood.core.domain.exceptions.CepNaoValidoException;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

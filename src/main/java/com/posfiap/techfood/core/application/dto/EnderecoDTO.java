@@ -1,6 +1,6 @@
 package com.posfiap.techfood.core.application.dto;
 
-import com.posfiap.techfood.core.domain.enums.TipoEndereco;
+import com.posfiap.techfood.infrastructure.models.enums.TipoEndereco;
 import jakarta.validation.constraints.NotNull;
 
 public record EnderecoDTO(
