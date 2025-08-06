@@ -9,6 +9,7 @@ import com.posfiap.techfood.core.application.interfaces.usuario.IUsuarioDataSour
 import com.posfiap.techfood.core.application.presenters.UsuarioPresenter;
 import com.posfiap.techfood.core.domain.entities.Usuario;
 import com.posfiap.techfood.core.domain.usecases.usuario.*;
+import com.posfiap.techfood.core.domain.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class UsuarioController {
             var usuario = useCase.run(id);
             return UsuarioPresenter.toDTO(usuario);
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar usuario por id: " + e.getMessage());
+            throw new ResourceNotFoundException("Usuario do id "  + id + " não existe");
         }
     }
 

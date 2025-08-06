@@ -1,6 +1,6 @@
 package com.posfiap.techfood.infrastructure.services;
 
-import com.posfiap.techfood.infrastructure.exceptions.ResourceNotFoundException;
+import com.posfiap.techfood.core.domain.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.infrastructure.models.Cardapio;
 import com.posfiap.techfood.infrastructure.models.Prato;
 import com.posfiap.techfood.infrastructure.models.dto.prato.PratoDTO;
