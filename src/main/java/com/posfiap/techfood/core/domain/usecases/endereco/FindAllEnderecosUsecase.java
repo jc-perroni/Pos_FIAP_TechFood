@@ -16,7 +16,7 @@ public class FindAllEnderecosUsecase {
         return new FindAllEnderecosUsecase(enderecoGateway);
     }
 
-    public List<Endereco> run(int size, int offset) {
-        return this.enderecoGateway.findAll(size, offset);
+    public List<Endereco> run(int page, int size) {
+        return this.enderecoGateway.findAll(page, size);
     }
 }

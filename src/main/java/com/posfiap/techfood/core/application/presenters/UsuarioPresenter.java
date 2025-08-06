@@ -9,14 +9,14 @@ public class UsuarioPresenter {
                 usuario.getTelefone(),
                 usuario.getId(),
                 usuario.getNome(),
-                usuario.getTipoUsuario(),
                 usuario.getCpf(),
                 usuario.getEmail(),
                 usuario.getUsername(),
                 "***",
                 usuario.getDataCriacaoConta(),
                 usuario.getDataAlteracaoSenha(),
-                usuario.getDataAlteracaoSenha()
+                usuario.getDataAlteracaoSenha(),
+                usuario.getPerfil()
         );
     }
 

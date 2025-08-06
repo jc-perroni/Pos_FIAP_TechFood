@@ -1,13 +1,11 @@
 package com.posfiap.techfood.core.application.controllers;
 
-import com.posfiap.techfood.core.application.dto.EnderecoDTO;
+import com.posfiap.techfood.core.application.dto.EnderecoComIdDTO;
 import com.posfiap.techfood.core.application.dto.NovoEnderecoDTO;
 import com.posfiap.techfood.core.application.gateways.EnderecoGatewayImp;
 import com.posfiap.techfood.core.application.interfaces.endereco.IEnderecoDataSource;
 import com.posfiap.techfood.core.application.presenters.EnderecoPresenter;
 import com.posfiap.techfood.core.domain.entities.Endereco;
-import com.posfiap.techfood.core.domain.exceptions.UsuarioJaExistenteException;
-import com.posfiap.techfood.core.domain.exceptions.UsuarioNaoEncontradoException;
 import com.posfiap.techfood.core.domain.usecases.endereco.*;
 
 import java.util.List;
@@ -23,53 +21,53 @@ public class EnderecoController {
         return new EnderecoController(dataSource);
     }
 
-    public List<EnderecoDTO> findAllEnderecos(int size, int offset) {
+    public List<EnderecoComIdDTO> findAllEnderecos(int page, int size) {
         var enderecoGateway = EnderecoGatewayImp.create(dataSource);
         var useCase = FindAllEnderecosUsecase.create(enderecoGateway);
 
         try {
-            List<Endereco> enderecoList = useCase.run(size, offset);
+            List<Endereco> enderecoList = useCase.run(page, size);
             return enderecoList.stream().map(
                     EnderecoPresenter::toDTO).toList();
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException("Erro ao buscar enderecos: " + e.getMessage());
         }
     }
 
-    public EnderecoDTO findEnderecoById(Long id) {
+    public EnderecoComIdDTO findEnderecoById(Long id) {
         var enderecoGateway = EnderecoGatewayImp.create(dataSource);
         var useCase = FindEnderecoByIdUsecase.create(enderecoGateway);
 
         try {
             var endereco = useCase.run(id);
             return EnderecoPresenter.toDTO(endereco);
-        } catch (UsuarioNaoEncontradoException e) {
-            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar endereco: " + e.getMessage());
         }
     }
 
-    public EnderecoDTO inserirEndereco(NovoEnderecoDTO novoEnderecoDTO) {
+    public EnderecoComIdDTO inserirEndereco(NovoEnderecoDTO novoEnderecoDTO) {
         var enderecoGateway = EnderecoGatewayImp.create(dataSource);
         var useCase = InsertEnderecoUsecase.create(enderecoGateway);
 
         try {
             Endereco endereco = useCase.run(novoEnderecoDTO);
             return EnderecoPresenter.toDTO(endereco);
-        } catch (UsuarioJaExistenteException e) {
-            return  null;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao salvar endereco: " + e.getMessage());
         }
 
     }
 
-    public EnderecoDTO atualizarEndereco(NovoEnderecoDTO enderecoDTO, Long id) {
+    public EnderecoComIdDTO atualizarEndereco(NovoEnderecoDTO enderecoDTO, Long id) {
         var enderecoGateway = EnderecoGatewayImp.create(dataSource);
         var useCase = UpdateEnderecoUsecase.create(enderecoGateway);
 
         try {
             Endereco endereco = useCase.run(enderecoDTO, id);
             return EnderecoPresenter.toDTO(endereco);
-        } catch (UsuarioNaoEncontradoException e) {
-            return  null;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar endereco: " + e.getMessage());
         }
 
     }
@@ -80,8 +78,8 @@ public class EnderecoController {
 
         try {
             return useCase.run(id);
-        } catch (UsuarioNaoEncontradoException e) {
-            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao excluir endereco: " + e.getMessage());
         }
     }
 }

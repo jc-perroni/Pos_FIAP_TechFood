@@ -1,8 +1,10 @@
 package com.posfiap.techfood.infrastructure.controllers;
 
-import com.posfiap.techfood.infrastructure.models.Usuario;
-import com.posfiap.techfood.infrastructure.models.dto.proprietario.ProprietarioDTO;
-import com.posfiap.techfood.infrastructure.models.dto.proprietario.ProprietarioUpdateDTO;
+import com.posfiap.techfood.core.application.controllers.UsuarioController;
+import com.posfiap.techfood.core.application.dto.NovoUsuarioDTO;
+import com.posfiap.techfood.core.application.dto.UsuarioDTO;
+import com.posfiap.techfood.core.application.dto.UsuarioUpdateDto;
+import com.posfiap.techfood.infrastructure.datasource.ProprietarioDataSource;
 import com.posfiap.techfood.infrastructure.services.ProprietarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,33 +22,37 @@ import java.util.List;
 @Tag(name = "Proprietários", description = "Operações relacionadas a proprietários de restaurantes")
 public class ProprietarioController {
 
-    private final ProprietarioService proprietarioService;
+    private final ProprietarioDataSource proprietarioDataSource;
 
     @Operation(summary = "Listar todos os proprietários paginados")
     @GetMapping
-    public ResponseEntity<List<Usuario>> findAllProprietarios(
+    public ResponseEntity<List<UsuarioDTO>> findAllProprietarios(
         @Parameter(description = "Número da página (começa em 0)") @RequestParam("page") int page,
         @Parameter(description = "Quantidade de registros por página") @RequestParam("size") int size
     ) {
-        var proprietarios = proprietarioService.findAllProprietarios(page, size);
-        return ResponseEntity.ok(proprietarios.getContent());
+        UsuarioController usuarioController = UsuarioController.create(proprietarioDataSource);
+        return ResponseEntity.ok(
+                usuarioController.findAllUsuarios(page, size));
     }
 
     @Operation(summary = "Buscar proprietário por ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> findProprietarioById(
+    public ResponseEntity<UsuarioDTO> findProprietarioById(
         @Parameter(description = "ID do proprietário") @PathVariable("id") Long id
     ){
-        var proprietario = proprietarioService.findProprietarioById(id);
-        return ResponseEntity.ok(proprietario);
+        UsuarioController usuarioController = UsuarioController.create(proprietarioDataSource);
+        return ResponseEntity.ok(
+                usuarioController.findUsuarioById(id));
     }
 
     @Operation(summary = "Inserir novo proprietário")
     @PostMapping
     public ResponseEntity<Void> inserirProprietario(
-        @RequestBody ProprietarioDTO proprietario
+        @RequestBody NovoUsuarioDTO novoUsuarioDTO
     ){
-        proprietarioService.insertProprietario(proprietario);
+        UsuarioController usuarioController = UsuarioController.create(proprietarioDataSource);
+        usuarioController.inserirUsuario(novoUsuarioDTO);
+
         return ResponseEntity.status(201).build();
     }
 
@@ -54,9 +60,11 @@ public class ProprietarioController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> atualizarProprietario(
         @Parameter(description = "ID do proprietário") @PathVariable("id") Long id,
-        @RequestBody ProprietarioUpdateDTO proprietario
+        @RequestBody UsuarioUpdateDto usuarioUpdateDto
     ){
-        proprietarioService.updateProprietario(proprietario, id);
+        UsuarioController usuarioController = UsuarioController.create(proprietarioDataSource);
+        usuarioController.atualizarUsuario(usuarioUpdateDto, id);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -65,7 +73,9 @@ public class ProprietarioController {
     public ResponseEntity<Void> excluirProprietario(
         @Parameter(description = "ID do proprietário") @PathVariable("id") Long id
     ){
-        proprietarioService.deleteProprietario(id);
+        UsuarioController usuarioController = UsuarioController.create(proprietarioDataSource);
+
+        usuarioController.excluirUsuario(id);
         return ResponseEntity.ok().build();
     }
 }

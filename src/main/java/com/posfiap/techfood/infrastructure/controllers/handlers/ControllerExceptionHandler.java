@@ -1,6 +1,6 @@
 package com.posfiap.techfood.infrastructure.controllers.handlers;
 
-import com.posfiap.techfood.infrastructure.exceptions.ResourceNotFoundException;
+import com.posfiap.techfood.core.domain.exceptions.ResourceNotFoundException;
 import com.posfiap.techfood.infrastructure.models.dto.errors.ResourceNotFoundDTO;
 import com.posfiap.techfood.infrastructure.models.dto.errors.ValidationErrorDTO;
 import org.springframework.http.HttpStatus;

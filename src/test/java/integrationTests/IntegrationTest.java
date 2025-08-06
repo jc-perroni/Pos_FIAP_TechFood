@@ -3,6 +3,8 @@ package integrationTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import com.posfiap.techfood.core.application.dto.EnderecoComIdDTO;
+import com.posfiap.techfood.core.application.dto.NovoEnderecoDTO;
 import com.posfiap.techfood.infrastructure.models.*;
 import com.posfiap.techfood.infrastructure.models.dto.cliente.ClienteDTO;
 import com.posfiap.techfood.infrastructure.models.dto.cliente.ClienteLoginDTO;
@@ -372,7 +374,7 @@ public class IntegrationTest {
 
         List<?> enderecosPersistidos = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
-                objectMapper.getTypeFactory().constructCollectionType(List.class, Endereco.class)
+                objectMapper.getTypeFactory().constructCollectionType(List.class, EnderecoComIdDTO.class)
         );
         assertEquals(7, enderecosPersistidos.size());
     }
@@ -384,31 +386,29 @@ public class IntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        Endereco endereco = objectMapper.readValue(
+        EnderecoComIdDTO endereco = objectMapper.readValue(
                 byId.getResponse().getContentAsString(),
-                Endereco.class
+                EnderecoComIdDTO.class
         );
 
-        endereco.setRua("Rua Alterada");
-        endereco.setNumero("999");
-        endereco.setBairro("Bairro Novo");
+        NovoEnderecoDTO novoEnderecoDTO = dataFactory.gerarNovoEnderecoDTOComAlteracao(endereco);
 
         mockMvc.perform(put("/v1/enderecos/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(endereco)))
+                        .content(objectMapper.writeValueAsString(novoEnderecoDTO)))
                 .andExpect(status().isNoContent());
 
         byId = mockMvc.perform(get("/v1/enderecos/1"))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        Endereco enderecoAtualizado = objectMapper.readValue(
+        EnderecoComIdDTO enderecoAtualizado = objectMapper.readValue(
                 byId.getResponse().getContentAsString(),
-                Endereco.class
+                EnderecoComIdDTO.class
         );
-        assertEquals("Rua Alterada", enderecoAtualizado.getRua());
-        assertEquals("999", enderecoAtualizado.getNumero());
-        assertEquals("Bairro Novo", enderecoAtualizado.getBairro());
+        assertEquals("Rua Alterada", enderecoAtualizado.rua());
+        assertEquals("999", enderecoAtualizado.numero());
+        assertEquals("Bairro Novo", enderecoAtualizado.bairro());
     }
 
     @Test
@@ -425,7 +425,7 @@ public class IntegrationTest {
 
         List<?> enderecosPersistidos = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
-                objectMapper.getTypeFactory().constructCollectionType(List.class, Endereco.class)
+                objectMapper.getTypeFactory().constructCollectionType(List.class, EnderecoComIdDTO.class)
         );
         assertEquals(6, enderecosPersistidos.size());
     }

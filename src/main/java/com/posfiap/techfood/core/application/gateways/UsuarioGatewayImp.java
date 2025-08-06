@@ -29,20 +29,20 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
             return Optional.empty();
         }
 
-        UsuarioDTO usuario = usuarioCriado.get();
+        UsuarioDTO usuarioDTO = usuarioCriado.get();
 
         return Optional.of(Usuario.create(
-                usuario.id(),
-                usuario.telefone(),
-                usuario.nome(),
-                usuario.tipoDeUsuario(),
-                usuario.cpf(),
-                usuario.email(),
-                usuario.username(),
-                usuario.password(),
-                usuario.dataCriacaoConta(),
-                usuario.dataAlteracaoConta(),
-                usuario.dataAlteracaoSenha()));
+                usuarioDTO.id(),
+                usuarioDTO.nome(),
+                usuarioDTO.email(),
+                usuarioDTO.telefone(),
+                usuarioDTO.cpf(),
+                usuarioDTO.username(),
+                usuarioDTO.password(),
+                usuarioDTO.dataCriacaoConta(),
+                usuarioDTO.dataAlteracaoConta(),
+                usuarioDTO.dataAlteracaoSenha(),
+                usuarioDTO.perfil()));
     }
 
     @Override
@@ -56,24 +56,24 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
     }
 
     @Override
-    public List<Usuario> findAll(int size, int offset) {
-        List<UsuarioDTO> usuarioDTOList = this.dataSource.findAll(size, offset);
+    public List<Usuario> findAll(int page, int size) {
+        List<UsuarioDTO> usuarioDTOList = this.dataSource.findAll(page, size);
         List<Usuario> usuarioList = new ArrayList<>();
 
         usuarioDTOList.forEach(
                 usuarioDTO -> {
                     var usario = Usuario.create(
                             usuarioDTO.id(),
-                            usuarioDTO.telefone(),
                             usuarioDTO.nome(),
-                            usuarioDTO.tipoDeUsuario(),
-                            usuarioDTO.cpf(),
                             usuarioDTO.email(),
+                            usuarioDTO.telefone(),
+                            usuarioDTO.cpf(),
                             usuarioDTO.username(),
                             usuarioDTO.password(),
                             usuarioDTO.dataCriacaoConta(),
                             usuarioDTO.dataAlteracaoConta(),
-                            usuarioDTO.dataAlteracaoSenha());
+                            usuarioDTO.dataAlteracaoSenha(),
+                            usuarioDTO.perfil());
 
                     usuarioList.add(usario);
                 });
@@ -83,7 +83,32 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
 
     @Override
     public Usuario update(Usuario usuario, long id) {
-        return null;
+        UsuarioDTO usuarioDto = new UsuarioDTO(
+                usuario.getTelefone(),
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getCpf(),
+                usuario.getEmail(),
+                usuario.getUsername(),
+                usuario.getPassword(),
+                usuario.getDataCriacaoConta(),
+                usuario.getDataAlteracaoConta(),
+                usuario.getDataAlteracaoSenha(),
+                usuario.getPerfil()
+        );
+        UsuarioDTO usuarioCriado = this.dataSource.update(usuarioDto, id);
+        return Usuario.create(
+                usuarioCriado.id(),
+                usuarioCriado.telefone(),
+                usuarioCriado.nome(),
+                usuarioCriado.cpf(),
+                usuarioCriado.email(),
+                usuarioCriado.username(),
+                usuarioCriado.password(),
+                usuarioCriado.dataCriacaoConta(),
+                usuarioCriado.dataAlteracaoConta(),
+                usuarioCriado.dataAlteracaoSenha(),
+                usuarioCriado.perfil());
     }
 
     @Override
@@ -91,7 +116,6 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
         final NovoUsuarioDTO novoUsuarioDTO = new NovoUsuarioDTO(
                 usuario.getTelefone(),
                 usuario.getNome(),
-                usuario.getTipoUsuario(),
                 usuario.getCpf(),
                 usuario.getEmail(),
                 usuario.getUsername(),
@@ -103,14 +127,14 @@ public class UsuarioGatewayImp implements IUsuarioGateway {
                 usuarioCriado.id(),
                 usuarioCriado.telefone(),
                 usuarioCriado.nome(),
-                usuarioCriado.tipoDeUsuario(),
                 usuarioCriado.cpf(),
                 usuarioCriado.email(),
                 usuarioCriado.username(),
                 usuarioCriado.password(),
                 usuarioCriado.dataCriacaoConta(),
                 usuarioCriado.dataAlteracaoConta(),
-                usuarioCriado.dataAlteracaoSenha());
+                usuarioCriado.dataAlteracaoSenha(),
+                usuarioCriado.perfil());
     }
 
     @Override

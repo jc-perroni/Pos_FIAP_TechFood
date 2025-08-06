@@ -30,7 +30,6 @@ public class InsertUsuarioUsecase {
         }
 
         final Usuario novoUsuario = Usuario.create(
-                usuarioDTO.tipoDeUsuario(),
                 usuarioDTO.nome(),
                 usuarioDTO.email(),
                 usuarioDTO.telefone(),

@@ -1,4 +1,4 @@
-package com.posfiap.techfood.infrastructure.exceptions;
+package com.posfiap.techfood.core.domain.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException{
 

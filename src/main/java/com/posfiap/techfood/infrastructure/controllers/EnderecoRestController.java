@@ -1,8 +1,10 @@
 package com.posfiap.techfood.infrastructure.controllers;
 
 
-import com.posfiap.techfood.infrastructure.models.Endereco;
-import com.posfiap.techfood.infrastructure.models.dto.endereco.EnderecoDTO;
+import com.posfiap.techfood.core.application.controllers.EnderecoController;
+import com.posfiap.techfood.core.application.dto.NovoEnderecoDTO;
+import com.posfiap.techfood.infrastructure.datasource.EnderecoDataSource;
+import com.posfiap.techfood.core.application.dto.EnderecoComIdDTO;
 import com.posfiap.techfood.infrastructure.services.EnderecoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,34 +21,38 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/enderecos")
 @Tag(name = "Endereços", description = "Operações relacionadas a endereços")
-public class EnderecoController {
+public class EnderecoRestController {
 
-    private final EnderecoService enderecoService;
+    private final EnderecoDataSource enderecoDataSource;
 
     @Operation(summary = "Listar todos os endereços paginados")
     @GetMapping
-    public ResponseEntity<List<Endereco>> findAllEnderecos(
+    public ResponseEntity<List<EnderecoComIdDTO>> findAllEnderecos(
         @Parameter(description = "Número da página (começa em 0)") @RequestParam("page") int page,
         @Parameter(description = "Quantidade de registros por página") @RequestParam("size") int size
     ) {
-        var enderecos = enderecoService.findAllEnderecos(page, size);
-        return ResponseEntity.ok(enderecos.getContent());
+        EnderecoController enderecoController = EnderecoController.create(enderecoDataSource);
+        return ResponseEntity.ok(
+                enderecoController.findAllEnderecos(page, size));
     }
 
     @Operation(summary = "Buscar endereço por ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Endereco> findEnderecoById(
+    public ResponseEntity<EnderecoComIdDTO> findEnderecoById(
             @Parameter(description = "ID do endereço") @PathVariable("id") Long id){
-        var endereco = enderecoService.findEnderecoById(id);
-        return ResponseEntity.ok(endereco);
+        EnderecoController enderecoController = EnderecoController.create(enderecoDataSource);
+        return ResponseEntity.ok(
+                enderecoController.findEnderecoById(id));
     }
 
     @Operation(summary = "Inserir novo endereço")
     @PostMapping
     public ResponseEntity<Void> inserirEndereco(
-        @Valid @RequestBody EnderecoDTO endereco
+        @Valid @RequestBody NovoEnderecoDTO novoEnderecoDTO
         ){
-        enderecoService.insertEndereco(endereco);
+        EnderecoController enderecoController = EnderecoController.create(enderecoDataSource);
+
+        enderecoController.inserirEndereco(novoEnderecoDTO);
         return ResponseEntity.status(201).build();
     }
 
@@ -54,9 +60,11 @@ public class EnderecoController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> atualizarEndereco(
         @Parameter(description = "ID do endereço") @PathVariable("id") Long id,
-        @RequestBody Endereco endereco
+        @RequestBody NovoEnderecoDTO novoEnderecoDTO
     ){
-        enderecoService.updateEndereco(endereco, id);
+        EnderecoController enderecoController = EnderecoController.create(enderecoDataSource);
+        enderecoController.atualizarEndereco(novoEnderecoDTO, id);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -65,7 +73,9 @@ public class EnderecoController {
     public ResponseEntity<Void> excluirEndereco(
         @Parameter(description = "ID do endereço") @PathVariable("id") Long id
     ){
-        enderecoService.deleteEndereco(id);
+        EnderecoController enderecoController = EnderecoController.create(enderecoDataSource);
+        enderecoController.excluirEndereco(id);
+
         return ResponseEntity.ok().build();
     }
 

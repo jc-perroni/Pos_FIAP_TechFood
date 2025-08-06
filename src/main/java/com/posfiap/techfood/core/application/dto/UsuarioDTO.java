@@ -1,5 +1,6 @@
 package com.posfiap.techfood.core.application.dto;
 
+import com.posfiap.techfood.core.application.enums.PerfilUsuario;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -9,9 +10,6 @@ public record UsuarioDTO(String telefone,
 
                          @NotNull(message = "O campo 'nome' não pode ser nulo")
                               String nome,
-
-                         @NotNull(message = "O campo 'tipoDeUsuario' não pode ser nulo")
-                              String tipoDeUsuario,
 
                          @NotNull(message = "O campo 'CPF' não pode ser nulo")
                               String cpf,
@@ -26,6 +24,10 @@ public record UsuarioDTO(String telefone,
                               String password,
 
                          LocalDate dataCriacaoConta,
+
                          LocalDate dataAlteracaoConta,
-                         LocalDate dataAlteracaoSenha) {
+
+                         LocalDate dataAlteracaoSenha,
+
+                         PerfilUsuario perfil) {
 }

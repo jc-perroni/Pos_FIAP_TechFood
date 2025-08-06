@@ -3,13 +3,13 @@ package com.posfiap.techfood.core.application.controllers;
 import com.posfiap.techfood.core.application.dto.LoginDTO;
 import com.posfiap.techfood.core.application.dto.NovoUsuarioDTO;
 import com.posfiap.techfood.core.application.dto.UsuarioDTO;
+import com.posfiap.techfood.core.application.dto.UsuarioUpdateDto;
 import com.posfiap.techfood.core.application.gateways.UsuarioGatewayImp;
 import com.posfiap.techfood.core.application.interfaces.usuario.IUsuarioDataSource;
 import com.posfiap.techfood.core.application.presenters.UsuarioPresenter;
 import com.posfiap.techfood.core.domain.entities.Usuario;
-import com.posfiap.techfood.core.domain.exceptions.UsuarioJaExistenteException;
-import com.posfiap.techfood.core.domain.exceptions.UsuarioNaoEncontradoException;
 import com.posfiap.techfood.core.domain.usecases.usuario.*;
+import com.posfiap.techfood.core.domain.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -24,16 +24,16 @@ public class UsuarioController {
         return new UsuarioController(dataSource);
     }
 
-    public List<UsuarioDTO> findAllUsuarios(int size, int offset) {
+    public List<UsuarioDTO> findAllUsuarios(int page, int size) {
         var usuarioGateway = UsuarioGatewayImp.create(dataSource);
         var useCase = FindAllUsuariosUsecase.create(usuarioGateway);
 
         try {
-            List<Usuario> usuarioList = useCase.run(size, offset);
+            List<Usuario> usuarioList = useCase.run(page, size);
             return usuarioList.stream().map(
                     UsuarioPresenter::toDTO).toList();
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException("Erro ao buscar usuarios: " + e.getMessage());
         }
     }
 
@@ -44,8 +44,8 @@ public class UsuarioController {
         try {
             var usuario = useCase.run(id);
             return UsuarioPresenter.toDTO(usuario);
-        } catch (UsuarioNaoEncontradoException e) {
-            return null;
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Usuario do id "  + id + " não existe");
         }
     }
 
@@ -56,20 +56,20 @@ public class UsuarioController {
         try {
             Usuario usuario = useCase.run(novoUsuarioDTO);
             return UsuarioPresenter.toDTO(usuario);
-        } catch (UsuarioJaExistenteException e) {
-            return  null;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criar usuario: " + e.getMessage());
         }
     }
 
-    public UsuarioDTO atualizarUsuario(UsuarioDTO usuarioDTO) {
+    public UsuarioDTO atualizarUsuario(UsuarioUpdateDto usuarioDTO, Long id) {
         var usuarioGateway = UsuarioGatewayImp.create(dataSource);
         var useCase = UpdateUsuarioUsecase.create(usuarioGateway);
 
         try {
-            Usuario usuario = useCase.run(usuarioDTO);
+            Usuario usuario = useCase.run(usuarioDTO, id);
             return UsuarioPresenter.toDTO(usuario);
-        } catch (UsuarioNaoEncontradoException e) {
-            return  null;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar usuario: " + e.getMessage());
         }
     }
 
@@ -79,8 +79,8 @@ public class UsuarioController {
 
         try {
             return useCase.run(id);
-        } catch (UsuarioNaoEncontradoException e) {
-            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao deletar usuario: " + e.getMessage());
         }
     }
 
