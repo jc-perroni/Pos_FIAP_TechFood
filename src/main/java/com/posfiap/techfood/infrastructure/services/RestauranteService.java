@@ -45,15 +45,23 @@ public class RestauranteService {
         });
     }
 
-    public Optional<Restaurante> findRestauranteById(Long id){
-        return Optional.of(restauranteRepository.findById(id))
-                .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
+    public Restaurante findRestauranteById(Long id) {
+        return restauranteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurante não encontrado"));
     }
+
     @Transactional
-    public void updateRestaurante(Restaurante restaurante, Long id){
-        Restaurante restauranteAlterado = findRestauranteById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Restaurante não encontrado"));
-        restauranteRepository.save(restaurante);
+    public void updateRestaurante(Restaurante restaurante, Long id) {
+        Restaurante restauranteExistente = findRestauranteById(id);
+        restauranteExistente.setNome(restaurante.getNome());
+        restauranteExistente.setTelefone(restaurante.getTelefone());
+        restauranteExistente.setTipoCozinha(restaurante.getTipoCozinha());
+        restauranteExistente.setHorarioFuncionamento(restaurante.getHorarioFuncionamento());
+
+        if (restaurante.getUsuario() != null && restaurante.getUsuario().getId() != null) {
+            restauranteExistente.setUsuario(restaurante.getUsuario());
+        }
+        restauranteRepository.save(restauranteExistente);
         log.info("Atualização realizada com sucesso.");
     }
     @Transactional
