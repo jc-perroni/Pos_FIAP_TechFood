@@ -89,7 +89,7 @@ public class IntegrationTest {
                 .andReturn();
 
         Usuario clienteBuscado = objectMapper.readValue(byId.getResponse().getContentAsString(), Usuario.class);
-        assertEquals(usuarios.getFirst().getNome(), clienteBuscado.getNome());
+        assertEquals(usuarios.get(0).getNome(), clienteBuscado.getNome());
         assertNotNull(clienteBuscado.getDataCriacaoConta());
     }
 
@@ -504,7 +504,7 @@ public class IntegrationTest {
             MvcResult resultado = mockMvc.perform(get("/v1/restaurantes/" + restaurante.id())).andExpect(status().isOk()).andReturn();
             listaRestaurantes.add(objectMapper.readValue(resultado.getResponse().getContentAsString(), Restaurante.class));
         }
-        Cardapio cardapio = dataFactory.gerarCardapiosComPratos(listaRestaurantes).getFirst();
+        Cardapio cardapio = dataFactory.gerarCardapiosComPratos(listaRestaurantes).get(0);
         mockMvc.perform(post("/v1/cardapio")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cardapio)))
@@ -541,7 +541,7 @@ public class IntegrationTest {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, Cardapio.class)
         );
 
-        Long id = cardapios.getFirst().getId();
+        Long id = cardapios.get(0).getId();
 
         mockMvc.perform(get("/v1/cardapio/" + id))
                 .andExpect(status().isOk());
@@ -562,7 +562,7 @@ public class IntegrationTest {
         );
         assertFalse(cardapios.isEmpty(), "Nenhum cardápio encontrado para teste");
 
-        Cardapio cardapio = cardapios.getFirst();
+        Cardapio cardapio = cardapios.get(0);
 
         MvcResult cardapioResult = mockMvc.perform(get("/v1/cardapio/" + cardapio.getId()))
                 .andExpect(status().isOk())
@@ -574,8 +574,8 @@ public class IntegrationTest {
         );
 
         assertFalse(cardapioBuscado.getPratos().isEmpty(), "Cardápio não possui pratos");
-        String nomeAntigo = cardapioBuscado.getPratos().getFirst().getNome();
-        cardapioBuscado.getPratos().getFirst().setNome("Prato Alterado");
+        String nomeAntigo = cardapioBuscado.getPratos().get(0).getNome();
+        cardapioBuscado.getPratos().get(0).setNome("Prato Alterado");
 
         mockMvc.perform(put("/v1/cardapio/" + cardapioBuscado.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -591,8 +591,8 @@ public class IntegrationTest {
                 Cardapio.class
         );
 
-        assertEquals("Prato Alterado", cardapioAtualizado.getPratos().getFirst().getNome());
-        assertNotEquals(nomeAntigo, cardapioAtualizado.getPratos().getFirst().getNome());
+        assertEquals("Prato Alterado", cardapioAtualizado.getPratos().get(0).getNome());
+        assertNotEquals(nomeAntigo, cardapioAtualizado.getPratos().get(0).getNome());
     }
 
     @Test
@@ -609,7 +609,7 @@ public class IntegrationTest {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, Cardapio.class)
         );
 
-        Long id = cardapios.getFirst().getId();
+        Long id = cardapios.get(0).getId();
 
         mockMvc.perform(delete("/v1/cardapio/" + id))
                 .andExpect(status().isOk());
@@ -629,7 +629,7 @@ public class IntegrationTest {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, Cardapio.class)
         );
         assertFalse(cardapios.isEmpty());
-        Long cardapioId = cardapios.getFirst().getId();
+        Long cardapioId = cardapios.get(0).getId();
 
         var pratoDTO = dataFactory.getPratoDTO();
 
@@ -670,7 +670,7 @@ public class IntegrationTest {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, Prato.class)
         );
         assertFalse(pratos.isEmpty());
-        Long id = pratos.getFirst().getId();
+        Long id = pratos.get(0).getId();
 
         mockMvc.perform(get("/v1/prato/" + id))
                 .andExpect(status().isOk());
@@ -690,7 +690,7 @@ public class IntegrationTest {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, Prato.class)
         );
         assertFalse(pratos.isEmpty());
-        Prato prato = pratos.getFirst();
+        Prato prato = pratos.get(0);
 
         var updateDTO = new PratoUpdateDTO(
                 "Nome Prato Atualizado",
@@ -732,7 +732,7 @@ public class IntegrationTest {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, Prato.class)
         );
         assertFalse(pratos.isEmpty());
-        Long id = pratos.getFirst().getId();
+        Long id = pratos.get(0).getId();
 
         mockMvc.perform(delete("/v1/prato/" + id))
                 .andExpect(status().isOk());
@@ -751,7 +751,7 @@ public class IntegrationTest {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, Usuario.class)
         );
         assertFalse(clientes.isEmpty());
-        Usuario cliente = clientes.getFirst();
+        Usuario cliente = clientes.get(0);
 
         var alterarPerfilCliente = objectMapper.createObjectNode();
         alterarPerfilCliente.put("idUsuario", cliente.getId());
@@ -781,7 +781,7 @@ public class IntegrationTest {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, Usuario.class)
         );
         assertFalse(proprietarios.isEmpty());
-        Usuario proprietario = proprietarios.getFirst();
+        Usuario proprietario = proprietarios.get(0);
 
         var alterarPerfilProprietario = objectMapper.createObjectNode();
         alterarPerfilProprietario.put("idUsuario", proprietario.getId());

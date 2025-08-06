@@ -4,7 +4,7 @@ import com.posfiap.techfood.core.application.dto.NovoUsuarioDTO;
 import com.posfiap.techfood.core.application.interfaces.usuario.IUsuarioGateway;
 import com.posfiap.techfood.core.domain.entities.Usuario;
 import com.posfiap.techfood.core.domain.exceptions.UsuarioJaExistenteException;
-import com.posfiap.techfood.models.enums.PerfilUsuario;
+import com.posfiap.techfood.infrastructure.models.enums.PerfilUsuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

@@ -181,7 +181,7 @@ public class DataFactory {
         List<EnderecoDTO> enderecos = new ArrayList<>();
         int max = Math.min(ids.size(), 5);
 
-        if (max > 0) enderecos.add(new EnderecoDTO(ids.getFirst(), TipoEndereco.RESTAURANTE, "Av. Brasil", "83000-000", "Curitiba", "Centro Cívico", "Loja 1", "10"));
+        if (max > 0) enderecos.add(new EnderecoDTO(ids.get(0), TipoEndereco.RESTAURANTE, "Av. Brasil", "83000-000", "Curitiba", "Centro Cívico", "Loja 1", "10"));
         if (max > 1) enderecos.add(new EnderecoDTO(ids.get(1), TipoEndereco.RESTAURANTE, "Av. Paraná", "83001-001", "Curitiba", "Água Verde", null, "20"));
         if (max > 2) enderecos.add(new EnderecoDTO(ids.get(2), TipoEndereco.RESTAURANTE, "Rua Chile", "83002-002", "Curitiba", "Mercês", "Sala 5", "30"));
         if (max > 3) enderecos.add(new EnderecoDTO(ids.get(3), TipoEndereco.RESTAURANTE, "Rua México", "83003-003", "Curitiba", "Santa Felicidade", null, "40"));
@@ -212,7 +212,7 @@ public class DataFactory {
             p1b.setCardapio(c1);
 
             c1.setPratos(Arrays.asList(p1a, p1b));
-            c1.setRestaurante(restaurantes.getFirst());
+            c1.setRestaurante(restaurantes.get(0));
             cardapios.add(c1);
         }
         if (max > 1) {

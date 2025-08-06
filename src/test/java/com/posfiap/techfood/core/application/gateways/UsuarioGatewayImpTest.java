@@ -4,7 +4,7 @@ import com.posfiap.techfood.core.application.dto.NovoUsuarioDTO;
 import com.posfiap.techfood.core.application.dto.UsuarioDTO;
 import com.posfiap.techfood.core.application.interfaces.usuario.IUsuarioDataSource;
 import com.posfiap.techfood.core.domain.entities.Usuario;
-import com.posfiap.techfood.models.enums.PerfilUsuario;
+import com.posfiap.techfood.infrastructure.models.enums.PerfilUsuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,6 +18,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import com.posfiap.techfood.infrastructure.models.enums.PerfilUsuario;
+
 
 class UsuarioGatewayImpTest {
 
