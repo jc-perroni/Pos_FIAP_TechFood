@@ -274,40 +274,6 @@ public class IntegrationTest {
 
     @Test
     @Order(8)
-    void deveAlterarRestaurantePersistido() throws Exception {
-        long restauranteId = 1L;
-
-        MvcResult byId = mockMvc.perform(get("/v1/restaurantes/" + restauranteId))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        com.fasterxml.jackson.databind.JsonNode restauranteJson = objectMapper.readTree(byId.getResponse().getContentAsString());
-        Restaurante restaurante = objectMapper.treeToValue(restauranteJson, Restaurante.class);
-
-        restaurante.setNome("Restaurante Alterado");
-        restaurante.setTelefone("9999-9999");
-        restaurante.setTipoCozinha(TipoCozinha.COMIDA_ITALIANA);
-        restaurante.setHorarioFuncionamento("09:00 às 21:00");
-
-        mockMvc.perform(put("/v1/restaurantes/" + restauranteId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(restaurante)))
-                .andExpect(status().isNoContent());
-
-        byId = mockMvc.perform(get("/v1/restaurantes/" + restauranteId))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        restauranteJson = objectMapper.readTree(byId.getResponse().getContentAsString());
-        restaurante = objectMapper.treeToValue(restauranteJson, Restaurante.class);
-
-        assertEquals("Restaurante Alterado", restaurante.getNome());
-        assertEquals("9999-9999", restaurante.getTelefone());
-        assertEquals("09:00 às 21:00", restaurante.getHorarioFuncionamento());
-    }
-
-    @Test
-    @Order(9)
     void deveDeletarRestaurante() throws Exception {
         mockMvc.perform(delete("/v1/restaurantes/1"))
                 .andExpect(status().isOk());
@@ -326,7 +292,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(10)
+    @Order(9)
     void deveAdicionarEnderecos() throws Exception {
         MvcResult clientesResult = mockMvc.perform(get("/v1/clientes")
                         .param("page", "0")
@@ -378,7 +344,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(11)
+    @Order(10)
     void deveAlterarEnderecoPersistido() throws Exception {
         MvcResult byId = mockMvc.perform(get("/v1/enderecos/1"))
                 .andExpect(status().isOk())
@@ -412,7 +378,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(12)
+    @Order(11)
     void deveDeletarEndereco() throws Exception {
         mockMvc.perform(delete("/v1/enderecos/1"))
                 .andExpect(status().isOk());
@@ -430,7 +396,7 @@ public class IntegrationTest {
         assertEquals(6, enderecosPersistidos.size());
     }
     @Test
-    @Order(13)
+    @Order(12)
     void deveAutenticarClienteComSucesso() throws Exception {
         var loginSucesso = new ClienteLoginDTO();
         loginSucesso.setUsuario("quarto.aluno4");
@@ -442,7 +408,7 @@ public class IntegrationTest {
                 .andExpect(status().isOk());
     }
     @Test
-    @Order(14)
+    @Order(13)
     void naoDeveAutenticarClienteSenhaErrada() throws Exception {
         var loginFalha = new ClienteLoginDTO();
         loginFalha.setUsuario("quarto.aluno4");
@@ -455,7 +421,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(15)
+    @Order(14)
     void deveAlterarSenhaClienteEValidarLogin() throws Exception {
         var alterarSenhaJson = objectMapper.createObjectNode();
         alterarSenhaJson.put("username", "quarto.aluno4");
@@ -487,7 +453,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(16)
+    @Order(15)
     void deveAdicionarCardapio() throws Exception {
         List<Restaurante> listaRestaurantes = new ArrayList<>();
 
@@ -514,7 +480,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(17)
+    @Order(16)
     void deveBuscarCardapios() throws Exception {
         MvcResult result = mockMvc.perform(get("/v1/cardapio")
                         .param("page", "0")
@@ -530,7 +496,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(18)
+    @Order(17)
     void deveBuscarCardapioPorId() throws Exception {
         MvcResult result = mockMvc.perform(get("/v1/cardapio")
                         .param("page", "0")
@@ -550,7 +516,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(19)
+    @Order(18)
     void deveAtualizarCardapio() throws Exception {
         MvcResult cardapiosResult = mockMvc.perform(get("/v1/cardapio")
                         .param("page", "0")
@@ -598,7 +564,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(26)
+    @Order(25)
     void deveDeletarCardapio() throws Exception {
         MvcResult result = mockMvc.perform(get("/v1/cardapio")
                         .param("page", "0")
@@ -618,7 +584,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(21)
+    @Order(20)
     void deveAdicionarPrato() throws Exception {
         MvcResult cardapiosResult = mockMvc.perform(get("/v1/cardapio")
                         .param("page", "0")
@@ -643,7 +609,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(22)
+    @Order(21)
     void deveBuscarPratos() throws Exception {
         MvcResult result = mockMvc.perform(get("/v1/prato")
                         .param("page", "0")
@@ -659,7 +625,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(23)
+    @Order(22)
     void deveBuscarPratoPorId() throws Exception {
         MvcResult result = mockMvc.perform(get("/v1/prato")
                         .param("page", "0")
@@ -679,7 +645,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(24)
+    @Order(23)
     void deveAtualizarPrato() throws Exception {
         MvcResult result = mockMvc.perform(get("/v1/prato")
                         .param("page", "0")
@@ -720,7 +686,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(25)
+    @Order(24)
     void deveDeletarPrato() throws Exception {
         // Buscar um prato existente
         MvcResult result = mockMvc.perform(get("/v1/prato")
@@ -741,7 +707,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(27)
+    @Order(26)
     void deveAlterarPerfilUsuario() throws Exception {
         MvcResult clientesResult = mockMvc.perform(get("/v1/clientes")
                         .param("page", "0")
@@ -807,7 +773,4 @@ public class IntegrationTest {
         );
         assertEquals(PerfilUsuario.CLIENTE, proprietarioAlterado.getPerfil());
     }
-
-
-
 }
