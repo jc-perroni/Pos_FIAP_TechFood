@@ -13,6 +13,7 @@ import com.posfiap.techfood.infrastructure.models.dto.proprietario.ProprietarioU
 import com.posfiap.techfood.infrastructure.models.dto.restaurante.RestauranteDTO;
 import com.posfiap.techfood.infrastructure.models.dto.restaurante.RestauranteResponseDTO;
 import com.posfiap.techfood.infrastructure.models.enums.PerfilUsuario;
+import com.posfiap.techfood.infrastructure.models.enums.TipoCozinha;
 import integrationTests.utils.DataFactory;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -285,6 +286,7 @@ public class IntegrationTest {
 
         restaurante.setNome("Restaurante Alterado");
         restaurante.setTelefone("9999-9999");
+        restaurante.setTipoCozinha(TipoCozinha.COMIDA_ITALIANA);
         restaurante.setHorarioFuncionamento("09:00 às 21:00");
 
         mockMvc.perform(put("/v1/restaurantes/" + restauranteId)

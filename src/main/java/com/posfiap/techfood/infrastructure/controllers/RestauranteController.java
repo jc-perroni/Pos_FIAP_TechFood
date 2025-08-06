@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -33,7 +32,7 @@ public class RestauranteController {
 
     @Operation(summary = "Buscar restaurante por ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Restaurante>> findRestauranteById(@PathVariable("id") Long id){
+    public ResponseEntity<Restaurante> findRestauranteById(@PathVariable("id") Long id){
         var restaurante = restauranteService.findRestauranteById(id);
         return ResponseEntity.ok(restaurante);
     }

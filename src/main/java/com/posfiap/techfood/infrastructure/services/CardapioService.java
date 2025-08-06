@@ -39,9 +39,11 @@ public class CardapioService {
     public void insertCardapio(Cardapio cardapio){
         cardapioRepository.save(cardapio);
     }
+
     @Transactional
     public void deleteCardapio(Long id) {
-        cardapioRepository.deleteById(id);
+        Cardapio cardapio = cardapioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cardápio não localizado."));
+        cardapioRepository.delete(cardapio);
     }
-
 }
